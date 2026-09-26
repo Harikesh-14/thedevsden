@@ -8,8 +8,10 @@ import { Switch } from "@/components/ui/switch"
 import { cn } from "@/lib/utils"
 
 const navLinks = [
-  { label: "Work", href: "#professional-information" },
+  { label: "About me", href: "#about-me" },
+  { label: "Skills", href: "#skills" },
   { label: "Projects", href: "#projects" },
+  { label: "Experiences", href: "#experiences" },
   { label: "Contact", href: "#contact-me" },
 ]
 
@@ -35,9 +37,9 @@ export default function Header() {
         <div
           className={cn(
             "pointer-events-auto",
-            "w-full max-w-3xl",
+            "w-full max-w-4xl",
             "flex items-center justify-between gap-3 sm:gap-5",
-            "h-13 pl-5 pr-1.5 rounded-full",
+            "h-13 px-5 rounded-full",
             "bg-white/75 dark:bg-neutral-950/80",
             "border border-white/90 dark:border-white/[0.07]",
             "shadow-[0_1px_2px_rgba(0,0,0,0.04),0_4px_20px_rgba(0,0,0,0.07)]",

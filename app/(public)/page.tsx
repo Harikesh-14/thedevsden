@@ -1,5 +1,11 @@
-export default function PortfolioPage() {
+import AboutSection from "@/components/portfolio/about-me";
+import SkillSection from "@/components/portfolio/skills";
+
+export default function ProfilePage() {
   return (
-    <div></div>
-  )
+    <main className="mx-auto max-w-6xl px-5 py-20 sm:px-8 lg:px-10 lg:py-32">
+      <AboutSection />
+      <SkillSection />
+    </main>
+  );
 }
