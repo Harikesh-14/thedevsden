@@ -8,6 +8,7 @@ import {
   Server,
   Terminal,
   Wrench,
+  TestTube2,
 } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
@@ -50,6 +51,12 @@ const skillGroups = [
     icon: Terminal,
     skills: ["Linux", "Unix", "Git", "GitHub", "CLI Development", "Make", "Docker"],
   },
+  {
+    title: "Automation Testing",
+    description: "Automating the testing process for websites",
+    icon: TestTube2,
+    skills: ["Selenium", "Playwright"]
+  }
 ];
 
 const coreSkills = [
