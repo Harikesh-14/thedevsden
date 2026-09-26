@@ -40,7 +40,7 @@ const contactMethods = [
 
 export default function ContactPage() {
   return (
-    <main className="border-b bg-background">
+    <main id="contact-me" className="border-b bg-background">
       <div className="mx-auto max-w-7xl px-6 py-20 sm:px-8 lg:px-12 lg:py-28">
         <div className="mb-14 max-w-3xl lg:mb-20">
           {/* Emerald rule */}
@@ -68,9 +68,6 @@ export default function ContactPage() {
           </p>
         </div>
 
-        {/* ─────────────────────────────────────────
-            Main Grid
-        ───────────────────────────────────────── */}
         <div className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20">
 
           {/* ───────────── Left ───────────── */}

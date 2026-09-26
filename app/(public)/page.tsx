@@ -1,6 +1,7 @@
 import AboutSection from "@/components/portfolio/about-me";
 import ContactPage from "@/components/portfolio/contact-me";
 import ExperiencesPage from "@/components/portfolio/experiences";
+import ProjectsSection from "@/components/portfolio/projects";
 import SkillSection from "@/components/portfolio/skills";
 
 export default function ProfilePage() {
@@ -8,6 +9,7 @@ export default function ProfilePage() {
     <main className="mx-auto max-w-6xl px-5 py-20 sm:px-8 lg:px-10 lg:py-32">
       <AboutSection />
       <SkillSection />
+      <ProjectsSection />
       <ExperiencesPage />
       <ContactPage />
     </main>

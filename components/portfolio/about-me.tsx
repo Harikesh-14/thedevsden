@@ -35,7 +35,7 @@ const facts = [
 
 export default function AboutSection() {
   return (
-    <section id="#about-me" className="border-b bg-background">
+    <section id="about-me" className="border-b bg-background">
       <div className="mx-auto mb-20">
 
         {/* Section heading */}

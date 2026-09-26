@@ -50,7 +50,7 @@ const experiences = [
 export default function ExperiencesPage() {
   return (
     <section
-      id="experience"
+      id="experiences"
       className="relative overflow-hidden border-b bg-background"
     >
       {/* Ambient blobs — emerald tinted */}
