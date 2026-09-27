@@ -1,4 +1,4 @@
-"use client";
+"use client"
 
 import {
   ArrowUpRight,
@@ -7,10 +7,10 @@ import {
   GitBranch,
   Layers3,
   Sparkles,
-} from "lucide-react";
+} from "lucide-react"
 
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
 import {
   Dialog,
   DialogContent,
@@ -18,7 +18,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
+} from "@/components/ui/dialog"
 
 const projects = [
   {
@@ -57,7 +57,7 @@ const projects = [
     github: "https://github.com/harikeshranjan/rit-js",
     featured: false,
   },
-];
+]
 
 const githubAccounts = [
   {
@@ -72,16 +72,12 @@ const githubAccounts = [
     description: "Experiments, learning projects and side quests.",
     href: "https://github.com/harikeshranjan",
   },
-];
+]
 
 export default function ProjectsSection() {
   return (
-    <section
-      id="projects"
-      className="border-b bg-background"
-    >
+    <section id="projects" className="border-b bg-background">
       <div className="mx-auto max-w-7xl px-6 py-20 sm:px-8 lg:px-12 lg:py-28">
-
         <div className="mb-12 flex flex-col justify-between gap-6 sm:flex-row sm:items-end lg:mb-16">
           <div className="max-w-3xl">
             <div className="mb-5 h-0.75 w-8 rounded-full bg-emerald-500" />
@@ -94,17 +90,17 @@ export default function ProjectsSection() {
               Selected work
             </Badge>
 
-            <h2 className="text-3xl font-semibold tracking-tight text-neutral-900 dark:text-neutral-50 sm:text-4xl lg:text-5xl">
+            <h2 className="text-3xl font-semibold tracking-tight text-neutral-900 sm:text-4xl lg:text-5xl dark:text-neutral-50">
               Things I've{" "}
               <span className="text-neutral-400 dark:text-neutral-500">
                 built.
               </span>
             </h2>
 
-            <p className="mt-5 max-w-2xl text-base leading-7 text-neutral-500 dark:text-neutral-400 sm:text-lg">
+            <p className="mt-5 max-w-2xl text-base leading-7 text-neutral-500 sm:text-lg dark:text-neutral-400">
               A collection of projects I've built while exploring software
-              engineering, artificial intelligence, developer tools and
-              computer science.
+              engineering, artificial intelligence, developer tools and computer
+              science.
             </p>
           </div>
 
@@ -122,13 +118,11 @@ export default function ProjectsSection() {
 
             <DialogContent className="max-w-lg border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-950">
               <DialogHeader>
-                <DialogTitle className="text-xl">
-                  Find me on GitHub
-                </DialogTitle>
+                <DialogTitle className="text-xl">Find me on GitHub</DialogTitle>
 
                 <DialogDescription className="leading-6 text-neutral-500 dark:text-neutral-400">
-                  I keep different kinds of projects across two GitHub
-                  accounts. Pick a profile to explore everything I've built.
+                  I keep different kinds of projects across two GitHub accounts.
+                  Pick a profile to explore everything I've built.
                 </DialogDescription>
               </DialogHeader>
 
@@ -159,7 +153,7 @@ export default function ProjectsSection() {
                       </p>
                     </div>
 
-                    <ExternalLink className="size-4 shrink-0 text-neutral-400 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-emerald-500" />
+                    <ExternalLink className="size-4 shrink-0 text-neutral-400 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-emerald-500" />
                   </a>
                 ))}
               </div>
@@ -168,16 +162,13 @@ export default function ProjectsSection() {
         </div>
 
         <div className="grid gap-5 lg:grid-cols-2">
-
           {projects.map((project) => (
             <article
               key={project.title}
               className="group relative flex flex-col overflow-hidden rounded-2xl border border-neutral-200 bg-white transition-all duration-300 hover:-translate-y-1 hover:border-emerald-200 hover:shadow-[0_12px_35px_rgba(0,0,0,0.06)] dark:border-neutral-800 dark:bg-neutral-900/50 dark:hover:border-emerald-900 dark:hover:shadow-[0_12px_35px_rgba(0,0,0,0.2)]"
             >
-
               {/* Project visual/header */}
               <div className="relative flex h-44 items-center justify-center overflow-hidden border-b border-neutral-100 bg-neutral-50 dark:border-neutral-800 dark:bg-neutral-950">
-
                 {/* Decorative grid */}
                 <div
                   className="absolute inset-0 opacity-[0.035] dark:opacity-[0.06]"
@@ -189,7 +180,7 @@ export default function ProjectsSection() {
                 />
 
                 {/* Large background number */}
-                <span className="absolute right-5 top-2 select-none text-8xl font-bold tracking-tighter text-neutral-200/70 dark:text-neutral-800/50">
+                <span className="absolute top-2 right-5 text-8xl font-bold tracking-tighter text-neutral-200/70 select-none dark:text-neutral-800/50">
                   {String(projects.indexOf(project) + 1).padStart(2, "0")}
                 </span>
 
@@ -214,7 +205,6 @@ export default function ProjectsSection() {
 
               {/* Content */}
               <div className="flex flex-1 flex-col p-6 sm:p-7">
-
                 <div className="flex items-start justify-between gap-4">
                   <h3 className="text-xl font-semibold tracking-tight text-neutral-900 dark:text-neutral-100">
                     {project.title}
@@ -255,14 +245,14 @@ export default function ProjectsSection() {
                   className="group/link mt-6 flex items-center gap-1.5 text-sm font-medium text-neutral-700 dark:text-neutral-300"
                 >
                   View project
-                  <ArrowUpRight className="size-3.5 transition-transform group-hover/link:-translate-y-0.5 group-hover/link:translate-x-0.5" />
+                  <ArrowUpRight className="size-3.5 transition-transform group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5" />
                 </a>
               </div>
             </article>
           ))}
         </div>
 
-        <div className="mt-12 flex flex-col gap-3 border-t border-neutral-200 pt-8 dark:border-neutral-800 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-12 flex flex-col gap-3 border-t border-neutral-200 pt-8 sm:flex-row sm:items-center sm:justify-between dark:border-neutral-800">
           <p className="text-sm text-neutral-500 dark:text-neutral-400">
             Always building. Usually experimenting.
           </p>
@@ -273,5 +263,5 @@ export default function ProjectsSection() {
         </div>
       </div>
     </section>
-  );
+  )
 }

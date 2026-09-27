@@ -6,10 +6,10 @@ import {
   MapPin,
   MessageCircle,
   Sparkles,
-} from "lucide-react";
+} from "lucide-react"
 
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
 
 const contactMethods = [
   {
@@ -36,7 +36,7 @@ const contactMethods = [
     value: "linkedin.com/in/harikeshranjansinha",
     href: "https://linkedin.com/in/harikeshranjansinha",
   },
-];
+]
 
 export default function ContactSection() {
   return (
@@ -54,14 +54,14 @@ export default function ContactSection() {
             Get in touch
           </Badge>
 
-          <h1 className="text-4xl font-semibold tracking-tight text-neutral-900 dark:text-neutral-50 sm:text-5xl lg:text-6xl">
+          <h1 className="text-4xl font-semibold tracking-tight text-neutral-900 sm:text-5xl lg:text-6xl dark:text-neutral-50">
             Let's build something{" "}
             <span className="text-neutral-400 dark:text-neutral-500">
               interesting.
             </span>
           </h1>
 
-          <p className="mt-6 max-w-2xl text-lg leading-8 text-neutral-500 dark:text-neutral-400 sm:text-xl">
+          <p className="mt-6 max-w-2xl text-lg leading-8 text-neutral-500 sm:text-xl dark:text-neutral-400">
             Have an idea, a project, or just want to talk about software,
             artificial intelligence, or some ridiculously interesting tech
             rabbit hole? My inbox is open.
@@ -69,12 +69,10 @@ export default function ContactSection() {
         </div>
 
         <div className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20">
-
           {/* ───────────── Left ───────────── */}
           <div className="flex flex-col gap-8">
-
             {/* Intro card */}
-            <div className="rounded-2xl border border-neutral-200 bg-white p-6 dark:border-neutral-800 dark:bg-neutral-900/50 sm:p-7">
+            <div className="rounded-2xl border border-neutral-200 bg-white p-6 sm:p-7 dark:border-neutral-800 dark:bg-neutral-900/50">
               <div className="mb-5 flex size-10 items-center justify-center rounded-xl border border-emerald-200 bg-emerald-50 dark:border-emerald-900 dark:bg-emerald-950/60">
                 <MessageCircle className="size-4 text-emerald-600 dark:text-emerald-400" />
               </div>
@@ -158,7 +156,7 @@ export default function ContactSection() {
                       </p>
                     </div>
 
-                    <ArrowUpRight className="size-4 text-neutral-400 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 dark:text-neutral-600" />
+                    <ArrowUpRight className="size-4 text-neutral-400 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 dark:text-neutral-600" />
                   </a>
                 )
               )}
@@ -166,8 +164,7 @@ export default function ContactSection() {
           </div>
 
           {/* ───────────── Right: Contact Form ───────────── */}
-          <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-[0_4px_20px_rgba(0,0,0,0.04)] dark:border-neutral-800 dark:bg-neutral-900/50 dark:shadow-[0_4px_24px_rgba(0,0,0,0.2)] sm:p-8 lg:p-10">
-
+          <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-[0_4px_20px_rgba(0,0,0,0.04)] sm:p-8 lg:p-10 dark:border-neutral-800 dark:bg-neutral-900/50 dark:shadow-[0_4px_24px_rgba(0,0,0,0.2)]">
             <div className="mb-8">
               <h2 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
                 Send me a message
@@ -179,7 +176,6 @@ export default function ContactSection() {
             </div>
 
             <form className="space-y-5">
-
               {/* Name */}
               <div className="space-y-2">
                 <label
@@ -194,7 +190,7 @@ export default function ContactSection() {
                   name="name"
                   type="text"
                   placeholder="Your name"
-                  className="h-11 w-full rounded-xl border border-neutral-200 bg-neutral-50 px-3.5 text-sm text-neutral-900 outline-none transition placeholder:text-neutral-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/10 dark:border-neutral-800 dark:bg-neutral-950 dark:text-neutral-100 dark:placeholder:text-neutral-600"
+                  className="h-11 w-full rounded-xl border border-neutral-200 bg-neutral-50 px-3.5 text-sm text-neutral-900 transition outline-none placeholder:text-neutral-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/10 dark:border-neutral-800 dark:bg-neutral-950 dark:text-neutral-100 dark:placeholder:text-neutral-600"
                 />
               </div>
 
@@ -212,7 +208,7 @@ export default function ContactSection() {
                   name="email"
                   type="email"
                   placeholder="you@example.com"
-                  className="h-11 w-full rounded-xl border border-neutral-200 bg-neutral-50 px-3.5 text-sm text-neutral-900 outline-none transition placeholder:text-neutral-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/10 dark:border-neutral-800 dark:bg-neutral-950 dark:text-neutral-100 dark:placeholder:text-neutral-600"
+                  className="h-11 w-full rounded-xl border border-neutral-200 bg-neutral-50 px-3.5 text-sm text-neutral-900 transition outline-none placeholder:text-neutral-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/10 dark:border-neutral-800 dark:bg-neutral-950 dark:text-neutral-100 dark:placeholder:text-neutral-600"
                 />
               </div>
 
@@ -230,7 +226,7 @@ export default function ContactSection() {
                   name="subject"
                   type="text"
                   placeholder="What's on your mind?"
-                  className="h-11 w-full rounded-xl border border-neutral-200 bg-neutral-50 px-3.5 text-sm text-neutral-900 outline-none transition placeholder:text-neutral-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/10 dark:border-neutral-800 dark:bg-neutral-950 dark:text-neutral-100 dark:placeholder:text-neutral-600"
+                  className="h-11 w-full rounded-xl border border-neutral-200 bg-neutral-50 px-3.5 text-sm text-neutral-900 transition outline-none placeholder:text-neutral-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/10 dark:border-neutral-800 dark:bg-neutral-950 dark:text-neutral-100 dark:placeholder:text-neutral-600"
                 />
               </div>
 
@@ -248,7 +244,7 @@ export default function ContactSection() {
                   name="message"
                   rows={6}
                   placeholder="Tell me about your idea, project, or question..."
-                  className="w-full resize-none rounded-xl border border-neutral-200 bg-neutral-50 px-3.5 py-3 text-sm leading-6 text-neutral-900 outline-none transition placeholder:text-neutral-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/10 dark:border-neutral-800 dark:bg-neutral-950 dark:text-neutral-100 dark:placeholder:text-neutral-600"
+                  className="w-full resize-none rounded-xl border border-neutral-200 bg-neutral-50 px-3.5 py-3 text-sm leading-6 text-neutral-900 transition outline-none placeholder:text-neutral-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/10 dark:border-neutral-800 dark:bg-neutral-950 dark:text-neutral-100 dark:placeholder:text-neutral-600"
                 />
               </div>
 
@@ -269,5 +265,5 @@ export default function ContactSection() {
         </div>
       </div>
     </main>
-  );
+  )
 }

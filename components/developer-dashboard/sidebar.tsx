@@ -1,7 +1,7 @@
-"use client";
+"use client"
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import Link from "next/link"
+import { usePathname } from "next/navigation"
 import {
   LayoutDashboard,
   ListTodo,
@@ -12,19 +12,19 @@ import {
   Sun,
   User2,
   X,
-} from "lucide-react";
-import { useTheme } from "next-themes";
-import { useState } from "react";
+} from "lucide-react"
+import { useTheme } from "next-themes"
+import { useState } from "react"
 
-import { Switch } from "../ui/switch";
-import { Label } from "../ui/label";
+import { Switch } from "../ui/switch"
+import { Label } from "../ui/label"
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "../ui/accordion";
-import { cn } from "@/lib/utils";
+} from "../ui/accordion"
+import { cn } from "@/lib/utils"
 
 const navigation = [
   {
@@ -42,18 +42,18 @@ const navigation = [
     href: "/developer-dashboard/roadmap",
     icon: Map,
   },
-];
+]
 
 export default function Sidebar() {
-  const pathname = usePathname();
-  const { theme, setTheme } = useTheme();
+  const pathname = usePathname()
+  const { theme, setTheme } = useTheme()
 
-  const [isOpen, setIsOpen] = useState(false);
-  const [portfolioMode, setPortfolioMode] = useState(false);
+  const [isOpen, setIsOpen] = useState(false)
+  const [portfolioMode, setPortfolioMode] = useState(false)
 
   const closeSidebar = () => {
-    setIsOpen(false);
-  };
+    setIsOpen(false)
+  }
 
   return (
     <>
@@ -63,7 +63,7 @@ export default function Sidebar() {
         onClick={() => setIsOpen(true)}
         aria-label="Open sidebar"
         className={cn(
-          "fixed left-4 top-4 z-40 md:hidden",
+          "fixed top-4 left-4 z-40 md:hidden",
           "flex size-11 items-center justify-center",
           "rounded-2xl",
           "border border-white/80 dark:border-white/[0.07]",
@@ -90,7 +90,7 @@ export default function Sidebar() {
             "fixed inset-0 z-40 md:hidden",
             "bg-black/25 dark:bg-black/50",
             "backdrop-blur-[2px]",
-            "animate-in fade-in duration-200"
+            "animate-in duration-200 fade-in"
           )}
         />
       )}
@@ -98,7 +98,7 @@ export default function Sidebar() {
       {/* Sidebar */}
       <aside
         className={cn(
-          "fixed left-4 top-4 bottom-4 z-50",
+          "fixed top-4 bottom-4 left-4 z-50",
           "flex w-57 flex-col",
           "rounded-[22px]",
           "border-2 border-white/[0.07] dark:border-white/6",
@@ -109,9 +109,7 @@ export default function Sidebar() {
           "dark:shadow-[0_8px_40px_rgba(0,0,0,0.55)]",
           "overflow-hidden",
           "md:translate-x-0",
-          isOpen
-            ? "translate-x-0"
-            : "-translate-x-[calc(100%+1rem)]",
+          isOpen ? "translate-x-0" : "-translate-x-[calc(100%+1rem)]",
           "transition-transform duration-300 ease-out"
         )}
       >
@@ -155,17 +153,17 @@ export default function Sidebar() {
             </button>
           </div>
 
-          <p className="mt-1 text-[10px] font-semibold uppercase tracking-widest text-neutral-400 dark:text-neutral-600">
+          <p className="mt-1 text-[10px] font-semibold tracking-widest text-neutral-400 uppercase dark:text-neutral-600">
             Developer Dashboard
           </p>
         </div>
 
         {/* Divider */}
-        <div className="relative z-10 mx-5 mt-4 h-px bg-linear-to-r from-transparent via-neutral-200 dark:via-neutral-800 to-transparent" />
+        <div className="relative z-10 mx-5 mt-4 h-px bg-linear-to-r from-transparent via-neutral-200 to-transparent dark:via-neutral-800" />
 
         {/* Navigation */}
-        <div className="relative z-10 flex-1 overflow-y-auto px-3 py-4 scrollbar-none">
-          <p className="mb-2 px-2.5 text-[9px] font-semibold uppercase tracking-[0.14em] text-neutral-400 dark:text-neutral-600">
+        <div className="relative z-10 flex-1 scrollbar-none overflow-y-auto px-3 py-4">
+          <p className="mb-2 px-2.5 text-[9px] font-semibold tracking-[0.14em] text-neutral-400 uppercase dark:text-neutral-600">
             Workspace
           </p>
 
@@ -175,17 +173,14 @@ export default function Sidebar() {
             defaultValue={["admin-portal"]}
             className="w-full space-y-px"
           >
-            <AccordionItem
-              value="admin-portal"
-              className="border-none"
-            >
+            <AccordionItem value="admin-portal" className="border-none">
               <AccordionTrigger
                 className={cn(
                   "rounded-xl px-2.5 py-2 text-[12.5px] font-medium",
                   "text-neutral-600 dark:text-neutral-400",
                   "hover:bg-neutral-100/80 dark:hover:bg-white/5",
                   "hover:text-neutral-900 dark:hover:text-neutral-200",
-                  "hover:no-underline transition-all duration-150",
+                  "transition-all duration-150 hover:no-underline",
                   "[&>svg]:hidden"
                 )}
               >
@@ -199,12 +194,11 @@ export default function Sidebar() {
                   >
                     <LayoutDashboard className="size-3.5 text-emerald-600 dark:text-emerald-400" />
                   </span>
-
                   Admin Portal
                 </span>
               </AccordionTrigger>
 
-              <AccordionContent className="pb-1 pt-0.5">
+              <AccordionContent className="pt-0.5 pb-1">
                 <div className="ml-3.25 border-l border-neutral-200/70 pl-3 dark:border-neutral-800/70">
                   <Link
                     href="/blooplingo"
@@ -228,7 +222,7 @@ export default function Sidebar() {
           {/* Main navigation */}
           <div className="mt-1 space-y-px">
             {navigation.map(({ href, label, icon: Icon }) => {
-              const isActive = pathname === href;
+              const isActive = pathname === href
 
               return (
                 <Link
@@ -240,17 +234,17 @@ export default function Sidebar() {
                     "text-[12.5px] font-medium transition-all duration-150",
                     isActive
                       ? [
-                        "bg-emerald-500/10 dark:bg-emerald-400/10",
-                        "text-emerald-600 dark:text-emerald-400",
-                        "border border-emerald-200/60 dark:border-emerald-800/50",
-                        "shadow-[inset_0_1px_0_rgba(255,255,255,0.5)] dark:shadow-none",
-                      ]
+                          "bg-emerald-500/10 dark:bg-emerald-400/10",
+                          "text-emerald-600 dark:text-emerald-400",
+                          "border border-emerald-200/60 dark:border-emerald-800/50",
+                          "shadow-[inset_0_1px_0_rgba(255,255,255,0.5)] dark:shadow-none",
+                        ]
                       : [
-                        "text-neutral-600 dark:text-neutral-400",
-                        "border border-transparent",
-                        "hover:bg-neutral-100/80 dark:hover:bg-white/5",
-                        "hover:text-neutral-900 dark:hover:text-neutral-200",
-                      ]
+                          "text-neutral-600 dark:text-neutral-400",
+                          "border border-transparent",
+                          "hover:bg-neutral-100/80 dark:hover:bg-white/5",
+                          "hover:text-neutral-900 dark:hover:text-neutral-200",
+                        ]
                   )}
                 >
                   <span
@@ -258,7 +252,7 @@ export default function Sidebar() {
                       "flex size-7 shrink-0 items-center justify-center rounded-lg transition-all duration-150",
                       isActive
                         ? "border border-emerald-200/80 bg-emerald-50 dark:border-emerald-800/60 dark:bg-emerald-950/70"
-                        : "border border-neutral-200/60 bg-neutral-50/80 dark:border-white/6 dark:bg-white/4 group-hover:border-neutral-300/60 dark:group-hover:border-white/10"
+                        : "border border-neutral-200/60 bg-neutral-50/80 group-hover:border-neutral-300/60 dark:border-white/6 dark:bg-white/4 dark:group-hover:border-white/10"
                     )}
                   >
                     <Icon
@@ -266,14 +260,14 @@ export default function Sidebar() {
                         "size-3.5 transition-colors",
                         isActive
                           ? "text-emerald-600 dark:text-emerald-400"
-                          : "text-neutral-400 dark:text-neutral-500 group-hover:text-neutral-600 dark:group-hover:text-neutral-300"
+                          : "text-neutral-400 group-hover:text-neutral-600 dark:text-neutral-500 dark:group-hover:text-neutral-300"
                       )}
                     />
                   </span>
 
                   {label}
                 </Link>
-              );
+              )
             })}
           </div>
         </div>
@@ -301,7 +295,7 @@ export default function Sidebar() {
               checked={portfolioMode}
               onCheckedChange={setPortfolioMode}
               className={cn(
-                "scale-[0.8] origin-right",
+                "origin-right scale-[0.8]",
                 "data-[state=checked]:bg-emerald-500 dark:data-[state=checked]:bg-emerald-400",
                 "dark:bg-neutral-700"
               )}
@@ -312,9 +306,7 @@ export default function Sidebar() {
           <div className="flex items-center gap-2">
             <button
               type="button"
-              onClick={() =>
-                setTheme(theme === "dark" ? "light" : "dark")
-              }
+              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
               className={cn(
                 "relative flex size-9 shrink-0 items-center justify-center rounded-xl",
                 "border border-neutral-200/60 dark:border-white/[0.07]",
@@ -326,8 +318,8 @@ export default function Sidebar() {
               )}
               aria-label="Toggle theme"
             >
-              <Sun className="size-3.5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-              <Moon className="absolute size-3.5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+              <Sun className="size-3.5 scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" />
+              <Moon className="absolute size-3.5 scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" />
             </button>
 
             <button
@@ -367,5 +359,5 @@ export default function Sidebar() {
         </div>
       </aside>
     </>
-  );
+  )
 }

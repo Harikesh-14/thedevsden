@@ -5,11 +5,11 @@ import {
   MapPin,
   School,
   Trophy,
-} from "lucide-react";
+} from "lucide-react"
 
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent } from "@/components/ui/card";
-import { cn } from "@/lib/utils";
+import { Badge } from "@/components/ui/badge"
+import { Card, CardContent } from "@/components/ui/card"
+import { cn } from "@/lib/utils"
 
 const education = [
   {
@@ -42,14 +42,11 @@ const education = [
     result: "91.8% in Class 12",
     description:
       "Completed schooling from Kindergarten through Class 12 under the CBSE curriculum, with a consistent academic record and no backlogs.",
-    highlights: [
-      "Class 12: 91.8% — CBSE",
-      "Class 10: 84.6% — CBSE",
-    ],
+    highlights: ["Class 12: 91.8% — CBSE", "Class 10: 84.6% — CBSE"],
     icon: School,
     featured: false,
   },
-];
+]
 
 export default function EducationSection() {
   return (
@@ -59,7 +56,7 @@ export default function EducationSection() {
     >
       {/* Ambient blobs */}
       <div className="pointer-events-none absolute inset-0">
-        <div className="absolute right-[5%] top-32 size-72 rounded-full bg-emerald-500/5 blur-3xl" />
+        <div className="absolute top-32 right-[5%] size-72 rounded-full bg-emerald-500/5 blur-3xl" />
         <div className="absolute bottom-20 left-[8%] size-96 rounded-full bg-emerald-500/5 blur-3xl" />
       </div>
 
@@ -76,35 +73,35 @@ export default function EducationSection() {
             Education
           </Badge>
 
-          <h2 className="text-3xl font-semibold tracking-tight text-neutral-900 dark:text-neutral-50 sm:text-4xl lg:text-5xl">
+          <h2 className="text-3xl font-semibold tracking-tight text-neutral-900 sm:text-4xl lg:text-5xl dark:text-neutral-50">
             Where I{" "}
             <span className="text-neutral-400 dark:text-neutral-500">
               learned.
             </span>
           </h2>
 
-          <p className="mt-5 max-w-2xl text-base leading-7 text-neutral-500 dark:text-neutral-400 sm:text-lg">
-            My academic journey from school to software engineering, shaped by
-            a strong foundation in computer science and a continued interest
-            in building things with technology.
+          <p className="mt-5 max-w-2xl text-base leading-7 text-neutral-500 sm:text-lg dark:text-neutral-400">
+            My academic journey from school to software engineering, shaped by a
+            strong foundation in computer science and a continued interest in
+            building things with technology.
           </p>
         </div>
 
         {/* Education Timeline */}
         <div className="relative">
           {/* Timeline line */}
-          <div className="absolute bottom-0 left-4.75 top-0 hidden w-px bg-linear-to-b from-emerald-400 via-emerald-200 to-neutral-200 dark:from-emerald-600 dark:via-emerald-900 dark:to-neutral-800 md:block" />
+          <div className="absolute top-0 bottom-0 left-4.75 hidden w-px bg-linear-to-b from-emerald-400 via-emerald-200 to-neutral-200 md:block dark:from-emerald-600 dark:via-emerald-900 dark:to-neutral-800" />
 
           <div className="space-y-8">
             {education.map((item) => {
-              const Icon = item.icon;
+              const Icon = item.icon
 
               return (
                 <div key={item.institution} className="relative md:pl-15">
                   {/* Timeline node */}
                   <div
                     className={cn(
-                      "absolute left-0 top-7 hidden size-10 items-center justify-center rounded-full shadow-sm md:flex",
+                      "absolute top-7 left-0 hidden size-10 items-center justify-center rounded-full shadow-sm md:flex",
                       item.featured
                         ? "border-2 border-emerald-300 bg-emerald-50 dark:border-emerald-700 dark:bg-emerald-950"
                         : "border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-neutral-900"
@@ -191,11 +188,11 @@ export default function EducationSection() {
                       {/* Degree + Academic Highlights */}
                       <div className="grid gap-6 lg:grid-cols-[1fr_0.8fr]">
                         <div>
-                          <p className="text-[10px] font-semibold uppercase tracking-widest text-neutral-400 dark:text-neutral-500">
+                          <p className="text-[10px] font-semibold tracking-widest text-neutral-400 uppercase dark:text-neutral-500">
                             Qualification
                           </p>
 
-                          <h4 className="mt-2 text-xl font-semibold tracking-tight text-neutral-900 dark:text-neutral-100 sm:text-2xl">
+                          <h4 className="mt-2 text-xl font-semibold tracking-tight text-neutral-900 sm:text-2xl dark:text-neutral-100">
                             {item.degree}
                           </h4>
 
@@ -213,7 +210,7 @@ export default function EducationSection() {
                           <div className="flex items-center gap-2">
                             <Trophy className="size-3.5 text-emerald-600 dark:text-emerald-400" />
 
-                            <p className="text-[10px] font-semibold uppercase tracking-widest text-neutral-400 dark:text-neutral-500">
+                            <p className="text-[10px] font-semibold tracking-widest text-neutral-400 uppercase dark:text-neutral-500">
                               Academic highlights
                             </p>
                           </div>
@@ -250,11 +247,11 @@ export default function EducationSection() {
                     </CardContent>
                   </Card>
                 </div>
-              );
+              )
             })}
           </div>
         </div>
       </div>
     </section>
-  );
+  )
 }

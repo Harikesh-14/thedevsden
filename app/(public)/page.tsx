@@ -1,9 +1,9 @@
-import AboutSection from "@/components/portfolio/about-me";
-import ContactSection from "@/components/portfolio/contact-me";
-import EducationSection from "@/components/portfolio/education";
-import ExperiencesSection from "@/components/portfolio/experiences";
-import ProjectsSection from "@/components/portfolio/projects";
-import SkillSection from "@/components/portfolio/skills";
+import AboutSection from "@/components/portfolio/about-me"
+import ContactSection from "@/components/portfolio/contact-me"
+import EducationSection from "@/components/portfolio/education"
+import ExperiencesSection from "@/components/portfolio/experiences"
+import ProjectsSection from "@/components/portfolio/projects"
+import SkillSection from "@/components/portfolio/skills"
 
 export default function ProfilePage() {
   return (
@@ -15,5 +15,5 @@ export default function ProfilePage() {
       <EducationSection />
       <ContactSection />
     </main>
-  );
+  )
 }

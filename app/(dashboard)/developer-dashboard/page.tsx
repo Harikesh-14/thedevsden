@@ -1,7 +1,3 @@
 export default function DeveloperDashboardPage() {
-  return (
-    <div>
-      hello
-    </div>
-  )
+  return <div>hello</div>
 }

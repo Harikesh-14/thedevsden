@@ -1,4 +1,4 @@
-import Image from "next/image";
+import Image from "next/image"
 import {
   ArrowUpRight,
   BriefcaseBusiness,
@@ -7,11 +7,11 @@ import {
   Sparkles,
   Download,
   Calendar1,
-} from "lucide-react";
+} from "lucide-react"
 
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import { cn } from "@/lib/utils"
 
 const facts = [
   {
@@ -38,13 +38,12 @@ const facts = [
     body: "Greater Noida, India",
     tags: [],
   },
-];
+]
 
 export default function AboutSection() {
   return (
     <section id="about-me" className="border-b bg-background">
       <div className="mx-auto mb-20">
-
         {/* Section heading */}
         <div className="mb-12 max-w-2xl lg:mb-16">
           {/* Emerald rule line */}
@@ -58,7 +57,7 @@ export default function AboutSection() {
             About me
           </Badge>
 
-          <h2 className="text-3xl font-semibold tracking-tight text-neutral-900 dark:text-neutral-50 sm:text-4xl lg:text-5xl">
+          <h2 className="text-3xl font-semibold tracking-tight text-neutral-900 sm:text-4xl lg:text-5xl dark:text-neutral-50">
             Building software with{" "}
             <span className="text-neutral-400 dark:text-neutral-500">
               curiosity and purpose.
@@ -68,7 +67,6 @@ export default function AboutSection() {
 
         {/* Content grid */}
         <div className="grid items-start gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:gap-16 xl:gap-24">
-
           {/* ── Left: Image ── */}
           <div className="relative mx-auto w-full max-w-sm lg:mx-0">
             <div className="relative aspect-4/5 overflow-hidden rounded-2xl border border-neutral-200 bg-neutral-100 dark:border-neutral-800 dark:bg-neutral-900">
@@ -81,13 +79,13 @@ export default function AboutSection() {
                 className="object-cover"
               />
               {/* Emerald corner accent */}
-              <div className="absolute inset-0 rounded-2xl ring-1 ring-inset ring-black/5 dark:ring-white/5" />
+              <div className="absolute inset-0 rounded-2xl ring-1 ring-black/5 ring-inset dark:ring-white/5" />
             </div>
 
             {/* Floating status card */}
             <div
               className={cn(
-                "absolute -bottom-4 -right-3 sm:-right-5",
+                "absolute -right-3 -bottom-4 sm:-right-5",
                 "rounded-2xl border border-neutral-200 bg-white/95 px-4 py-3 backdrop-blur-sm",
                 "dark:border-neutral-800 dark:bg-neutral-950/95",
                 "shadow-[0_4px_16px_rgba(0,0,0,0.08)] dark:shadow-[0_4px_24px_rgba(0,0,0,0.3)]"
@@ -111,25 +109,24 @@ export default function AboutSection() {
 
           {/* ── Right: Content ── */}
           <div className="flex flex-col gap-8">
-
             {/* Bio */}
             <div className="space-y-3">
-              <p className="text-lg leading-8 text-neutral-800 dark:text-neutral-200 sm:text-xl">
+              <p className="text-lg leading-8 text-neutral-800 sm:text-xl dark:text-neutral-200">
                 I'm a software engineer who enjoys turning ideas into
-                well-designed, reliable software. I work across the stack,
-                with a particular interest in backend systems, developer
-                tools, and artificial intelligence.
+                well-designed, reliable software. I work across the stack, with
+                a particular interest in backend systems, developer tools, and
+                artificial intelligence.
               </p>
               <p className="leading-7 text-neutral-500 dark:text-neutral-400">
-                I like understanding how things work beneath the surface —
-                from designing APIs and databases to experimenting with
-                programming languages, machine learning systems, and
-                developer-focused products.
+                I like understanding how things work beneath the surface — from
+                designing APIs and databases to experimenting with programming
+                languages, machine learning systems, and developer-focused
+                products.
               </p>
               <p className="leading-7 text-neutral-500 dark:text-neutral-400">
-                I'm constantly building and experimenting with new ideas,
-                using projects as a way to explore technologies and deepen
-                my understanding of computer science.
+                I'm constantly building and experimenting with new ideas, using
+                projects as a way to explore technologies and deepen my
+                understanding of computer science.
               </p>
             </div>
 
@@ -169,7 +166,7 @@ export default function AboutSection() {
             {/* CTAs */}
             <div className="flex flex-wrap items-center gap-3">
               <Button
-                className="rounded-full bg-emerald-500 text-white hover:bg-emerald-600 dark:bg-emerald-500 dark:hover:bg-emerald-400 dark:text-white"
+                className="rounded-full bg-emerald-500 text-white hover:bg-emerald-600 dark:bg-emerald-500 dark:text-white dark:hover:bg-emerald-400"
                 asChild
               >
                 <a href="#projects">
@@ -189,10 +186,9 @@ export default function AboutSection() {
                 </a>
               </Button>
             </div>
-
           </div>
         </div>
       </div>
     </section>
-  );
+  )
 }
