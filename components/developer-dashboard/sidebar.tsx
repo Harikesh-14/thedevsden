@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import {
   LayoutDashboard,
   ListTodo,
@@ -14,7 +14,7 @@ import {
   X,
 } from "lucide-react"
 import { useTheme } from "next-themes"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 import { Switch } from "../ui/switch"
 import { Label } from "../ui/label"
@@ -25,6 +25,7 @@ import {
   AccordionTrigger,
 } from "../ui/accordion"
 import { cn } from "@/lib/utils"
+import ModeTransition from "../mode-transition"
 
 const navigation = [
   {
@@ -46,17 +47,54 @@ const navigation = [
 
 export default function Sidebar() {
   const pathname = usePathname()
+  const router = useRouter()
+
   const { theme, setTheme } = useTheme()
 
   const [isOpen, setIsOpen] = useState(false)
-  const [portfolioMode, setPortfolioMode] = useState(true)
+  const [developerMode, setDeveloperMode] = useState<boolean | null>(null)
+  const [isTransitioning, setIsTransitioning] = useState(false)
 
   const closeSidebar = () => {
     setIsOpen(false)
   }
 
+  useEffect(() => {
+    const storedMode = localStorage.getItem("devMode")
+
+    setDeveloperMode(storedMode === "true")
+  }, [])
+
+  const toggleDeveloperMode = (checked: boolean) => {
+    if (!checked) {
+      setIsTransitioning(true)
+
+      setTimeout(() => {
+        localStorage.setItem("devMode", "false")
+        setDeveloperMode(false)
+
+        router.push("/")
+      }, 900)
+
+      return
+    }
+
+    setIsTransitioning(true)
+
+    setTimeout(() => {
+      localStorage.setItem("devMode", "true")
+      setDeveloperMode(true)
+
+      router.push("/developer-dashboard")
+    }, 900)
+  }
+
+  const isDeveloperModeLoaded = developerMode !== null
+
   return (
     <>
+      {isTransitioning && <ModeTransition mode="portfolio" />}
+
       {/* Mobile floating menu button */}
       <button
         type="button"
@@ -234,17 +272,17 @@ export default function Sidebar() {
                     "text-[12.5px] font-medium transition-all duration-150",
                     isActive
                       ? [
-                          "bg-emerald-500/10 dark:bg-emerald-400/10",
-                          "text-emerald-600 dark:text-emerald-400",
-                          "border border-emerald-200/60 dark:border-emerald-800/50",
-                          "shadow-[inset_0_1px_0_rgba(255,255,255,0.5)] dark:shadow-none",
-                        ]
+                        "bg-emerald-500/10 dark:bg-emerald-400/10",
+                        "text-emerald-600 dark:text-emerald-400",
+                        "border border-emerald-200/60 dark:border-emerald-800/50",
+                        "shadow-[inset_0_1px_0_rgba(255,255,255,0.5)] dark:shadow-none",
+                      ]
                       : [
-                          "text-neutral-600 dark:text-neutral-400",
-                          "border border-transparent",
-                          "hover:bg-neutral-100/80 dark:hover:bg-white/5",
-                          "hover:text-neutral-900 dark:hover:text-neutral-200",
-                        ]
+                        "text-neutral-600 dark:text-neutral-400",
+                        "border border-transparent",
+                        "hover:bg-neutral-100/80 dark:hover:bg-white/5",
+                        "hover:text-neutral-900 dark:hover:text-neutral-200",
+                      ]
                   )}
                 >
                   <span
@@ -290,16 +328,18 @@ export default function Sidebar() {
               Portfolio mode
             </Label>
 
-            <Switch
-              id="toggle-portfolio"
-              checked={portfolioMode}
-              onCheckedChange={setPortfolioMode}
-              className={cn(
-                "origin-right scale-[0.8]",
-                "data-[state=checked]:bg-emerald-500 dark:data-[state=checked]:bg-emerald-400",
-                "dark:bg-neutral-700"
-              )}
-            />
+            {isDeveloperModeLoaded && (
+              <Switch
+                id="toggle-portfolio"
+                checked={developerMode}
+                onCheckedChange={toggleDeveloperMode}
+                className={cn(
+                  "origin-right scale-[0.8]",
+                  "data-[state=checked]:bg-emerald-500 dark:data-[state=checked]:bg-emerald-400",
+                  "dark:bg-neutral-700"
+                )}
+              />
+            )}
           </div>
 
           {/* Theme + Profile */}
