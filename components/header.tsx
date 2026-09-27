@@ -18,19 +18,35 @@ const navLinks = [
 
 export default function Header() {
   const pathname = usePathname()
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
-  // Prevent background body scroll when mobile menu is open
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [developerMode, setDeveloperMode] = useState<boolean | null>(null)
+
+  useEffect(() => {
+    const storedMode = localStorage.getItem("devMode")
+
+    setDeveloperMode(storedMode === "true")
+  }, [])
+
   useEffect(() => {
     if (isMobileMenuOpen) {
       document.body.style.overflow = "hidden"
     } else {
       document.body.style.overflow = "unset"
     }
+
     return () => {
       document.body.style.overflow = "unset"
     }
   }, [isMobileMenuOpen])
+
+  const toggleDeveloperMode = (checked: boolean) => {
+    setDeveloperMode(checked)
+    localStorage.setItem("devMode", String(checked))
+  }
+
+  // Don't render the switch until localStorage has been checked
+  const isDeveloperModeLoaded = developerMode !== null
 
   return (
     <>
@@ -57,9 +73,11 @@ export default function Header() {
             <span className="text-[15px] font-bold tracking-[-0.02em] text-zinc-900 dark:text-neutral-100">
               the
             </span>
+
             <span className="text-[15px] font-bold tracking-[-0.02em] text-emerald-500 dark:text-emerald-400">
               devs
             </span>
+
             <span className="text-[15px] font-bold tracking-[-0.02em] text-zinc-900 dark:text-neutral-100">
               den
             </span>
@@ -89,7 +107,7 @@ export default function Header() {
 
           {/* Controls */}
           <div className="flex shrink-0 items-center gap-2">
-            {/* Dev toggle pill */}
+            {/* Desktop Dev Mode */}
             <label
               htmlFor="dev-dashboard"
               className={cn(
@@ -101,21 +119,26 @@ export default function Header() {
                 "hover:bg-black/[0.07] dark:hover:bg-white/8"
               )}
             >
-              <Switch
-                id="dev-dashboard"
-                className={cn(
-                  "h-4.5 w-8 scale-90",
-                  "data-[state=checked]:bg-emerald-500",
-                  "dark:data-[state=checked]:bg-emerald-400",
-                  "dark:bg-neutral-700"
-                )}
-              />
+              {isDeveloperModeLoaded && (
+                <Switch
+                  id="dev-dashboard"
+                  checked={developerMode}
+                  onCheckedChange={toggleDeveloperMode}
+                  className={cn(
+                    "h-4.5 w-8 scale-90",
+                    "data-[state=checked]:bg-emerald-500",
+                    "dark:data-[state=checked]:bg-emerald-400",
+                    "dark:bg-neutral-700"
+                  )}
+                />
+              )}
+
               <span className="pr-0.5 text-[12px] font-medium whitespace-nowrap text-zinc-400 dark:text-neutral-500">
                 Dev mode
               </span>
             </label>
 
-            {/* Mobile Hamburger Button */}
+            {/* Mobile Hamburger */}
             <button
               type="button"
               onClick={() => setIsMobileMenuOpen((prev) => !prev)}
@@ -130,7 +153,6 @@ export default function Header() {
               )}
             >
               {isMobileMenuOpen ? (
-                /* Close Icon (X) */
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                   <path
                     d="M12 4L4 12M4 4l8 8"
@@ -141,7 +163,6 @@ export default function Header() {
                   />
                 </svg>
               ) : (
-                /* Hamburger Icon */
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                   <path
                     d="M2 4h12M2 8h12M2 12h8"
@@ -158,12 +179,12 @@ export default function Header() {
         </div>
       </header>
 
-      {/* Mobile Menu Backdrop & Drawer */}
+      {/* Mobile Menu */}
       {isMobileMenuOpen && (
         <div className="fixed inset-0 z-40 md:hidden">
           {/* Backdrop */}
           <div
-            className="fixed inset-0 bg-black/40 backdrop-blur-sm transition-opacity"
+            className="fixed inset-0 bg-black/40 backdrop-blur-sm"
             onClick={() => setIsMobileMenuOpen(false)}
           />
 
@@ -174,7 +195,8 @@ export default function Header() {
               "bg-white/95 dark:bg-neutral-900/95",
               "border border-neutral-200 dark:border-neutral-800",
               "shadow-2xl backdrop-blur-2xl",
-              "flex animate-in flex-col gap-4 duration-200 fade-in slide-in-from-top-4"
+              "flex animate-in flex-col gap-4 duration-200",
+              "fade-in slide-in-from-top-4"
             )}
           >
             <nav className="flex flex-col gap-1">
@@ -198,19 +220,24 @@ export default function Header() {
 
             <div className="my-1 h-px bg-neutral-200 dark:bg-neutral-800" />
 
-            {/* Mobile Dev Mode Switcher */}
+            {/* Mobile Dev Mode */}
             <div className="flex items-center justify-between px-2 py-1">
               <span className="text-sm font-medium text-zinc-600 dark:text-neutral-300">
                 Dev mode
               </span>
-              <Switch
-                id="dev-dashboard-mobile"
-                className={cn(
-                  "h-4.5 w-8 scale-90",
-                  "data-[state=checked]:bg-emerald-500",
-                  "dark:data-[state=checked]:bg-emerald-400"
-                )}
-              />
+
+              {isDeveloperModeLoaded && (
+                <Switch
+                  id="dev-dashboard-mobile"
+                  checked={developerMode}
+                  onCheckedChange={toggleDeveloperMode}
+                  className={cn(
+                    "h-4.5 w-8 scale-90",
+                    "data-[state=checked]:bg-emerald-500",
+                    "dark:data-[state=checked]:bg-emerald-400"
+                  )}
+                />
+              )}
             </div>
           </div>
         </div>

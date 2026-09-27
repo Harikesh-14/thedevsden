@@ -49,7 +49,7 @@ export default function Sidebar() {
   const { theme, setTheme } = useTheme()
 
   const [isOpen, setIsOpen] = useState(false)
-  const [portfolioMode, setPortfolioMode] = useState(false)
+  const [portfolioMode, setPortfolioMode] = useState(true)
 
   const closeSidebar = () => {
     setIsOpen(false)
@@ -170,7 +170,7 @@ export default function Sidebar() {
           {/* Admin Portal */}
           <Accordion
             type="multiple"
-            defaultValue={["admin-portal"]}
+            // defaultValue={["admin-portal"]}
             className="w-full space-y-px"
           >
             <AccordionItem value="admin-portal" className="border-none">
