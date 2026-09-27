@@ -6,6 +6,7 @@ import {
   MapPin,
   Sparkles,
   Download,
+  Calendar1,
 } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
@@ -13,6 +14,12 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 const facts = [
+  {
+    icon: Calendar1,
+    label: "Professional Experience",
+    body: "1 year experience in the industry",
+    tags: [],
+  },
   {
     icon: Code2,
     label: "What I do",
@@ -106,7 +113,7 @@ export default function AboutSection() {
           <div className="flex flex-col gap-8">
 
             {/* Bio */}
-            <div className="space-y-4">
+            <div className="space-y-3">
               <p className="text-lg leading-8 text-neutral-800 dark:text-neutral-200 sm:text-xl">
                 I'm a software engineer who enjoys turning ideas into
                 well-designed, reliable software. I work across the stack,

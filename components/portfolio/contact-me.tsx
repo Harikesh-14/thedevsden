@@ -38,7 +38,7 @@ const contactMethods = [
   },
 ];
 
-export default function ContactPage() {
+export default function ContactSection() {
   return (
     <main id="contact-me" className="border-b bg-background">
       <div className="mx-auto max-w-7xl px-6 py-20 sm:px-8 lg:px-12 lg:py-28">

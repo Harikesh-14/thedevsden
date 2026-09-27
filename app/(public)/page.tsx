@@ -1,6 +1,7 @@
 import AboutSection from "@/components/portfolio/about-me";
-import ContactPage from "@/components/portfolio/contact-me";
-import ExperiencesPage from "@/components/portfolio/experiences";
+import ContactSection from "@/components/portfolio/contact-me";
+import EducationSection from "@/components/portfolio/education";
+import ExperiencesSection from "@/components/portfolio/experiences";
 import ProjectsSection from "@/components/portfolio/projects";
 import SkillSection from "@/components/portfolio/skills";
 
@@ -10,8 +11,9 @@ export default function ProfilePage() {
       <AboutSection />
       <SkillSection />
       <ProjectsSection />
-      <ExperiencesPage />
-      <ContactPage />
+      <ExperiencesSection />
+      <EducationSection />
+      <ContactSection />
     </main>
   );
 }
