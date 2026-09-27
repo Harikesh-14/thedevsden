@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import ModeToggle from "./mode-toggle"
 import { Switch } from "@/components/ui/switch"
 import { cn } from "@/lib/utils"
@@ -18,9 +18,11 @@ const navLinks = [
 
 export default function Header() {
   const pathname = usePathname()
+  const router = useRouter()
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [developerMode, setDeveloperMode] = useState<boolean | null>(null)
+  const [isTransitioning, setIsTransitioning] = useState(false)
 
   useEffect(() => {
     const storedMode = localStorage.getItem("devMode")
@@ -41,8 +43,20 @@ export default function Header() {
   }, [isMobileMenuOpen])
 
   const toggleDeveloperMode = (checked: boolean) => {
-    setDeveloperMode(checked)
-    localStorage.setItem("devMode", String(checked))
+    if (!checked) {
+      setDeveloperMode(false);
+      localStorage.setItem("devMode", "false")
+      return;
+    }
+
+    setIsTransitioning(true)
+
+    setTimeout(() => {
+      localStorage.setItem("devMode", "true");
+      setDeveloperMode(true);
+
+      router.push("/developer-dashboard");
+    }, 900);
   }
 
   // Don't render the switch until localStorage has been checked
@@ -50,6 +64,32 @@ export default function Header() {
 
   return (
     <>
+      {isTransitioning && (
+        <div className="fixed inset-0 z-9999 flex items-center justify-center bg-neutral-950">
+          <div className="flex flex-col items-center gap-5">
+
+            {/* Spinner */}
+            <div className="relative h-10 w-10">
+              <div className="absolute inset-0 rounded-full border-2 border-white/10" />
+
+              <div className="absolute inset-0 animate-spin rounded-full border-2 border-transparent border-t-emerald-400" />
+            </div>
+
+            {/* Text */}
+            <div className="text-center">
+              <p className="text-sm font-medium tracking-wide text-white">
+                Entering Developer Mode
+              </p>
+
+              <p className="mt-1 text-xs text-white/40">
+                Initializing workspace...
+              </p>
+            </div>
+
+          </div>
+        </div>
+      )}
+
       <header className="pointer-events-none fixed inset-x-0 top-0 z-50 flex justify-center px-4 pt-4 sm:pt-5">
         <div
           className={cn(
