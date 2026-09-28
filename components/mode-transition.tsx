@@ -4,7 +4,6 @@ export default function ModeTransition({ mode }: { mode: Mode }) {
   return (
     <div className="fixed inset-0 z-9999 flex items-center justify-center bg-neutral-950">
       <div className="flex flex-col items-center gap-5">
-
         {/* Spinner */}
         <div className="relative h-10 w-10">
           <div className="absolute inset-0 rounded-full border-2 border-white/10" />
@@ -28,7 +27,6 @@ export default function ModeTransition({ mode }: { mode: Mode }) {
             Initializing workspace...
           </p>
         </div>
-
       </div>
     </div>
   )

@@ -26,6 +26,8 @@ import {
 } from "../ui/accordion"
 import { cn } from "@/lib/utils"
 import ModeTransition from "../mode-transition"
+import { logout } from "@/lib/auth"
+import { useAuth } from "@/hooks/use-auth"
 
 const navigation = [
   {
@@ -50,6 +52,7 @@ export default function Sidebar() {
   const router = useRouter()
 
   const { theme, setTheme } = useTheme()
+  const { isAuthenticated } = useAuth()
 
   const [isOpen, setIsOpen] = useState(false)
   const [developerMode, setDeveloperMode] = useState<boolean | null>(null)
@@ -87,6 +90,15 @@ export default function Sidebar() {
 
       router.push("/developer-dashboard")
     }, 900)
+  }
+
+  async function handleLogout() {
+    try {
+      await logout()
+      router.replace("/login")
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   const isDeveloperModeLoaded = developerMode !== null
@@ -272,17 +284,17 @@ export default function Sidebar() {
                     "text-[12.5px] font-medium transition-all duration-150",
                     isActive
                       ? [
-                        "bg-emerald-500/10 dark:bg-emerald-400/10",
-                        "text-emerald-600 dark:text-emerald-400",
-                        "border border-emerald-200/60 dark:border-emerald-800/50",
-                        "shadow-[inset_0_1px_0_rgba(255,255,255,0.5)] dark:shadow-none",
-                      ]
+                          "bg-emerald-500/10 dark:bg-emerald-400/10",
+                          "text-emerald-600 dark:text-emerald-400",
+                          "border border-emerald-200/60 dark:border-emerald-800/50",
+                          "shadow-[inset_0_1px_0_rgba(255,255,255,0.5)] dark:shadow-none",
+                        ]
                       : [
-                        "text-neutral-600 dark:text-neutral-400",
-                        "border border-transparent",
-                        "hover:bg-neutral-100/80 dark:hover:bg-white/5",
-                        "hover:text-neutral-900 dark:hover:text-neutral-200",
-                      ]
+                          "text-neutral-600 dark:text-neutral-400",
+                          "border border-transparent",
+                          "hover:bg-neutral-100/80 dark:hover:bg-white/5",
+                          "hover:text-neutral-900 dark:hover:text-neutral-200",
+                        ]
                   )}
                 >
                   <span
@@ -380,22 +392,25 @@ export default function Sidebar() {
           </div>
 
           {/* Logout */}
-          <button
-            type="button"
-            className={cn(
-              "flex h-9 w-full items-center justify-center gap-1.5 rounded-xl",
-              "border border-red-200/40 dark:border-red-500/10",
-              "bg-red-50/50 dark:bg-red-500/5",
-              "text-[11.5px] font-medium text-red-500/80 dark:text-red-400/70",
-              "hover:bg-red-50 dark:hover:bg-red-500/10",
-              "hover:text-red-600 dark:hover:text-red-400",
-              "hover:border-red-200/70 dark:hover:border-red-500/20",
-              "transition-all duration-150"
-            )}
-          >
-            <LogOut className="size-3.5" />
-            Logout
-          </button>
+          {isAuthenticated && (
+            <button
+              type="button"
+              className={cn(
+                "flex h-9 w-full items-center justify-center gap-1.5 rounded-xl",
+                "border border-red-200/40 dark:border-red-500/10",
+                "bg-red-50/50 dark:bg-red-500/5",
+                "text-[11.5px] font-medium text-red-500/80 dark:text-red-400/70",
+                "hover:bg-red-50 dark:hover:bg-red-500/10",
+                "hover:text-red-600 dark:hover:text-red-400",
+                "hover:border-red-200/70 dark:hover:border-red-500/20",
+                "transition-all duration-150"
+              )}
+              onClick={handleLogout}
+            >
+              <LogOut className="size-3.5" />
+              Logout
+            </button>
+          )}
         </div>
       </aside>
     </>

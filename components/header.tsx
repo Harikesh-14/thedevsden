@@ -45,19 +45,19 @@ export default function Header() {
 
   const toggleDeveloperMode = (checked: boolean) => {
     if (!checked) {
-      setDeveloperMode(false);
+      setDeveloperMode(false)
       localStorage.setItem("devMode", "false")
-      return;
+      return
     }
 
     setIsTransitioning(true)
 
     setTimeout(() => {
-      localStorage.setItem("devMode", "true");
-      setDeveloperMode(true);
+      localStorage.setItem("devMode", "true")
+      setDeveloperMode(true)
 
-      router.push("/developer-dashboard");
-    }, 900);
+      router.push("/developer-dashboard")
+    }, 900)
   }
 
   // Don't render the switch until localStorage has been checked

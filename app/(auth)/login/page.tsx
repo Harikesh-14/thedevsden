@@ -8,30 +8,43 @@ import { Home, ArrowRight } from "lucide-react"
 import Link from "next/link"
 import { useState } from "react"
 import { cn } from "@/lib/utils"
+import { useRouter } from "next/navigation"
+import { login } from "@/lib/auth"
 
 export default function LoginPage() {
+  const router = useRouter()
+
   const [password, setPassword] = useState("")
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState("")
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
+
     setLoading(true)
-    // wire up your auth here
-    await new Promise((r) => setTimeout(r, 800))
-    setLoading(false)
+    setError("")
+
+    try {
+      const data = await login("ranjansinhaharikesh@gmail.com", password)
+
+      router.push("/developer-dashboard")
+    } catch (error) {
+      setError(error instanceof Error ? error.message : "Something went wong")
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
     <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-white px-4 dark:bg-neutral-950">
-
       {/* Ambient emerald glows */}
       <div
         aria-hidden
-        className="pointer-events-none absolute -top-20 left-1/2 -translate-x-1/2 h-64 w-96 rounded-full bg-emerald-400/10 dark:bg-emerald-500/10 blur-3xl"
+        className="pointer-events-none absolute -top-20 left-1/2 h-64 w-96 -translate-x-1/2 rounded-full bg-emerald-400/10 blur-3xl dark:bg-emerald-500/10"
       />
       <div
         aria-hidden
-        className="pointer-events-none absolute -bottom-16 right-1/4 h-52 w-72 rounded-full bg-emerald-400/6 dark:bg-emerald-500/6 blur-3xl"
+        className="pointer-events-none absolute right-1/4 -bottom-16 h-52 w-72 rounded-full bg-emerald-400/6 blur-3xl dark:bg-emerald-500/6"
       />
 
       {/* Card */}
@@ -81,7 +94,7 @@ export default function LoginPage() {
         {/* Heading */}
         <div className="mb-7">
           <div className="mb-4 h-0.5 w-6 rounded-full bg-emerald-500" />
-          <h1 className="mb-2 text-[22px] font-semibold leading-tight tracking-[-0.02em] text-neutral-900 dark:text-neutral-100">
+          <h1 className="mb-2 text-[22px] leading-tight font-semibold tracking-[-0.02em] text-neutral-900 dark:text-neutral-100">
             Are you{" "}
             <span className="text-emerald-500 dark:text-emerald-400">
               Harikesh?
@@ -96,7 +109,7 @@ export default function LoginPage() {
         <div className="mb-5 space-y-2">
           <Label
             htmlFor="password"
-            className="text-[10px] font-semibold uppercase tracking-[0.08em] text-neutral-400 dark:text-neutral-600"
+            className="text-[10px] font-semibold tracking-[0.08em] text-neutral-400 uppercase dark:text-neutral-600"
           >
             Password
           </Label>
@@ -117,6 +130,7 @@ export default function LoginPage() {
               "focus-visible:ring-2 focus-visible:ring-emerald-500/10 dark:focus-visible:ring-emerald-500/10",
               "transition-all duration-150"
             )}
+            {...(error && <p>{error}</p>)}
           />
         </div>
 

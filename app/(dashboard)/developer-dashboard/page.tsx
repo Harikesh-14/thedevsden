@@ -1,11 +1,16 @@
-import { CalendarDays, LayoutDashboard, ListTodo, Map } from "lucide-react";
-import Link from "next/link";
-import { cn } from "@/lib/utils";
+"use client"
+
+import { CalendarDays, LayoutDashboard, ListTodo, Map } from "lucide-react"
+import Link from "next/link"
+import { cn } from "@/lib/utils"
+import { useRouter } from "next/navigation"
+import { useAuth } from "@/hooks/use-auth"
+import { useEffect } from "react"
 
 const THOUGHT_OF_THE_DAY = {
   quote: "The best way to predict the future is to invent it.",
   author: "Alan Kay",
-};
+}
 
 const quickLinks = [
   {
@@ -26,13 +31,13 @@ const quickLinks = [
     icon: Map,
     meta: "Next milestone: v2.0",
   },
-];
+]
 
 function getGreeting() {
-  const h = new Date().getHours();
-  if (h < 12) return "Good morning";
-  if (h < 17) return "Good afternoon";
-  return "Good evening";
+  const h = new Date().getHours()
+  if (h < 12) return "Good morning"
+  if (h < 17) return "Good afternoon"
+  return "Good evening"
 }
 
 function getFormattedDate() {
@@ -41,20 +46,41 @@ function getFormattedDate() {
     day: "numeric",
     month: "long",
     year: "numeric",
-  });
+  })
 }
 
 export default function DeveloperDashboardPage() {
+  const router = useRouter()
+
+  const { user, loading, isAuthenticated } = useAuth()
+
+  useEffect(() => {
+    if (!loading && !isAuthenticated) {
+      router.replace("/login")
+    }
+  }, [loading, isAuthenticated, router])
+
+  if (loading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        Checking authentication...
+      </div>
+    )
+  }
+
+  if (!user) {
+    return null
+  }
+
   return (
     <main className="flex min-h-screen items-center justify-center px-8 py-16">
       <div className="w-full max-w-2xl">
-
         {/* Top meta row */}
         <div className="mb-10 flex items-center gap-3">
           <span
             className={cn(
               "rounded-full border border-emerald-500/20 bg-emerald-500/8",
-              "px-3 py-1 text-[10px] font-semibold uppercase tracking-widest",
+              "px-3 py-1 text-[10px] font-semibold tracking-widest uppercase",
               "text-emerald-500 dark:text-emerald-400"
             )}
           >
@@ -73,13 +99,15 @@ export default function DeveloperDashboardPage() {
         </p>
         <h1
           className={cn(
-            "text-[clamp(32px,5vw,48px)] font-semibold leading-[1.1] tracking-[-0.03em]",
+            "text-[clamp(32px,5vw,48px)] leading-[1.1] font-semibold tracking-[-0.03em]",
             "text-neutral-900 dark:text-neutral-100",
             "mb-3"
           )}
         >
           Welcome back,{" "}
-          <span className="text-emerald-500 dark:text-emerald-400">Harikesh.</span>
+          <span className="text-emerald-500 dark:text-emerald-400">
+            Harikesh.
+          </span>
         </h1>
         <p className="mb-14 text-sm text-neutral-400 dark:text-neutral-500">
           Here's what's on for today.
@@ -92,7 +120,7 @@ export default function DeveloperDashboardPage() {
         <p
           className={cn(
             "mb-5 flex items-center gap-3",
-            "text-[10px] font-bold uppercase tracking-[0.14em]",
+            "text-[10px] font-bold tracking-[0.14em] uppercase",
             "text-emerald-600/60 dark:text-emerald-500/50",
             "after:h-px after:flex-1 after:bg-neutral-100 dark:after:bg-neutral-800"
           )}
@@ -100,17 +128,17 @@ export default function DeveloperDashboardPage() {
           Thought of the day
         </p>
 
-        <div className="mb-2 border-l-2 border-emerald-500/40 dark:border-emerald-500/30 pl-5">
+        <div className="mb-2 border-l-2 border-emerald-500/40 pl-5 dark:border-emerald-500/30">
           <p
             className={cn(
-              "text-[19px] font-normal italic leading-relaxed",
+              "text-[19px] leading-relaxed font-normal italic",
               "text-neutral-700 dark:text-neutral-300"
             )}
           >
             &ldquo;{THOUGHT_OF_THE_DAY.quote}&rdquo;
           </p>
         </div>
-        <p className="pl-5 text-xs font-semibold uppercase tracking-widest text-emerald-600/60 dark:text-emerald-500/50">
+        <p className="pl-5 text-xs font-semibold tracking-widest text-emerald-600/60 uppercase dark:text-emerald-500/50">
           — {THOUGHT_OF_THE_DAY.author}
         </p>
 
@@ -148,8 +176,7 @@ export default function DeveloperDashboardPage() {
             </Link>
           ))}
         </div>
-
       </div>
     </main>
-  );
+  )
 }
