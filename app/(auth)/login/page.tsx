@@ -18,7 +18,7 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
 
-  async function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.ChangeEvent) {
     e.preventDefault()
 
     setLoading(true)
@@ -130,8 +130,12 @@ export default function LoginPage() {
               "focus-visible:ring-2 focus-visible:ring-emerald-500/10 dark:focus-visible:ring-emerald-500/10",
               "transition-all duration-150"
             )}
-            {...(error && <p>{error}</p>)}
           />
+          {error && (
+            <p className="text-xs text-red-500 dark:text-red-400">
+              {error}
+            </p>
+          )}
         </div>
 
         {/* Submit */}
