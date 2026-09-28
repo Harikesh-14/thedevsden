@@ -63,6 +63,19 @@ export default function Header() {
   // Don't render the switch until localStorage has been checked
   const isDeveloperModeLoaded = developerMode !== null
 
+  // Auto redirection to the dev dashboard if dev mode is on
+  useEffect(() => {
+    if (developerMode && pathname !== "/developer-dashboard") {
+      setIsTransitioning(true)
+
+      const timer = setTimeout(() => {
+        router.push("/developer-dashboard")
+      }, 900)
+
+      return () => clearTimeout(timer)
+    }
+  }, [developerMode, pathname, router])
+
   return (
     <>
       {isTransitioning && <ModeTransition mode="developer" />}
