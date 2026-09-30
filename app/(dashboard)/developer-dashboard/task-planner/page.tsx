@@ -10,6 +10,7 @@ import {
   Trash2,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { useRouter } from "next/navigation"
 
 const tasks = [
   {
@@ -119,12 +120,12 @@ const priorityStyles = {
 
 export default function TaskPlannerPage() {
   const [activeFilter, setActiveFilter] = useState<Filter>("All")
-
   const [showAll, setShowAll] = useState(false)
-
   const [openMenu, setOpenMenu] = useState<number | null>(null)
 
   const menuRef = useRef<HTMLDivElement>(null)
+
+  const router = useRouter();
 
   const [completed, setCompleted] = useState<Set<number>>(
     new Set(tasks.filter((task) => task.isCompleted).map((task) => task.id))
@@ -217,6 +218,7 @@ export default function TaskPlannerPage() {
               "hover:text-emerald-400",
               "active:scale-[0.98]"
             )}
+            onClick={() => router.push("/developer-dashboard/task-planner/add-task")}
           >
             <Plus className="size-4 transition-transform duration-200 group-hover:rotate-90" />
             Add task

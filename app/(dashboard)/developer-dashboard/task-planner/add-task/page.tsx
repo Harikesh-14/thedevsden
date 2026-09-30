@@ -1,0 +1,315 @@
+"use client"
+
+import { useState } from "react"
+import { ArrowLeft, CalendarDays, Check, Plus } from "lucide-react"
+import { useRouter } from "next/navigation"
+import { cn } from "@/lib/utils"
+
+const priorities = [
+  {
+    value: "low",
+    label: "Low",
+    description: "Can wait",
+    dot: "bg-emerald-400 shadow-[0_0_10px_rgba(52,211,153,0.6)]",
+    active:
+      "border-emerald-400/25 bg-emerald-400/[0.08] text-emerald-300",
+  },
+  {
+    value: "medium",
+    label: "Medium",
+    description: "Worth doing soon",
+    dot: "bg-amber-400 shadow-[0_0_10px_rgba(251,191,36,0.6)]",
+    active:
+      "border-amber-400/25 bg-amber-400/[0.08] text-amber-300",
+  },
+  {
+    value: "high",
+    label: "High",
+    description: "Needs attention",
+    dot: "bg-red-400 shadow-[0_0_10px_rgba(248,113,113,0.7)]",
+    active:
+      "border-red-400/25 bg-red-400/[0.08] text-red-300",
+  },
+] as const
+
+type Priority = (typeof priorities)[number]["value"]
+
+export default function AddTaskPage() {
+  const router = useRouter()
+
+  const [title, setTitle] = useState("")
+  const [description, setDescription] = useState("")
+  const [priority, setPriority] = useState<Priority>("medium")
+  const [dueDate, setDueDate] = useState("")
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+
+    // TODO: Create task
+    console.log({
+      title,
+      description,
+      priority,
+      dueDate,
+    })
+  }
+
+  return (
+    <main className="relative min-h-screen overflow-hidden">
+      {/* Ambient glows */}
+      <div
+        aria-hidden
+        className="pointer-events-none fixed -top-24 left-1/3 h-64 w-96 rounded-full bg-emerald-500/8 blur-3xl"
+      />
+
+      <div
+        aria-hidden
+        className="pointer-events-none fixed right-1/4 bottom-0 h-56 w-80 rounded-full bg-emerald-500/5 blur-3xl"
+      />
+
+      <div className="relative mx-auto w-full max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
+        {/* Header */}
+        <header className="mb-8">
+          <button
+            onClick={() => router.back()}
+            className={cn(
+              "mb-6 flex items-center gap-2",
+              "text-[11.5px] font-medium text-white/30",
+              "transition-colors duration-150",
+              "hover:text-white/65"
+            )}
+          >
+            <ArrowLeft className="size-3.5" />
+            Back to tasks
+          </button>
+
+          <div className="mb-3 flex items-center gap-2">
+            <span className="size-2 rounded-full bg-emerald-400 shadow-[0_0_12px_rgba(52,211,153,0.8)]" />
+
+            <span className="text-[10px] font-semibold tracking-[0.18em] text-white/35 uppercase">
+              Task Planner
+            </span>
+          </div>
+
+          <h1 className="text-3xl font-semibold tracking-tight text-white/90 sm:text-4xl">
+            Add a task.
+            <span className="ml-2 text-white/25">Make it count.</span>
+          </h1>
+
+          <p className="mt-2 max-w-md text-sm leading-6 text-white/35">
+            Capture what needs to be done and keep your next step clear.
+          </p>
+        </header>
+
+        {/* Form card */}
+        <form
+          onSubmit={handleSubmit}
+          className={cn(
+            "overflow-hidden rounded-3xl",
+            "border border-white/[0.07] bg-white/3",
+            "shadow-[0_24px_60px_rgba(0,0,0,0.3)]",
+            "backdrop-blur-2xl"
+          )}
+        >
+          {/* Form header */}
+          <div className="border-b border-white/6 px-5 py-4 sm:px-6">
+            <h2 className="text-[13px] font-semibold text-white/80">
+              Task details
+            </h2>
+
+            <p className="mt-0.5 text-[11px] text-white/25">
+              Add the essentials. You can refine it later.
+            </p>
+          </div>
+
+          <div className="space-y-7 p-5 sm:p-6">
+            {/* Title */}
+            <div>
+              <label
+                htmlFor="title"
+                className="mb-2 block text-[11px] font-medium text-white/45"
+              >
+                Task title
+              </label>
+
+              <input
+                id="title"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                placeholder="What needs to be done?"
+                autoFocus
+                className={cn(
+                  "h-11 w-full rounded-xl px-3.5",
+                  "border border-white/8 bg-white/3",
+                  "text-[13px] text-white/85",
+                  "placeholder:text-white/20",
+                  "outline-none",
+                  "transition-all duration-150",
+                  "focus:border-emerald-500/30",
+                  "focus:bg-white/4",
+                  "focus:ring-2 focus:ring-emerald-500/5"
+                )}
+              />
+            </div>
+
+            {/* Description */}
+            <div>
+              <label
+                htmlFor="description"
+                className="mb-2 block text-[11px] font-medium text-white/45"
+              >
+                Description
+                <span className="ml-1 text-white/20">(optional)</span>
+              </label>
+
+              <textarea
+                id="description"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                placeholder="Add some context..."
+                rows={4}
+                className={cn(
+                  "w-full resize-none rounded-xl px-3.5 py-3",
+                  "border border-white/8 bg-white/3",
+                  "text-[13px] leading-6 text-white/85",
+                  "placeholder:text-white/20",
+                  "outline-none",
+                  "transition-all duration-150",
+                  "focus:border-emerald-500/30",
+                  "focus:bg-white/4",
+                  "focus:ring-2 focus:ring-emerald-500/5"
+                )}
+              />
+            </div>
+
+            {/* Priority */}
+            <div>
+              <div className="mb-3">
+                <p className="text-[11px] font-medium text-white/45">
+                  Priority
+                </p>
+              </div>
+
+              <div className="grid grid-cols-3 gap-2">
+                {priorities.map((item) => {
+                  const isSelected = priority === item.value
+
+                  return (
+                    <button
+                      key={item.value}
+                      type="button"
+                      onClick={() => setPriority(item.value)}
+                      className={cn(
+                        "relative rounded-xl border p-3 text-left",
+                        "transition-all duration-150",
+                        isSelected
+                          ? item.active
+                          : "border-white/[0.07] bg-white/2 hover:border-white/13 hover:bg-white/4"
+                      )}
+                    >
+                      <div className="flex items-center gap-2">
+                        <span
+                          className={cn(
+                            "size-2 rounded-full",
+                            item.dot
+                          )}
+                        />
+
+                        <span
+                          className={cn(
+                            "text-[11.5px] font-medium",
+                            isSelected
+                              ? "text-white/80"
+                              : "text-white/45"
+                          )}
+                        >
+                          {item.label}
+                        </span>
+
+                        {isSelected && (
+                          <Check className="ml-auto size-3 text-white/50" />
+                        )}
+                      </div>
+
+                      <p className="mt-1.5 pl-4 text-[10px] text-white/20">
+                        {item.description}
+                      </p>
+                    </button>
+                  )
+                })}
+              </div>
+            </div>
+
+            {/* Due date */}
+            <div>
+              <label
+                htmlFor="dueDate"
+                className="mb-2 block text-[11px] font-medium text-white/45"
+              >
+                Due date
+                <span className="ml-1 text-white/20">(optional)</span>
+              </label>
+
+              <div className="relative">
+                <CalendarDays className="pointer-events-none absolute top-1/2 left-3.5 size-3.5 -translate-y-1/2 text-white/25" />
+
+                <input
+                  id="dueDate"
+                  type="date"
+                  value={dueDate}
+                  onChange={(e) => setDueDate(e.target.value)}
+                  className={cn(
+                    "h-11 w-full rounded-xl pl-10 pr-3.5",
+                    "border border-white/8 bg-white/3",
+                    "text-[12px] text-white/60",
+                    "outline-none",
+                    "transition-all duration-150",
+                    "focus:border-emerald-500/30",
+                    "focus:bg-white/4",
+                    "focus:ring-2 focus:ring-emerald-500/5"
+                  )}
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Footer */}
+          <div className="flex items-center justify-end gap-2 border-t border-white/6 px-5 py-4 sm:px-6">
+            <button
+              type="button"
+              onClick={() => router.back()}
+              className={cn(
+                "h-10 rounded-xl px-4",
+                "text-[11.5px] font-medium text-white/35",
+                "transition-all duration-150",
+                "hover:bg-white/5 hover:text-white/60"
+              )}
+            >
+              Cancel
+            </button>
+
+            <button
+              type="submit"
+              disabled={!title.trim()}
+              className={cn(
+                "group flex h-10 items-center gap-2 rounded-xl px-4",
+                "border border-emerald-500/20",
+                "bg-emerald-500/10",
+                "text-[11.5px] font-semibold text-emerald-400/80",
+                "transition-all duration-150",
+                "hover:border-emerald-500/35",
+                "hover:bg-emerald-500/15",
+                "hover:text-emerald-400",
+                "active:scale-[0.98]",
+                "disabled:pointer-events-none disabled:opacity-30"
+              )}
+            >
+              <Plus className="size-3.5 transition-transform duration-200 group-hover:rotate-90" />
+              Add task
+            </button>
+          </div>
+        </form>
+      </div>
+    </main>
+  )
+}
