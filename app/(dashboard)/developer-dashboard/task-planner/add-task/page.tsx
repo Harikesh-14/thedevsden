@@ -4,6 +4,8 @@ import { useState } from "react"
 import { ArrowLeft, CalendarDays, Check, Plus } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { cn } from "@/lib/utils"
+import { apiFetch } from "@/lib/api"
+import { toast } from "sonner"
 
 const priorities = [
   {
@@ -42,16 +44,37 @@ export default function AddTaskPage() {
   const [priority, setPriority] = useState<Priority>("medium")
   const [dueDate, setDueDate] = useState("")
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.SubmitEvent<HTMLFormElement>) => {
     event.preventDefault()
 
-    // TODO: Create task
-    console.log({
-      title,
-      description,
-      priority,
-      dueDate,
+    const response = await apiFetch('/task-manager', {
+      method: "POST",
+      body: JSON.stringify({
+        task: title,
+        description,
+        priority,
+        dueDate
+      })
     })
+
+    const data = await response.json()
+
+    if (!response.ok) {
+      toast.error("Error", {
+        description: "Failed to add task",
+        closeButton: true,
+      })
+      throw new Error(data.message || "Failed to add task")
+    }
+
+    toast.success("Yeyy!", {
+      description: "Task added successfully",
+      closeButton: true
+    })
+    setTitle("")
+    setDescription("")
+    setPriority("medium")
+    setDueDate("")
   }
 
   return (

@@ -1,4 +1,5 @@
 import Sidebar from "@/components/developer-dashboard/sidebar"
+import { Toaster } from "@/components/ui/sonner"
 import React from "react"
 
 export default function DashboardLayout({
@@ -10,7 +11,10 @@ export default function DashboardLayout({
     <main className="min-h-screen">
       <Sidebar />
 
-      <div className="min-h-screen md:pl-68">{children}</div>
+      <div className="min-h-screen md:pl-68">
+        {children}
+        <Toaster />
+      </div>
     </main>
   )
 }

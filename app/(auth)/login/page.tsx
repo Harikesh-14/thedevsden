@@ -25,7 +25,7 @@ export default function LoginPage() {
     setError("")
 
     try {
-      const data = await login("ranjansinhaharikesh@gmail.com", password)
+      await login("ranjansinhaharikesh@gmail.com", password)
 
       router.push("/developer-dashboard")
     } catch (error) {
