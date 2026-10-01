@@ -11,93 +11,9 @@ import {
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useRouter } from "next/navigation"
-
-const tasks = [
-  {
-    id: 1,
-    task: "Design the new dashboard",
-    description: "Create the initial layout and component structure.",
-    priority: "high" as const,
-    isCompleted: false,
-  },
-  {
-    id: 2,
-    task: "Set up authentication",
-    description: "Configure JWT authentication and protected routes.",
-    priority: "high" as const,
-    isCompleted: true,
-  },
-  {
-    id: 3,
-    task: "Create task API",
-    description: "Implement CRUD endpoints for the task planner.",
-    priority: "medium" as const,
-    isCompleted: false,
-  },
-  {
-    id: 4,
-    task: "Write project documentation",
-    description: "Document the API and development setup.",
-    priority: "low" as const,
-    isCompleted: false,
-  },
-  {
-    id: 5,
-    task: "Design database schemas",
-    description: "Create and review MongoDB schemas for the application.",
-    priority: "high" as const,
-    isCompleted: false,
-  },
-  {
-    id: 6,
-    task: "Implement error handling",
-    description: "Add consistent API error responses and exception handling.",
-    priority: "medium" as const,
-    isCompleted: false,
-  },
-  {
-    id: 7,
-    task: "Add request validation",
-    description: "Validate incoming API requests using DTOs.",
-    priority: "medium" as const,
-    isCompleted: true,
-  },
-  {
-    id: 8,
-    task: "Create user profile",
-    description: "Build the profile page and user settings.",
-    priority: "low" as const,
-    isCompleted: false,
-  },
-  {
-    id: 9,
-    task: "Add API documentation",
-    description: "Document endpoints and request/response structures.",
-    priority: "low" as const,
-    isCompleted: false,
-  },
-  {
-    id: 10,
-    task: "Implement refresh tokens",
-    description: "Add secure refresh token rotation to authentication.",
-    priority: "high" as const,
-    isCompleted: false,
-  },
-  {
-    id: 11,
-    task: "Write unit tests",
-    description: "Add tests for the task service and authentication flow.",
-    priority: "medium" as const,
-    isCompleted: false,
-  },
-  {
-    id: 12,
-    task: "Deploy development server",
-    description: "Deploy the latest development build for testing.",
-    priority: "low" as const,
-    isCompleted: false,
-  },
-]
+import { apiFetch } from "@/lib/api"
+import { toast } from "sonner"
+import { ITask } from "@/lib/task-planner"
 
 const filters = ["All", "Active", "Completed"] as const
 
@@ -121,19 +37,54 @@ const priorityStyles = {
 export default function TaskPlannerPage() {
   const [activeFilter, setActiveFilter] = useState<Filter>("All")
   const [showAll, setShowAll] = useState(false)
-  const [openMenu, setOpenMenu] = useState<number | null>(null)
+  const [openMenu, setOpenMenu] = useState<string | null>(null)
+  const [tasks, setTasks] = useState<ITask[]>([])
+  const [completed, setCompleted] = useState<Set<string>>(new Set())
 
   const menuRef = useRef<HTMLDivElement>(null)
 
   const router = useRouter();
 
-  const [completed, setCompleted] = useState<Set<number>>(
-    new Set(tasks.filter((task) => task.isCompleted).map((task) => task.id))
-  )
+  async function fetchTasks() {
+    try {
+      const response = await apiFetch("/task-manager", {
+        method: "GET",
+      })
 
-  /*
-   * Close the task menu when clicking outside it.
-   */
+      if (!response.ok) {
+        toast.error("Oops", {
+          description: "Failed to load the tasks",
+          closeButton: true,
+        })
+
+        return
+      }
+
+      const data: ITask[] = await response.json()
+
+      setTasks(data)
+
+      setCompleted(
+        new Set(
+          data
+            .filter((task) => task.isCompleted)
+            .map((task) => task._id)
+        )
+      )
+    } catch (error) {
+      console.error("Failed to fetch tasks:", error)
+
+      toast.error("Oops", {
+        description: "Failed to load the tasks",
+        closeButton: true,
+      })
+    }
+  }
+
+  useEffect(() => {
+    fetchTasks()
+  }, [])
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
@@ -148,11 +99,29 @@ export default function TaskPlannerPage() {
     }
   }, [])
 
-  const toggleTask = (id: number) => {
+  const toggleTask = async (_id: string) => {
+    const isCompleted = completed.has(_id);
+
+    const response = await apiFetch(`/task-manager/${_id}/status`, {
+      method: "PATCH",
+      body: JSON.stringify({
+        isCompleted: !isCompleted
+      })
+    })
+
+    if (!response.ok) {
+      toast.error("Oops", {
+        description: "Failed to update task status",
+        closeButton: true,
+      })
+
+      return
+    }
+
     setCompleted((prev) => {
       const next = new Set(prev)
 
-      next.has(id) ? next.delete(id) : next.add(id)
+      next.has(_id) ? next.delete(_id) : next.add(_id)
 
       return next
     })
@@ -160,17 +129,45 @@ export default function TaskPlannerPage() {
 
   const filtered = tasks.filter((task) => {
     if (activeFilter === "Active") {
-      return !completed.has(task.id)
+      return !completed.has(task._id)
     }
 
     if (activeFilter === "Completed") {
-      return completed.has(task.id)
+      return completed.has(task._id)
     }
 
     return true
   })
 
   const visibleTasks = showAll ? filtered : filtered.slice(0, 4)
+
+  async function deleteTask(_id: string) {
+    const response = await apiFetch(`/task-manager/${_id}`, {
+      method: "DELETE"
+    })
+
+    if (!response.ok) {
+      toast.error("Oops", {
+        description: "Failed to update task status",
+        closeButton: true,
+      })
+
+      return
+    }
+
+    setTasks((prev) => prev.filter((task) => task._id !== _id))
+
+    setCompleted((prev) => {
+      const next = new Set(prev)
+      next.delete(_id)
+      return next
+    })
+
+    toast.success("Yeyy", {
+      description: "Task deleted successfully",
+      closeButton: true
+    })
+  }
 
   return (
     <main className="relative min-h-screen overflow-hidden">
@@ -246,7 +243,7 @@ export default function TaskPlannerPage() {
             {
               label: "High priority",
               value: tasks.filter(
-                (task) => task.priority === "high" && !completed.has(task.id)
+                (task) => task.priority === "high" && !completed.has(task._id)
               ).length,
               accent: false,
             },
@@ -332,15 +329,15 @@ export default function TaskPlannerPage() {
               </div>
             ) : (
               visibleTasks.map((task) => {
-                const isDone = completed.has(task.id)
+                const isDone = completed.has(task._id)
 
-                const priority = priorityStyles[task.priority]
+                const priority = priorityStyles[task.priority as keyof typeof priorityStyles]
 
-                const isMenuOpen = openMenu === task.id
+                const isMenuOpen = openMenu === task._id
 
                 return (
                   <article
-                    key={task.id}
+                    key={task._id}
                     className="group relative flex items-start gap-3 p-4 transition-colors duration-200 hover:bg-white/2 sm:gap-4 sm:p-5"
                   >
                     {/* Priority */}
@@ -352,7 +349,7 @@ export default function TaskPlannerPage() {
 
                     {/* Checkbox */}
                     <button
-                      onClick={() => toggleTask(task.id)}
+                      onClick={() => toggleTask(task._id)}
                       aria-label={isDone ? "Mark incomplete" : "Mark complete"}
                       className={cn(
                         "mt-px flex size-5 shrink-0",
@@ -407,7 +404,7 @@ export default function TaskPlannerPage() {
                       className="relative shrink-0"
                     >
                       <button
-                        onClick={() => setOpenMenu(isMenuOpen ? null : task.id)}
+                        onClick={() => setOpenMenu(isMenuOpen ? null : task._id)}
                         aria-label="Task options"
                         aria-expanded={isMenuOpen}
                         className={cn(
@@ -418,7 +415,7 @@ export default function TaskPlannerPage() {
                           "sm:opacity-0",
                           "sm:group-hover:opacity-100",
                           isMenuOpen &&
-                            "bg-white/[0.07] text-white/70 opacity-100"
+                          "bg-white/[0.07] text-white/70 opacity-100"
                         )}
                       >
                         <MoreHorizontal className="size-4" />
@@ -440,10 +437,7 @@ export default function TaskPlannerPage() {
                           <button
                             onClick={() => {
                               setOpenMenu(null)
-
-                              // TODO:
-                              // Open update task dialog
-                              console.log("Update task:", task.id)
+                              router.push(`/developer-dashboard/task-planner/update-task/${task._id}`)
                             }}
                             className={cn(
                               "flex w-full items-center gap-2.5",
@@ -463,10 +457,7 @@ export default function TaskPlannerPage() {
                           <button
                             onClick={() => {
                               setOpenMenu(null)
-
-                              // TODO:
-                              // Open delete confirmation
-                              console.log("Delete task:", task.id)
+                              deleteTask(task._id)
                             }}
                             className={cn(
                               "flex w-full items-center gap-2.5",

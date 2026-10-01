@@ -13,7 +13,7 @@ export default function DashboardLayout({
 
       <div className="min-h-screen md:pl-68">
         {children}
-        <Toaster />
+        <Toaster position="top-right" />
       </div>
     </main>
   )
