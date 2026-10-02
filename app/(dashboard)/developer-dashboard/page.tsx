@@ -96,8 +96,10 @@ export default function DeveloperDashboardPage() {
     }
 
     if (!loading && isAuthenticated) {
-      fetchThought()
-      fetchTasksCount()
+      Promise.all([
+        fetchThought(),
+        fetchTasksCount()
+      ])
     }
   }, [loading, isAuthenticated, router])
 
