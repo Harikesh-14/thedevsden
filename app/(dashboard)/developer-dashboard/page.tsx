@@ -5,33 +5,11 @@ import Link from "next/link"
 import { cn } from "@/lib/utils"
 import { useRouter } from "next/navigation"
 import { useAuth } from "@/hooks/use-auth"
-import { useEffect } from "react"
-
-const THOUGHT_OF_THE_DAY = {
-  quote: "The best way to predict the future is to invent it.",
-  author: "Alan Kay",
-}
-
-const quickLinks = [
-  {
-    label: "Project Planner",
-    href: "/project-planner",
-    icon: LayoutDashboard,
-    meta: "3 active projects",
-  },
-  {
-    label: "Task Planner",
-    href: "/task-planner",
-    icon: ListTodo,
-    meta: "7 tasks pending",
-  },
-  {
-    label: "Roadmap",
-    href: "/roadmap",
-    icon: Map,
-    meta: "Next milestone: v2.0",
-  },
-]
+import { useEffect, useState } from "react"
+import { apiFetch } from "@/lib/api"
+import { toast } from "sonner"
+import { IThought } from "@/lib/though-of-the-day"
+import { ITask } from "@/lib/task-planner"
 
 function getGreeting() {
   const h = new Date().getHours()
@@ -50,13 +28,76 @@ function getFormattedDate() {
 }
 
 export default function DeveloperDashboardPage() {
+  const [thought, setThought] = useState<IThought | null>(null)
+  const [taskCount, setTaskCount] = useState<number>(0)
+
   const router = useRouter()
 
   const { user, loading, isAuthenticated } = useAuth()
 
+  const quickLinks = [
+    {
+      label: "Project Planner",
+      href: "/project-planner",
+      icon: LayoutDashboard,
+      meta: "3 active projects",
+    },
+    {
+      label: "Task Planner",
+      href: "/task-planner",
+      icon: ListTodo,
+      meta: `${taskCount} task(s) pending`,
+    },
+    {
+      label: "Roadmap",
+      href: "/roadmap",
+      icon: Map,
+      meta: "Next milestone: v2.0",
+    },
+  ]
+
+  async function fetchThought() {
+    const response = await apiFetch("/thoughts/today")
+
+    if (!response.ok) {
+      toast.error("Oops", {
+        description: "Failed to fetch the 'thought of the day'.",
+        closeButton: true
+      })
+
+      throw new Error("Failed to fetch the 'thought of the day'.")
+    }
+
+    const data: IThought = await response.json();
+
+    setThought(data)
+  }
+
+  async function fetchTasksCount() {
+    const response = await apiFetch("/task-manager")
+
+    if (!response.ok) {
+      toast.error("Oops", {
+        description: "Failed to fetch the task count.",
+        closeButton: true
+      })
+
+      throw new Error("Failed to fetch the task count.")
+    }
+
+    const data: ITask[] = await response.json()
+
+    setTaskCount(data.length)
+  }
+
   useEffect(() => {
     if (!loading && !isAuthenticated) {
       router.replace("/login")
+    }
+
+    if (!loading && isAuthenticated) {
+      fetchThought()
+      fetchTasksCount()
     }
   }, [loading, isAuthenticated, router])
 
@@ -135,11 +176,11 @@ export default function DeveloperDashboardPage() {
               "text-neutral-700 dark:text-neutral-300"
             )}
           >
-            &ldquo;{THOUGHT_OF_THE_DAY.quote}&rdquo;
+            &ldquo;{thought?.thought}&rdquo;
           </p>
         </div>
         <p className="pl-5 text-xs font-semibold tracking-widest text-emerald-600/60 uppercase dark:text-emerald-500/50">
-          — {THOUGHT_OF_THE_DAY.author}
+          — Bhagwan
         </p>
 
         {/* Quick-access cards */}
