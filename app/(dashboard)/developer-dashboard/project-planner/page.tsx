@@ -3,70 +3,17 @@
 import { useState } from "react"
 import {
   ArrowUpRight,
-  BrainCircuit,
-  Database,
-  Globe2,
   LayoutGrid,
   List,
   MoreHorizontal,
   Plus,
   Search,
-  Server,
   SlidersHorizontal,
   ArrowUpDown,
-  Terminal,
-  Smartphone,
-  Monitor,
-  FlaskConical,
-  Container,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
-
-// ── Types ──────────────────────────────────────────────────────────────────
-type SkillCategory =
-  | "frontend" | "backend" | "database"
-  | "mobile" | "desktop" | "cli"
-  | "aiMl" | "devOps" | "testing" | "other"
-
-interface ProjectPlan {
-  id: string
-  title: string
-  content: string
-  skills: Partial<Record<SkillCategory, string[]>>
-  updatedAt: string
-}
-
-// ── Skill category config ──────────────────────────────────────────────────
-const categoryMeta: Record<SkillCategory, {
-  label: string
-  icon: React.ElementType
-  chip: string
-}> = {
-  frontend: { label: "Frontend", icon: Globe2, chip: "border-blue-400/20  bg-blue-400/[0.07]  text-blue-300/70" },
-  backend: { label: "Backend", icon: Server, chip: "border-emerald-400/20 bg-emerald-400/[0.07] text-emerald-300/70" },
-  database: { label: "Database", icon: Database, chip: "border-amber-400/20 bg-amber-400/[0.07] text-amber-300/70" },
-  mobile: { label: "Mobile", icon: Smartphone, chip: "border-pink-400/20  bg-pink-400/[0.07]  text-pink-300/70" },
-  desktop: { label: "Desktop", icon: Monitor, chip: "border-orange-400/20 bg-orange-400/[0.07] text-orange-300/70" },
-  cli: { label: "CLI", icon: Terminal, chip: "border-white/10     bg-white/5     text-white/40" },
-  aiMl: { label: "AI / ML", icon: BrainCircuit, chip: "border-purple-400/20 bg-purple-400/[0.07] text-purple-300/70" },
-  devOps: { label: "DevOps", icon: Container, chip: "border-cyan-400/20  bg-cyan-400/[0.07]  text-cyan-300/70" },
-  testing: { label: "Testing", icon: FlaskConical, chip: "border-rose-400/20  bg-rose-400/[0.07]  text-rose-300/70" },
-  other: { label: "Other", icon: LayoutGrid, chip: "border-white/10     bg-white/5     text-white/40" },
-}
-
-// Card accent colours per "dominant" skill category
-const accentByDominant: Record<SkillCategory, string> = {
-  frontend: "from-blue-500   via-blue-600",
-  backend: "from-emerald-500 via-emerald-600",
-  database: "from-amber-500  via-amber-600",
-  mobile: "from-pink-500   via-pink-600",
-  desktop: "from-orange-500 via-orange-600",
-  cli: "from-neutral-400 via-neutral-500",
-  aiMl: "from-purple-500 via-purple-600",
-  devOps: "from-cyan-500   via-cyan-600",
-  testing: "from-rose-500   via-rose-600",
-  other: "from-neutral-500 via-neutral-600",
-}
+import { useRouter } from "next/navigation"
+import { accentByDominant, categoryMeta, ProjectPlan, SkillCategory } from "@/lib/project-planner"
 
 // ── Mock data (replace with API data later) ────────────────────────────────
 const mockProjects: ProjectPlan[] = [
@@ -236,6 +183,8 @@ function ProjectCard({ project, onOpen }: { project: ProjectPlan; onOpen: () => 
 }
 
 function NewPlanCard({ onClick }: { onClick: () => void }) {
+  const router = useRouter();
+
   return (
     <button
       onClick={onClick}
@@ -254,6 +203,7 @@ function NewPlanCard({ onClick }: { onClick: () => void }) {
           "text-emerald-400/60 transition-all duration-200",
           "group-hover:border-emerald-500/35 group-hover:bg-emerald-500/12 group-hover:text-emerald-400/90",
         )}
+        onClick={() => router.push("/developer-dashboard/project-planner/new-plan")}
       >
         <Plus className="size-4" strokeWidth={2.5} />
       </div>
@@ -273,6 +223,8 @@ function NewPlanCard({ onClick }: { onClick: () => void }) {
 export default function ProjectPlannerPage() {
   const [search, setSearch] = useState("")
   const [view, setView] = useState<"grid" | "list">("grid")
+
+  const router = useRouter()
 
   const filtered = mockProjects.filter((p) =>
     p.title.toLowerCase().includes(search.toLowerCase()) ||
@@ -315,6 +267,7 @@ export default function ProjectPlannerPage() {
               "hover:border-emerald-500/35 hover:bg-emerald-500/13 hover:text-emerald-400",
               "active:scale-[0.98]",
             )}
+            onClick={() => router.push("/developer-dashboard/project-planner/new-plan")}
           >
             <Plus className="size-4 transition-transform duration-200 group-hover:rotate-90" />
             New plan
