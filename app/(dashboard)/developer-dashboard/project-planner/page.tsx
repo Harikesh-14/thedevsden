@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import {
   ArrowUpRight,
   LayoutGrid,
@@ -14,63 +14,8 @@ import {
 import { cn } from "@/lib/utils"
 import { useRouter } from "next/navigation"
 import { accentByDominant, categoryMeta, ProjectPlan, SkillCategory } from "@/lib/project-planner"
-
-// ── Mock data (replace with API data later) ────────────────────────────────
-const mockProjects: ProjectPlan[] = [
-  {
-    id: "1",
-    title: "Blooplingo",
-    content:
-      "A language-learning platform for Russian and Turkish vocabulary with spaced repetition and gamified progress tracking.",
-    skills: {
-      frontend: ["Next.js", "React", "Tailwind CSS"],
-      backend: ["Node.js", "NestJS", "REST APIs"],
-      database: ["MongoDB", "Mongoose"],
-    },
-    updatedAt: "2 days ago",
-  },
-  {
-    id: "2",
-    title: "DevCLI Toolkit",
-    content:
-      "A command-line toolkit for automating common developer workflows, scaffolding projects and managing local environments.",
-    skills: {
-      backend: ["TypeScript", "Node.js"],
-      cli: ["Commander.js", "Inquirer"],
-    },
-    updatedAt: "5 days ago",
-  },
-  {
-    id: "3",
-    title: "SentimentAI",
-    content:
-      "An NLP pipeline for real-time sentiment analysis using transformer models with a FastAPI REST layer and dashboard.",
-    skills: {
-      aiMl: ["Python", "NLP", "LLMs", "Model Training"],
-      backend: ["FastAPI"],
-    },
-    updatedAt: "1 week ago",
-  },
-  {
-    id: "4",
-    title: "QuickDeploy",
-    content:
-      "A lightweight DevOps tool for spinning up containerised apps with one command and managing deployment pipelines.",
-    skills: {
-      devOps: ["Docker", "GitHub Actions"],
-      backend: ["Node.js"],
-      cli: ["Bash"],
-    },
-    updatedAt: "2 weeks ago",
-  },
-]
-
-const stats = [
-  { label: "Total plans", value: String(mockProjects.length), accent: false },
-  { label: "Active", value: "4", accent: true },
-  { label: "Tech stacks", value: "12", accent: false },
-  { label: "Completed", value: "2", accent: false },
-]
+import { apiFetch } from "@/lib/api"
+import { toast } from "sonner"
 
 // ── Helpers ────────────────────────────────────────────────────────────────
 function getDominantCategory(skills: ProjectPlan["skills"]): SkillCategory {
@@ -223,13 +168,42 @@ function NewPlanCard({ onClick }: { onClick: () => void }) {
 export default function ProjectPlannerPage() {
   const [search, setSearch] = useState("")
   const [view, setView] = useState<"grid" | "list">("grid")
+  const [projectPlans, setProjectPlans] = useState<ProjectPlan[]>([])
 
   const router = useRouter()
 
-  const filtered = mockProjects.filter((p) =>
+  const stats = [
+    { label: "Total plans", value: String(projectPlans.length), accent: false },
+    { label: "Active", value: "4", accent: true },
+    { label: "Tech stacks", value: "12", accent: false },
+    { label: "Completed", value: "2", accent: false },
+  ]
+
+  const filtered = projectPlans.filter((p) =>
     p.title.toLowerCase().includes(search.toLowerCase()) ||
     p.content.toLowerCase().includes(search.toLowerCase()),
   )
+
+  async function fetchProjectPlans() {
+    const response = await apiFetch('/new-projects-plan/get/all')
+
+    if (!response.ok) {
+      toast.error("Oops", {
+        description: "Error fetching the projects plans",
+        closeButton: true
+      })
+
+      throw new Error('Error fetching the projects plans')
+    }
+
+    const data: ProjectPlan[] = await response.json()
+
+    setProjectPlans(data)
+  }
+
+  useEffect(() => {
+    fetchProjectPlans()
+  }, [])
 
   return (
     <main className="relative min-h-screen overflow-hidden">
@@ -370,7 +344,7 @@ export default function ProjectPlannerPage() {
           )}>
             {filtered.map((project) => (
               <ProjectCard
-                key={project.id}
+                key={project._id}
                 project={project}
                 onOpen={() => {
                   // navigate to detail page

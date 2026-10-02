@@ -6,8 +6,9 @@ export type SkillCategory =
   | "aiMl" | "devOps" | "testing" | "other"
 
 export interface ProjectPlan {
-  id: string
+  _id: string
   title: string
+  shortDescription: string;
   content: string
   skills: Partial<Record<SkillCategory, string[]>>
   updatedAt: string
