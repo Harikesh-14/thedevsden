@@ -157,6 +157,7 @@ export default function NewProjectPlanPage() {
         body: JSON.stringify({
           title: trimmedTitle,
           shortDescription: shortDescription.trim(),
+          isActive: false,
           content,
           skills: buildSkills(),
         }),

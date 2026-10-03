@@ -388,6 +388,35 @@ export default function ProjectPlannerPage() {
     }
   }
 
+  async function deleteProjectPlan(id: string) {
+    try {
+      const response = await apiFetch(`/new-projects-plan/delete/${id}`, {
+        method: "DELETE"
+      })
+
+      if (!response.ok) {
+        toast.error("Oops", {
+          description: "Error deleting the project plan",
+          closeButton: true
+        })
+
+        throw new Error("Error deleting the project plan")
+      }
+
+      setProjectPlans((projects) =>
+        projects.filter((project) => project._id !== id)
+      );
+
+      toast.success("Yeyy", {
+        description: "The project plan deleted successfully",
+        closeButton: true
+      })
+    } catch (error) {
+      console.log(error)
+      throw new Error("An unexpected error occurred while deleting the project plan")
+    }
+  }
+
   useEffect(() => {
     Promise.all([
       fetchProjectPlans()
@@ -542,12 +571,10 @@ export default function ProjectPlannerPage() {
                 onUpdate={() => {
                   // TODO: update project
                 }}
-                onDelete={() => {
-                  // TODO: delete project
-                }}
+                onDelete={() => deleteProjectPlan(project._id)}
               />
             ))}
-            <NewPlanCard onClick={() => {/* open sheet/modal */ }} />
+            <NewPlanCard onClick={() => router.push("/developer-dashboard/project-planner/new-plan")} />
           </div>
         )}
 
