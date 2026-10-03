@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import {
   ArrowUpRight,
   LayoutGrid,
@@ -10,6 +10,10 @@ import {
   Search,
   SlidersHorizontal,
   ArrowUpDown,
+  CheckCircle2,
+  Circle,
+  Pencil,
+  Trash2,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useRouter } from "next/navigation"
@@ -25,16 +29,156 @@ function getDominantCategory(skills: ProjectPlan["skills"]): SkillCategory {
   return order.find((k) => (skills[k]?.length ?? 0) > 0) ?? "other"
 }
 
+
 function getAllSkillChips(skills: ProjectPlan["skills"]) {
   const chips: { label: string; category: SkillCategory }[] = []
+  const seen = new Set<string>()
+
   for (const [cat, vals] of Object.entries(skills) as [SkillCategory, string[]][]) {
-    for (const v of vals ?? []) chips.push({ label: v, category: cat })
+    for (const value of vals ?? []) {
+      if (typeof value !== "string") continue
+
+      const label = value.trim()
+      if (!label) continue
+
+      const normalized = label.toLowerCase()
+      if (seen.has(normalized)) continue
+
+      seen.add(normalized)
+      chips.push({ label, category: cat })
+    }
   }
+
   return chips
 }
 
+
+function ProjectActionMenu({
+  isCompleted,
+  onToggleComplete,
+  onUpdate,
+  onDelete,
+}: {
+  isCompleted: boolean
+  onToggleComplete: () => void
+  onUpdate: () => void
+  onDelete: () => void
+}) {
+  const [open, setOpen] = useState(false)
+  const menuRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (!open) return
+
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        menuRef.current &&
+        !menuRef.current.contains(event.target as Node)
+      ) {
+        setOpen(false)
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside)
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside)
+    }
+  }, [open])
+
+  const actions = [
+    {
+      label: isCompleted ? "Mark as incomplete" : "Mark as complete",
+      icon: isCompleted ? Circle : CheckCircle2,
+      onClick: onToggleComplete,
+      danger: false,
+    },
+    {
+      label: "Update",
+      icon: Pencil,
+      onClick: onUpdate,
+      danger: false,
+    },
+    {
+      label: "Delete",
+      icon: Trash2,
+      onClick: onDelete,
+      danger: true,
+    },
+  ]
+
+  return (
+    <div ref={menuRef} className="relative">
+      <button
+        type="button"
+        aria-label="Project actions"
+        aria-expanded={open}
+        onClick={(e) => {
+          e.stopPropagation()
+          setOpen((current) => !current)
+        }}
+        className={cn(
+          "flex size-8 items-center justify-center rounded-lg",
+          "border border-white/[0.07] bg-white/4",
+          "text-white/45 transition-colors",
+          "hover:bg-white/8 hover:text-white/80",
+        )}
+      >
+        <MoreHorizontal className="size-4" />
+      </button>
+
+      {open && (
+        <div
+          role="menu"
+          className={cn(
+            "absolute right-0 top-full z-50 mt-2 w-52",
+            "rounded-xl border border-white/10",
+            "bg-[#151719] p-1.5 shadow-2xl",
+          )}
+          onClick={(e) => e.stopPropagation()}
+        >
+          {actions.map(({ label, icon: Icon, onClick, danger }) => (
+            <button
+              key={label}
+              type="button"
+              role="menuitem"
+              onClick={() => {
+                setOpen(false)
+                onClick()
+              }}
+              className={cn(
+                "flex w-full items-center gap-2.5 rounded-lg",
+                "px-3 py-2.5 text-left text-xs transition-colors",
+                danger
+                  ? "text-red-400 hover:bg-red-500/10"
+                  : "text-white/70 hover:bg-white/6 hover:text-white",
+              )}
+            >
+              <Icon className="size-4 shrink-0" />
+              {label}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
 // ── Sub-components ─────────────────────────────────────────────────────────
-function ProjectCard({ project, onOpen }: { project: ProjectPlan; onOpen: () => void }) {
+
+function ProjectCard({
+  project,
+  onOpen,
+  onToggleComplete,
+  onUpdate,
+  onDelete,
+}: {
+  project: ProjectPlan
+  onOpen: () => void
+  onToggleComplete: () => void
+  onUpdate: () => void
+  onDelete: () => void
+}) {
   const dominant = getDominantCategory(project.skills)
   const accent = accentByDominant[dominant]
   const allChips = getAllSkillChips(project.skills)
@@ -62,7 +206,7 @@ function ProjectCard({ project, onOpen }: { project: ProjectPlan; onOpen: () => 
           <h3 className="text-[14px] font-semibold leading-snug tracking-[-0.01em] text-white/88">
             {project.title}
           </h3>
-          <button
+          {/* <button
             onClick={(e) => e.stopPropagation()}
             className={cn(
               "flex size-7 shrink-0 items-center justify-center rounded-lg",
@@ -73,12 +217,18 @@ function ProjectCard({ project, onOpen }: { project: ProjectPlan; onOpen: () => 
             )}
           >
             <MoreHorizontal className="size-3.5" />
-          </button>
+          </button> */}
+          <ProjectActionMenu
+            isCompleted={project.isActive}
+            onToggleComplete={onToggleComplete}
+            onUpdate={onUpdate}
+            onDelete={onDelete}
+          />
         </div>
 
         {/* Description */}
         <p className="mb-4 line-clamp-2 text-[12px] leading-[1.65] text-white/28">
-          {project.content}
+          {project.shortDescription}
         </p>
 
         {/* Skill chips */}
@@ -128,8 +278,6 @@ function ProjectCard({ project, onOpen }: { project: ProjectPlan; onOpen: () => 
 }
 
 function NewPlanCard({ onClick }: { onClick: () => void }) {
-  const router = useRouter();
-
   return (
     <button
       onClick={onClick}
@@ -148,15 +296,16 @@ function NewPlanCard({ onClick }: { onClick: () => void }) {
           "text-emerald-400/60 transition-all duration-200",
           "group-hover:border-emerald-500/35 group-hover:bg-emerald-500/12 group-hover:text-emerald-400/90",
         )}
-        onClick={() => router.push("/developer-dashboard/project-planner/new-plan")}
       >
         <Plus className="size-4" strokeWidth={2.5} />
       </div>
+
       <div>
-        <p className="text-[13px] font-semibold text-white/30 group-hover:text-white/50 transition-colors">
+        <p className="text-[13px] font-semibold text-white/30 transition-colors group-hover:text-white/50">
           New plan
         </p>
-        <p className="mt-0.5 text-[11px] text-white/15 group-hover:text-white/25 transition-colors">
+
+        <p className="mt-0.5 text-[11px] text-white/15 transition-colors group-hover:text-white/25">
           Start planning your next project
         </p>
       </div>
@@ -348,6 +497,15 @@ export default function ProjectPlannerPage() {
                 project={project}
                 onOpen={() => {
                   // navigate to detail page
+                }}
+                onToggleComplete={() => {
+                  // TODO: toggle completion
+                }}
+                onUpdate={() => {
+                  // TODO: update project
+                }}
+                onDelete={() => {
+                  // TODO: delete project
                 }}
               />
             ))}

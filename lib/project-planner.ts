@@ -9,6 +9,7 @@ export interface ProjectPlan {
   _id: string
   title: string
   shortDescription: string;
+  isActive: boolean;
   content: string
   skills: Partial<Record<SkillCategory, string[]>>
   updatedAt: string
