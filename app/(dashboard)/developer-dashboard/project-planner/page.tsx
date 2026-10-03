@@ -29,7 +29,6 @@ function getDominantCategory(skills: ProjectPlan["skills"]): SkillCategory {
   return order.find((k) => (skills[k]?.length ?? 0) > 0) ?? "other"
 }
 
-
 function getAllSkillChips(skills: ProjectPlan["skills"]) {
   const chips: { label: string; category: SkillCategory }[] = []
   const seen = new Set<string>()
@@ -52,7 +51,7 @@ function getAllSkillChips(skills: ProjectPlan["skills"]) {
   return chips
 }
 
-
+// ── Sub-components ─────────────────────────────────────────────────────────
 function ProjectActionMenu({
   isCompleted,
   onToggleComplete,
@@ -164,8 +163,6 @@ function ProjectActionMenu({
   )
 }
 
-// ── Sub-components ─────────────────────────────────────────────────────────
-
 function ProjectCard({
   project,
   onOpen,
@@ -206,18 +203,7 @@ function ProjectCard({
           <h3 className="text-[14px] font-semibold leading-snug tracking-[-0.01em] text-white/88">
             {project.title}
           </h3>
-          {/* <button
-            onClick={(e) => e.stopPropagation()}
-            className={cn(
-              "flex size-7 shrink-0 items-center justify-center rounded-lg",
-              "border border-white/[0.07] bg-white/4",
-              "text-white/25 transition-colors",
-              "hover:bg-white/8 hover:text-white/60",
-              "opacity-0 group-hover:opacity-100",
-            )}
-          >
-            <MoreHorizontal className="size-3.5" />
-          </button> */}
+
           <ProjectActionMenu
             isCompleted={project.isActive}
             onToggleComplete={onToggleComplete}
@@ -333,6 +319,7 @@ export default function ProjectPlannerPage() {
     p.content.toLowerCase().includes(search.toLowerCase()),
   )
 
+  // API Calls
   async function fetchProjectPlans() {
     const response = await apiFetch('/new-projects-plan/get/all')
 
@@ -350,8 +337,61 @@ export default function ProjectPlannerPage() {
     setProjectPlans(data)
   }
 
+  async function toggleComplete(id: string, currentStatus: boolean) {
+    try {
+      const response = await apiFetch(
+        `/new-projects-plan/update/${id}`,
+        {
+          method: "PUT",
+          body: JSON.stringify({ isActive: !currentStatus, }),
+        }
+      );
+
+      if (!response.ok) {
+        const error = await response.text();
+
+        console.error("Failed to update project status:", {
+          status: response.status,
+          error,
+        });
+
+        toast.error("Oops", {
+          description: error || "Error toggling the status of the plan",
+          closeButton: true,
+        });
+
+        return;
+      }
+
+      const updatedProject: ProjectPlan = await response.json();
+
+      setProjectPlans((projects) =>
+        projects.map((project) =>
+          project._id === updatedProject._id
+            ? updatedProject
+            : project
+        )
+      );
+
+      toast.success(
+        updatedProject.isActive
+          ? "Project marked as active"
+          : "Project marked as completed"
+      );
+    } catch (error) {
+      console.error("Error updating project status:", error);
+
+      toast.error("Oops", {
+        description: "Something went wrong while updating the project",
+        closeButton: true,
+      });
+    }
+  }
+
   useEffect(() => {
-    fetchProjectPlans()
+    Promise.all([
+      fetchProjectPlans()
+    ])
   }, [])
 
   return (
@@ -498,9 +538,7 @@ export default function ProjectPlannerPage() {
                 onOpen={() => {
                   // navigate to detail page
                 }}
-                onToggleComplete={() => {
-                  // TODO: toggle completion
-                }}
+                onToggleComplete={() => toggleComplete(project._id, project.isActive)}
                 onUpdate={() => {
                   // TODO: update project
                 }}
