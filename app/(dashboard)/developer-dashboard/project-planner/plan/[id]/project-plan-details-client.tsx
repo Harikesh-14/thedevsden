@@ -308,7 +308,7 @@ export default function ProjectPlanDetailsClient({ id }: Props) {
             </Link>
 
             <Link
-              href={`/developer-dashboard/project-planner/${id}/edit`}
+              href={`/developer-dashboard/project-planner/plan/${id}/edit`}
               className={cn(
                 "inline-flex h-9 items-center gap-2 rounded-xl px-3.5 text-xs font-semibold transition-colors",
                 "border border-emerald-200 bg-emerald-50 text-emerald-700",
@@ -405,7 +405,7 @@ export default function ProjectPlanDetailsClient({ id }: Props) {
                     No project documentation yet.
                   </p>
                   <Link
-                    href={`/developer-dashboard/project-planner/${id}/edit`}
+                    href={`/developer-dashboard/project-planner/plan/${id}/edit`}
                     className="mt-3 inline-flex text-xs font-medium text-emerald-600 hover:text-emerald-700 dark:text-emerald-400 dark:hover:text-emerald-300"
                   >
                     Add documentation →
