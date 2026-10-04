@@ -360,7 +360,7 @@ export default function ProjectPlannerPage() {
       }
       const updated: ProjectPlan = await response.json()
       setProjectPlans((prev) => prev.map((p) => (p._id === updated._id ? updated : p)))
-      toast.success(updated.isActive ? "Project marked as active" : "Project marked as completed")
+      toast.success(!updated.isActive ? "Project marked as active" : "Project marked as completed")
     } catch (error) {
       console.error(error)
       toast.error("Oops", { description: "Something went wrong", closeButton: true })
@@ -575,7 +575,9 @@ export default function ProjectPlannerPage() {
               <ProjectCard
                 key={project._id}
                 project={project}
-                onOpen={() => { }}
+                onOpen={() => (
+                  router.push(`/developer-dashboard/project-planner/plan/${project._id}`)
+                )}
                 onToggleComplete={() => toggleComplete(project._id, project.isActive)}
                 onUpdate={() => { }}
                 onDelete={() => deleteProjectPlan(project._id)}
