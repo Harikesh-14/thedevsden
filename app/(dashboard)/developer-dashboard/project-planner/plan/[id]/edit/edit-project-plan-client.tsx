@@ -1,13 +1,8 @@
-"use client";
+"use client"
 
-import {
-  SyntheticEvent,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { SyntheticEvent, useEffect, useRef, useState } from "react"
+import Link from "next/link"
+import { useRouter } from "next/navigation"
 import {
   ArrowLeft,
   Bold,
@@ -21,30 +16,30 @@ import {
   ListOrdered,
   Minus,
   Save,
-} from "lucide-react";
-import { toast } from "sonner";
+} from "lucide-react"
+import { toast } from "sonner"
 
-import { cn } from "@/lib/utils";
-import { apiFetch } from "@/lib/api";
-import { STACK, type Category } from "@/lib/project-planner";
+import { cn } from "@/lib/utils"
+import { apiFetch } from "@/lib/api"
+import { STACK, type Category } from "@/lib/project-planner"
 
 type ProjectPlan = {
-  _id?: string;
-  id?: string;
-  title: string;
-  shortDescription?: string;
-  content?: string;
-  isActive?: boolean;
-  skills?: Partial<Record<Category, string[]>>;
-};
+  _id?: string
+  id?: string
+  title: string
+  shortDescription?: string
+  content?: string
+  isActive?: boolean
+  skills?: Partial<Record<Category, string[]>>
+}
 
 type MarkdownAction = {
-  icon: typeof Bold;
-  label: string;
-  prefix: string;
-  suffix?: string;
-  placeholder?: string;
-};
+  icon: typeof Bold
+  label: string
+  prefix: string
+  suffix?: string
+  placeholder?: string
+}
 
 const MD_ACTIONS: (MarkdownAction | null)[] = [
   {
@@ -111,7 +106,7 @@ const MD_ACTIONS: (MarkdownAction | null)[] = [
     suffix: "\n```",
     placeholder: "code",
   },
-];
+]
 
 function getMessage(body: unknown, fallback: string) {
   if (
@@ -120,70 +115,64 @@ function getMessage(body: unknown, fallback: string) {
     "message" in body &&
     typeof body.message === "string"
   ) {
-    return body.message;
+    return body.message
   }
 
-  return fallback;
+  return fallback
 }
 
-export default function EditProjectPlanClient({
-  id,
-}: {
-  id: string;
-}) {
-  const router = useRouter();
+export default function EditProjectPlanClient({ id }: { id: string }) {
+  const router = useRouter()
 
-  const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+  const textareaRef = useRef<HTMLTextAreaElement | null>(null)
 
-  const [title, setTitle] = useState("");
-  const [shortDescription, setShortDescription] = useState("");
-  const [content, setContent] = useState("");
+  const [title, setTitle] = useState("")
+  const [shortDescription, setShortDescription] = useState("")
+  const [content, setContent] = useState("")
 
   const [selected, setSelected] = useState<
     Partial<Record<Category, Set<string>>>
-  >({});
+  >({})
 
-  const [originalIsActive, setOriginalIsActive] = useState(false);
+  const [originalIsActive, setOriginalIsActive] = useState(false)
 
-  const [loading, setLoading] = useState(true);
-  const [loadError, setLoadError] = useState("");
-  const [saving, setSaving] = useState(false);
+  const [loading, setLoading] = useState(true)
+  const [loadError, setLoadError] = useState("")
+  const [saving, setSaving] = useState(false)
 
   useEffect(() => {
-    let cancelled = false;
+    let cancelled = false
 
     async function loadPlan() {
-      setLoading(true);
-      setLoadError("");
+      setLoading(true)
+      setLoadError("")
 
       try {
         const response = await apiFetch(
           `/new-projects-plan/get/${encodeURIComponent(id)}/`,
           {
             method: "GET",
-          },
-        );
+          }
+        )
 
         if (!response.ok) {
           throw new Error(
             response.status === 404
               ? "This project plan could not be found."
-              : "Unable to load this project plan.",
-          );
+              : "Unable to load this project plan."
+          )
         }
 
-        const body: unknown = await response.json();
+        const body: unknown = await response.json()
 
         // Supports either:
         // { ...plan }
         // or:
         // { data: { ...plan } }
         const payload =
-          typeof body === "object" &&
-            body !== null &&
-            "data" in body
+          typeof body === "object" && body !== null && "data" in body
             ? body.data
-            : body;
+            : body
 
         if (
           typeof payload !== "object" ||
@@ -191,71 +180,65 @@ export default function EditProjectPlanClient({
           !("title" in payload) ||
           typeof payload.title !== "string"
         ) {
-          throw new Error(
-            "The server returned an invalid project plan.",
-          );
+          throw new Error("The server returned an invalid project plan.")
         }
 
-        const plan = payload as ProjectPlan;
+        const plan = payload as ProjectPlan
 
-        if (cancelled) return;
+        if (cancelled) return
 
-        setTitle(plan.title);
-        setShortDescription(plan.shortDescription ?? "");
-        setContent(plan.content ?? "");
-        setOriginalIsActive(plan.isActive ?? false);
+        setTitle(plan.title)
+        setShortDescription(plan.shortDescription ?? "")
+        setContent(plan.content ?? "")
+        setOriginalIsActive(plan.isActive ?? false)
 
-        const nextSelected: Partial<
-          Record<Category, Set<string>>
-        > = {};
+        const nextSelected: Partial<Record<Category, Set<string>>> = {}
 
         for (const category of Object.keys(STACK) as Category[]) {
           nextSelected[category] = new Set(
-            Array.isArray(plan.skills?.[category])
-              ? plan.skills[category]
-              : [],
-          );
+            Array.isArray(plan.skills?.[category]) ? plan.skills[category] : []
+          )
         }
 
-        setSelected(nextSelected);
+        setSelected(nextSelected)
       } catch (error) {
-        if (cancelled) return;
+        if (cancelled) return
 
         const message =
           error instanceof Error
             ? error.message
-            : "Something went wrong while loading the plan.";
+            : "Something went wrong while loading the plan."
 
-        setLoadError(message);
+        setLoadError(message)
       } finally {
         if (!cancelled) {
-          setLoading(false);
+          setLoading(false)
         }
       }
     }
 
-    void loadPlan();
+    void loadPlan()
 
     return () => {
-      cancelled = true;
-    };
-  }, [id]);
+      cancelled = true
+    }
+  }, [id])
 
   function toggleChip(category: Category, value: string) {
     setSelected((previous) => {
-      const next = new Set(previous[category] ?? []);
+      const next = new Set(previous[category] ?? [])
 
       if (next.has(value)) {
-        next.delete(value);
+        next.delete(value)
       } else {
-        next.add(value);
+        next.add(value)
       }
 
       return {
         ...previous,
         [category]: next,
-      };
-    });
+      }
+    })
   }
 
   function buildSkills(): Record<Category, string[]> {
@@ -263,65 +246,58 @@ export default function EditProjectPlanClient({
       (Object.keys(STACK) as Category[]).map((category) => [
         category,
         [...(selected[category] ?? [])],
-      ]),
-    ) as Record<Category, string[]>;
+      ])
+    ) as Record<Category, string[]>
   }
 
   function applyMarkdown(action: MarkdownAction) {
-    const textarea = textareaRef.current;
+    const textarea = textareaRef.current
 
-    if (!textarea) return;
+    if (!textarea) return
 
-    const start = textarea.selectionStart;
-    const end = textarea.selectionEnd;
+    const start = textarea.selectionStart
+    const end = textarea.selectionEnd
 
-    const selectedText = content.slice(start, end);
+    const selectedText = content.slice(start, end)
 
     const textToWrap =
-      selectedText ||
-      action.placeholder ||
-      (action.suffix ? "text" : "");
+      selectedText || action.placeholder || (action.suffix ? "text" : "")
 
-    const inserted = `${action.prefix}${textToWrap}${action.suffix ?? ""
-      }`;
+    const inserted = `${action.prefix}${textToWrap}${action.suffix ?? ""}`
 
-    const nextContent =
-      content.slice(0, start) +
-      inserted +
-      content.slice(end);
+    const nextContent = content.slice(0, start) + inserted + content.slice(end)
 
-    setContent(nextContent);
+    setContent(nextContent)
 
     requestAnimationFrame(() => {
-      const current = textareaRef.current;
+      const current = textareaRef.current
 
-      if (!current) return;
+      if (!current) return
 
-      current.focus();
+      current.focus()
 
-      const selectionStart =
-        start + action.prefix.length;
+      const selectionStart = start + action.prefix.length
 
       current.setSelectionRange(
         selectionStart,
-        selectionStart + textToWrap.length,
-      );
-    });
+        selectionStart + textToWrap.length
+      )
+    })
   }
 
   async function handleSave(event: SyntheticEvent<HTMLFormElement>) {
-    event.preventDefault();
+    event.preventDefault()
 
-    const trimmedTitle = title.trim();
+    const trimmedTitle = title.trim()
 
     if (!trimmedTitle) {
-      toast.error("Project title is required");
-      return;
+      toast.error("Project title is required")
+      return
     }
 
-    if (saving) return;
+    if (saving) return
 
-    setSaving(true);
+    setSaving(true)
 
     try {
       const response = await apiFetch(
@@ -338,18 +314,14 @@ export default function EditProjectPlanClient({
             skills: buildSkills(),
             isActive: originalIsActive,
           }),
-        },
-      );
+        }
+      )
 
       if (!response.ok) {
-        let message =
-          "We couldn't update your project plan. Please try again.";
+        let message = "We couldn't update your project plan. Please try again."
 
         try {
-          message = getMessage(
-            await response.json(),
-            message,
-          );
+          message = getMessage(await response.json(), message)
         } catch {
           // Keep the fallback message.
         }
@@ -357,50 +329,46 @@ export default function EditProjectPlanClient({
         toast.error("Unable to update project plan", {
           description: message,
           closeButton: true,
-        });
+        })
 
-        return;
+        return
       }
 
-      toast.success("Project plan updated");
+      toast.success("Project plan updated")
 
       router.push(
-        `/developer-dashboard/project-planner/${encodeURIComponent(id)}`,
-      );
+        `/developer-dashboard/project-planner/${encodeURIComponent(id)}`
+      )
 
-      router.refresh();
+      router.refresh()
     } catch (error) {
-      console.error(
-        "Failed to update project plan:",
-        error,
-      );
+      console.error("Failed to update project plan:", error)
 
       toast.error("Unable to update project plan", {
-        description:
-          "Check your connection and try again.",
+        description: "Check your connection and try again.",
         closeButton: true,
-      });
+      })
     } finally {
-      setSaving(false);
+      setSaving(false)
     }
   }
 
   const inputClass = cn(
-    "h-10 w-full rounded-xl px-4 outline-none transition-all duration-150",
+    "h-10 w-full rounded-xl px-4 transition-all duration-150 outline-none",
     "border border-neutral-200 bg-neutral-50 text-[13px] text-neutral-800",
     "placeholder:text-neutral-400 focus:border-emerald-400",
     "focus:bg-emerald-50/40 focus:ring-2 focus:ring-emerald-500/10",
     "dark:border-white/[0.07] dark:bg-white/3",
     "dark:text-white/80 dark:placeholder:text-white/25",
-    "dark:focus:border-emerald-500/40 dark:focus:bg-emerald-500/[0.04]",
-  );
+    "dark:focus:border-emerald-500/40 dark:focus:bg-emerald-500/[0.04]"
+  )
 
   const cardClass = cn(
     "rounded-[18px] border border-neutral-200 bg-neutral-50/80",
     "shadow-sm shadow-neutral-900/[0.04]",
     "dark:border-white/[0.07] dark:bg-white/3",
-    "dark:shadow-none dark:backdrop-blur-xl",
-  );
+    "dark:shadow-none dark:backdrop-blur-xl"
+  )
 
   if (loading) {
     return (
@@ -421,7 +389,7 @@ export default function EditProjectPlanClient({
           </div>
         </div>
       </main>
-    );
+    )
   }
 
   if (loadError) {
@@ -458,7 +426,7 @@ export default function EditProjectPlanClient({
           </div>
         </div>
       </main>
-    );
+    )
   }
 
   return (
@@ -466,7 +434,7 @@ export default function EditProjectPlanClient({
       {/* Ambient emerald glows */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute left-1/2 top-0 h-72 w-72 -translate-x-1/2 rounded-full bg-emerald-500/6 blur-3xl"
+        className="pointer-events-none absolute top-0 left-1/2 h-72 w-72 -translate-x-1/2 rounded-full bg-emerald-500/6 blur-3xl"
       />
 
       <div className="relative mx-auto w-full max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
@@ -474,15 +442,13 @@ export default function EditProjectPlanClient({
           <div className="mb-3 flex items-center gap-2">
             <span className="size-2 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)] dark:bg-emerald-400" />
 
-            <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-neutral-400 dark:text-white/35">
+            <span className="text-[10px] font-semibold tracking-[0.18em] text-neutral-400 uppercase dark:text-white/35">
               Project Planner
             </span>
 
-            <span className="text-neutral-200 dark:text-white/15">
-              /
-            </span>
+            <span className="text-neutral-200 dark:text-white/15">/</span>
 
-            <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-emerald-600/70 dark:text-emerald-500/60">
+            <span className="text-[10px] font-semibold tracking-[0.18em] text-emerald-600/70 uppercase dark:text-emerald-500/60">
               Edit plan
             </span>
           </div>
@@ -495,35 +461,27 @@ export default function EditProjectPlanClient({
           </h1>
 
           <p className="mt-2 text-sm text-neutral-500 dark:text-white/35">
-            Update your project vision, refine the stack,
-            and keep everything in sync.
+            Update your project vision, refine the stack, and keep everything in
+            sync.
           </p>
         </header>
 
-        <form
-          onSubmit={handleSave}
-          className="space-y-3.5"
-        >
+        <form onSubmit={handleSave} className="space-y-3.5">
           {/* Project details */}
           <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2">
             <div>
               <label
                 htmlFor="project-title"
-                className="mb-2 block text-[9.5px] font-semibold uppercase tracking-[0.12em] text-neutral-400 dark:text-white/40"
+                className="mb-2 block text-[9.5px] font-semibold tracking-[0.12em] text-neutral-400 uppercase dark:text-white/40"
               >
-                Project title{" "}
-                <span className="text-red-400/80">
-                  *
-                </span>
+                Project title <span className="text-red-400/80">*</span>
               </label>
 
               <input
                 id="project-title"
                 name="title"
                 value={title}
-                onChange={(event) =>
-                  setTitle(event.target.value)
-                }
+                onChange={(event) => setTitle(event.target.value)}
                 maxLength={120}
                 required
                 autoComplete="off"
@@ -534,7 +492,7 @@ export default function EditProjectPlanClient({
             <div>
               <label
                 htmlFor="project-description"
-                className="mb-2 block text-[9.5px] font-semibold uppercase tracking-[0.12em] text-neutral-400 dark:text-white/40"
+                className="mb-2 block text-[9.5px] font-semibold tracking-[0.12em] text-neutral-400 uppercase dark:text-white/40"
               >
                 Short description
               </label>
@@ -543,11 +501,7 @@ export default function EditProjectPlanClient({
                 id="project-description"
                 name="shortDescription"
                 value={shortDescription}
-                onChange={(event) =>
-                  setShortDescription(
-                    event.target.value,
-                  )
-                }
+                onChange={(event) => setShortDescription(event.target.value)}
                 maxLength={240}
                 placeholder="One line about the project"
                 className={inputClass}
@@ -562,12 +516,10 @@ export default function EditProjectPlanClient({
           >
             <h2
               id="tech-stack-heading"
-              className="mb-5 flex items-center gap-2 text-[10px] font-semibold uppercase tracking-widest text-neutral-500 dark:text-white/45"
+              className="mb-5 flex items-center gap-2 text-[10px] font-semibold tracking-widest text-neutral-500 uppercase dark:text-white/45"
             >
               <Code2 className="size-3.5 text-emerald-600/70 dark:text-emerald-500/70" />
-
               Tech stack
-
               <span className="text-neutral-300 dark:text-white/25">
                 — select all that apply
               </span>
@@ -575,23 +527,15 @@ export default function EditProjectPlanClient({
 
             <div className="space-y-5">
               {(
-                Object.entries(STACK) as [
-                  Category,
-                  (typeof STACK)[Category],
-                ][]
+                Object.entries(STACK) as [Category, (typeof STACK)[Category]][]
               ).map(([category, meta]) => {
-                const values =
-                  selected[category] ??
-                  new Set<string>();
+                const values = selected[category] ?? new Set<string>()
 
                 return (
                   <div key={category}>
                     <div className="mb-2.5 flex items-center gap-2">
                       <span
-                        className={cn(
-                          "size-1.5 rounded-full",
-                          meta.color.dot,
-                        )}
+                        className={cn("size-1.5 rounded-full", meta.color.dot)}
                       />
 
                       <h3 className="text-[10.5px] font-medium text-neutral-400 dark:text-white/40">
@@ -607,40 +551,34 @@ export default function EditProjectPlanClient({
 
                     <div className="flex flex-wrap gap-1.5">
                       {meta.options.map((option) => {
-                        const isSelected =
-                          values.has(option);
+                        const isSelected = values.has(option)
 
                         return (
                           <button
                             key={option}
                             type="button"
                             aria-pressed={isSelected}
-                            onClick={() =>
-                              toggleChip(
-                                category,
-                                option,
-                              )
-                            }
+                            onClick={() => toggleChip(category, option)}
                             className={cn(
                               "rounded-[7px] border px-2.5 py-1 text-[11px] font-medium transition-all duration-100",
-                              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400/50",
+                              "focus-visible:ring-2 focus-visible:ring-emerald-400/50 focus-visible:outline-none",
                               isSelected
                                 ? meta.color.sel
                                 : cn(
-                                  "border-neutral-200 bg-white text-neutral-500",
-                                  "hover:border-neutral-300 hover:text-neutral-700",
-                                  "dark:border-white/[0.07] dark:bg-white/3 dark:text-white/40",
-                                  "dark:hover:border-white/[0.14] dark:hover:text-white/70",
-                                ),
+                                    "border-neutral-200 bg-white text-neutral-500",
+                                    "hover:border-neutral-300 hover:text-neutral-700",
+                                    "dark:border-white/[0.07] dark:bg-white/3 dark:text-white/40",
+                                    "dark:hover:border-white/[0.14] dark:hover:text-white/70"
+                                  )
                             )}
                           >
                             {option}
                           </button>
-                        );
+                        )
                       })}
                     </div>
                   </div>
-                );
+                )
               })}
             </div>
           </section>
@@ -648,16 +586,10 @@ export default function EditProjectPlanClient({
           {/* Markdown editor */}
           <section
             aria-labelledby="markdown-editor-heading"
-            className={cn(
-              cardClass,
-              "overflow-hidden",
-            )}
+            className={cn(cardClass, "overflow-hidden")}
           >
             <div className="flex flex-wrap items-center gap-0.5 border-b border-neutral-200 px-3 py-2.5 dark:border-white/6">
-              <h2
-                id="markdown-editor-heading"
-                className="sr-only"
-              >
+              <h2 id="markdown-editor-heading" className="sr-only">
                 Project plan content
               </h2>
 
@@ -674,27 +606,17 @@ export default function EditProjectPlanClient({
                     type="button"
                     title={action.label}
                     aria-label={action.label}
-                    onMouseDown={(event) =>
-                      event.preventDefault()
-                    }
-                    onClick={() =>
-                      applyMarkdown(action)
-                    }
-                    className="flex size-7 items-center justify-center rounded-md text-neutral-400 transition-colors hover:bg-neutral-200/70 hover:text-neutral-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400/50 dark:text-white/40 dark:hover:bg-white/[0.07] dark:hover:text-white/80"
+                    onMouseDown={(event) => event.preventDefault()}
+                    onClick={() => applyMarkdown(action)}
+                    className="flex size-7 items-center justify-center rounded-md text-neutral-400 transition-colors hover:bg-neutral-200/70 hover:text-neutral-700 focus-visible:ring-2 focus-visible:ring-emerald-400/50 focus-visible:outline-none dark:text-white/40 dark:hover:bg-white/[0.07] dark:hover:text-white/80"
                   >
-                    <action.icon
-                      className="size-3.5"
-                      aria-hidden="true"
-                    />
+                    <action.icon className="size-3.5" aria-hidden="true" />
                   </button>
-                ),
+                )
               )}
             </div>
 
-            <label
-              htmlFor="project-content"
-              className="sr-only"
-            >
+            <label htmlFor="project-content" className="sr-only">
               Project plan in Markdown
             </label>
 
@@ -703,9 +625,7 @@ export default function EditProjectPlanClient({
               name="content"
               ref={textareaRef}
               value={content}
-              onChange={(event) =>
-                setContent(event.target.value)
-              }
+              onChange={(event) => setContent(event.target.value)}
               placeholder={
                 "## Overview\n\nDescribe your project idea, goals, and scope..."
               }
@@ -713,8 +633,8 @@ export default function EditProjectPlanClient({
               className={cn(
                 "w-full resize-y bg-transparent px-5 py-4 font-mono text-[13px] leading-[1.75] outline-none",
                 "text-neutral-700 placeholder:text-neutral-300",
-                "focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-emerald-500/15",
-                "dark:text-white/75 dark:placeholder:text-white/25 dark:focus-visible:ring-emerald-500/20",
+                "focus-visible:ring-2 focus-visible:ring-emerald-500/15 focus-visible:ring-inset",
+                "dark:text-white/75 dark:placeholder:text-white/25 dark:focus-visible:ring-emerald-500/20"
               )}
             />
 
@@ -725,9 +645,8 @@ export default function EditProjectPlanClient({
                 Markdown supported
               </span>
 
-              <span className="ml-auto text-[10px] tabular-nums text-neutral-300 dark:text-white/25">
-                {content.length.toLocaleString()}{" "}
-                characters
+              <span className="ml-auto text-[10px] text-neutral-300 tabular-nums dark:text-white/25">
+                {content.length.toLocaleString()} characters
               </span>
             </div>
           </section>
@@ -736,7 +655,7 @@ export default function EditProjectPlanClient({
           <div className="flex items-center justify-between gap-3 pt-1">
             <Link
               href={`/developer-dashboard/project-planner/${encodeURIComponent(id)}`}
-              className="flex items-center gap-2 text-[12px] text-neutral-400 transition-colors hover:text-neutral-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400/50 dark:text-white/35 dark:hover:text-white/65"
+              className="flex items-center gap-2 text-[12px] text-neutral-400 transition-colors hover:text-neutral-700 focus-visible:ring-2 focus-visible:ring-emerald-400/50 focus-visible:outline-none dark:text-white/35 dark:hover:text-white/65"
             >
               <ArrowLeft className="size-3.5" />
               Back to plan
@@ -755,7 +674,7 @@ export default function EditProjectPlanClient({
               <button
                 type="submit"
                 disabled={saving || !title.trim()}
-                className="flex h-9 items-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 px-5 text-[12.5px] font-semibold text-emerald-700 transition-all hover:border-emerald-300 hover:bg-emerald-100 disabled:cursor-not-allowed disabled:opacity-40 active:scale-[0.98] dark:border-emerald-500/25 dark:bg-emerald-500/10 dark:text-emerald-300 dark:hover:border-emerald-500/40 dark:hover:bg-emerald-500/16"
+                className="flex h-9 items-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 px-5 text-[12.5px] font-semibold text-emerald-700 transition-all hover:border-emerald-300 hover:bg-emerald-100 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-40 dark:border-emerald-500/25 dark:bg-emerald-500/10 dark:text-emerald-300 dark:hover:border-emerald-500/40 dark:hover:bg-emerald-500/16"
               >
                 {saving ? (
                   <>
@@ -774,5 +693,5 @@ export default function EditProjectPlanClient({
         </form>
       </div>
     </main>
-  );
+  )
 }

@@ -62,13 +62,13 @@ export default function DeveloperDashboardPage() {
     if (!response.ok) {
       toast.error("Oops", {
         description: "Failed to fetch the 'thought of the day'.",
-        closeButton: true
+        closeButton: true,
       })
 
       throw new Error("Failed to fetch the 'thought of the day'.")
     }
 
-    const data: IThought = await response.json();
+    const data: IThought = await response.json()
 
     setThought(data)
   }
@@ -79,7 +79,7 @@ export default function DeveloperDashboardPage() {
     if (!response.ok) {
       toast.error("Oops", {
         description: "Failed to fetch the task count.",
-        closeButton: true
+        closeButton: true,
       })
 
       throw new Error("Failed to fetch the task count.")
@@ -96,10 +96,7 @@ export default function DeveloperDashboardPage() {
     }
 
     if (!loading && isAuthenticated) {
-      Promise.all([
-        fetchThought(),
-        fetchTasksCount()
-      ])
+      Promise.all([fetchThought(), fetchTasksCount()])
     }
   }, [loading, isAuthenticated, router])
 

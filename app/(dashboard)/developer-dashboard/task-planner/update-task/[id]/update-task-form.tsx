@@ -72,7 +72,9 @@ export function TaskUpdateForm({ id }: { id: string }) {
           setPriority((data.priority as Priority) || "medium")
 
           if (data.dueDate) {
-            const formattedDate = new Date(data.dueDate).toISOString().split("T")[0]
+            const formattedDate = new Date(data.dueDate)
+              .toISOString()
+              .split("T")[0]
             setDueDate(formattedDate)
           } else {
             setDueDate("")
@@ -247,7 +249,7 @@ export function TaskUpdateForm({ id }: { id: string }) {
                   "h-11 w-full rounded-xl px-3.5",
                   "border border-black/10 bg-black/2 text-neutral-900 placeholder:text-neutral-400",
                   "dark:border-white/8 dark:bg-white/3 dark:text-white/85 dark:placeholder:text-white/20",
-                  "text-[13px] outline-none transition-all duration-150",
+                  "text-[13px] transition-all duration-150 outline-none",
                   "focus:border-emerald-500/40 focus:bg-white focus:ring-2 focus:ring-emerald-500/10",
                   "dark:focus:border-emerald-500/30 dark:focus:bg-white/4 dark:focus:ring-emerald-500/5"
                 )}
@@ -260,7 +262,9 @@ export function TaskUpdateForm({ id }: { id: string }) {
                 className="mb-2 block text-[11px] font-medium text-neutral-600 dark:text-white/45"
               >
                 Description
-                <span className="ml-1 text-neutral-400 dark:text-white/20">(optional)</span>
+                <span className="ml-1 text-neutral-400 dark:text-white/20">
+                  (optional)
+                </span>
               </label>
               <textarea
                 id="description"
@@ -272,7 +276,7 @@ export function TaskUpdateForm({ id }: { id: string }) {
                   "w-full resize-none rounded-xl px-3.5 py-3",
                   "border border-black/10 bg-black/2 text-neutral-900 placeholder:text-neutral-400",
                   "dark:border-white/8 dark:bg-white/3 dark:text-white/85 dark:placeholder:text-white/20",
-                  "text-[13px] leading-6 outline-none transition-all duration-150",
+                  "text-[13px] leading-6 transition-all duration-150 outline-none",
                   "focus:border-emerald-500/40 focus:bg-white focus:ring-2 focus:ring-emerald-500/10",
                   "dark:focus:border-emerald-500/30 dark:focus:bg-white/4 dark:focus:ring-emerald-500/5"
                 )}
@@ -333,7 +337,9 @@ export function TaskUpdateForm({ id }: { id: string }) {
                 className="mb-2 block text-[11px] font-medium text-neutral-600 dark:text-white/45"
               >
                 Due date
-                <span className="ml-1 text-neutral-400 dark:text-white/20">(optional)</span>
+                <span className="ml-1 text-neutral-400 dark:text-white/20">
+                  (optional)
+                </span>
               </label>
 
               <div className="relative">
@@ -344,9 +350,9 @@ export function TaskUpdateForm({ id }: { id: string }) {
                   value={dueDate}
                   onChange={(e) => setDueDate(e.target.value)}
                   className={cn(
-                    "h-11 w-full rounded-xl pl-10 pr-3.5",
+                    "h-11 w-full rounded-xl pr-3.5 pl-10",
                     "border border-black/10 bg-black/2 text-neutral-800 dark:border-white/8 dark:bg-white/3 dark:text-white/60",
-                    "text-[12px] outline-none transition-all duration-150",
+                    "text-[12px] transition-all duration-150 outline-none",
                     "focus:border-emerald-500/40 focus:bg-white focus:ring-2 focus:ring-emerald-500/10",
                     "dark:focus:border-emerald-500/30 dark:focus:bg-white/4 dark:focus:ring-emerald-500/5"
                   )}

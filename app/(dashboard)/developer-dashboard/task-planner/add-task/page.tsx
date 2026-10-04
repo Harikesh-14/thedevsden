@@ -47,14 +47,14 @@ export default function AddTaskPage() {
   const handleSubmit = async (event: React.SubmitEvent<HTMLFormElement>) => {
     event.preventDefault()
 
-    const response = await apiFetch('/task-manager', {
+    const response = await apiFetch("/task-manager", {
       method: "POST",
       body: JSON.stringify({
         task: title,
         description,
         priority,
-        dueDate
-      })
+        dueDate,
+      }),
     })
 
     const data = await response.json()
@@ -69,7 +69,7 @@ export default function AddTaskPage() {
 
     toast.success("Yeyy!", {
       description: "Task added successfully",
-      closeButton: true
+      closeButton: true,
     })
     setTitle("")
     setDescription("")
@@ -116,7 +116,9 @@ export default function AddTaskPage() {
 
           <h1 className="text-3xl font-semibold tracking-tight text-neutral-900 sm:text-4xl dark:text-white/90">
             Add a task.
-            <span className="ml-2 text-neutral-400 dark:text-white/25">Make it count.</span>
+            <span className="ml-2 text-neutral-400 dark:text-white/25">
+              Make it count.
+            </span>
           </h1>
 
           <p className="mt-2 max-w-md text-sm leading-6 text-neutral-600 dark:text-white/35">
@@ -164,7 +166,7 @@ export default function AddTaskPage() {
                   "h-11 w-full rounded-xl px-3.5",
                   "border border-black/10 bg-black/2 text-neutral-900 placeholder:text-neutral-400",
                   "dark:border-white/8 dark:bg-white/3 dark:text-white/85 dark:placeholder:text-white/20",
-                  "text-[13px] outline-none transition-all duration-150",
+                  "text-[13px] transition-all duration-150 outline-none",
                   "focus:border-emerald-500/40 focus:bg-white focus:ring-2 focus:ring-emerald-500/10",
                   "dark:focus:border-emerald-500/30 dark:focus:bg-white/4 dark:focus:ring-emerald-500/5"
                 )}
@@ -178,7 +180,9 @@ export default function AddTaskPage() {
                 className="mb-2 block text-[11px] font-medium text-neutral-600 dark:text-white/45"
               >
                 Description
-                <span className="ml-1 text-neutral-400 dark:text-white/20">(optional)</span>
+                <span className="ml-1 text-neutral-400 dark:text-white/20">
+                  (optional)
+                </span>
               </label>
 
               <textarea
@@ -191,7 +195,7 @@ export default function AddTaskPage() {
                   "w-full resize-none rounded-xl px-3.5 py-3",
                   "border border-black/10 bg-black/2 text-neutral-900 placeholder:text-neutral-400",
                   "dark:border-white/8 dark:bg-white/3 dark:text-white/85 dark:placeholder:text-white/20",
-                  "text-[13px] leading-6 outline-none transition-all duration-150",
+                  "text-[13px] leading-6 transition-all duration-150 outline-none",
                   "focus:border-emerald-500/40 focus:bg-white focus:ring-2 focus:ring-emerald-500/10",
                   "dark:focus:border-emerald-500/30 dark:focus:bg-white/4 dark:focus:ring-emerald-500/5"
                 )}
@@ -223,12 +227,7 @@ export default function AddTaskPage() {
                       )}
                     >
                       <div className="flex items-center gap-2">
-                        <span
-                          className={cn(
-                            "size-2 rounded-full",
-                            item.dot
-                          )}
-                        />
+                        <span className={cn("size-2 rounded-full", item.dot)} />
 
                         <span
                           className={cn(
@@ -262,7 +261,9 @@ export default function AddTaskPage() {
                 className="mb-2 block text-[11px] font-medium text-neutral-600 dark:text-white/45"
               >
                 Due date
-                <span className="ml-1 text-neutral-400 dark:text-white/20">(optional)</span>
+                <span className="ml-1 text-neutral-400 dark:text-white/20">
+                  (optional)
+                </span>
               </label>
 
               <div className="relative">
@@ -274,9 +275,9 @@ export default function AddTaskPage() {
                   value={dueDate}
                   onChange={(e) => setDueDate(e.target.value)}
                   className={cn(
-                    "h-11 w-full rounded-xl pl-10 pr-3.5",
+                    "h-11 w-full rounded-xl pr-3.5 pl-10",
                     "border border-black/10 bg-black/2 text-neutral-800 dark:border-white/8 dark:bg-white/3 dark:text-white/60",
-                    "text-[12px] outline-none transition-all duration-150",
+                    "text-[12px] transition-all duration-150 outline-none",
                     "focus:border-emerald-500/40 focus:bg-white focus:ring-2 focus:ring-emerald-500/10",
                     "dark:focus:border-emerald-500/30 dark:focus:bg-white/4 dark:focus:ring-emerald-500/5"
                   )}

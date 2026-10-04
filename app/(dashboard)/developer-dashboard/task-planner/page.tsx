@@ -22,15 +22,18 @@ type Filter = (typeof filters)[number]
 const priorityStyles = {
   high: {
     dot: "bg-red-500 dark:bg-red-400 shadow-[0_0_10px_rgba(248,113,113,0.7)]",
-    badge: "border-red-500/20 bg-red-500/10 text-red-600 dark:border-red-400/15 dark:bg-red-400/[0.07] dark:text-red-300/70",
+    badge:
+      "border-red-500/20 bg-red-500/10 text-red-600 dark:border-red-400/15 dark:bg-red-400/[0.07] dark:text-red-300/70",
   },
   medium: {
     dot: "bg-amber-500 dark:bg-amber-400 shadow-[0_0_10px_rgba(251,191,36,0.6)]",
-    badge: "border-amber-500/20 bg-amber-500/10 text-amber-700 dark:border-amber-400/15 dark:bg-amber-400/[0.07] dark:text-amber-300/70",
+    badge:
+      "border-amber-500/20 bg-amber-500/10 text-amber-700 dark:border-amber-400/15 dark:bg-amber-400/[0.07] dark:text-amber-300/70",
   },
   low: {
     dot: "bg-emerald-500 dark:bg-emerald-400 shadow-[0_0_10px_rgba(52,211,153,0.6)]",
-    badge: "border-emerald-500/20 bg-emerald-500/10 text-emerald-700 dark:border-emerald-400/15 dark:bg-emerald-400/[0.07] dark:text-emerald-300/70",
+    badge:
+      "border-emerald-500/20 bg-emerald-500/10 text-emerald-700 dark:border-emerald-400/15 dark:bg-emerald-400/[0.07] dark:text-emerald-300/70",
   },
 }
 
@@ -65,11 +68,7 @@ export default function TaskPlannerPage() {
       setTasks(data)
 
       setCompleted(
-        new Set(
-          data
-            .filter((task) => task.isCompleted)
-            .map((task) => task._id)
-        )
+        new Set(data.filter((task) => task.isCompleted).map((task) => task._id))
       )
     } catch (error) {
       console.error("Failed to fetch tasks:", error)
@@ -170,7 +169,7 @@ export default function TaskPlannerPage() {
   }
 
   return (
-    <main className="relative min-h-screen overflow-hidden font-sans text-neutral-800 transition-colors duration-300 dark:bg-neutral-950 bg-white dark:text-white/90">
+    <main className="relative min-h-screen overflow-hidden bg-white font-sans text-neutral-800 transition-colors duration-300 dark:bg-neutral-950 dark:text-white/90">
       {/* Ambient glows */}
       <div
         aria-hidden
@@ -411,7 +410,9 @@ export default function TaskPlannerPage() {
                       className="relative shrink-0"
                     >
                       <button
-                        onClick={() => setOpenMenu(isMenuOpen ? null : task._id)}
+                        onClick={() =>
+                          setOpenMenu(isMenuOpen ? null : task._id)
+                        }
                         aria-label="Task options"
                         aria-expanded={isMenuOpen}
                         className={cn(

@@ -1,11 +1,11 @@
-import EditProjectPlanClient from "./edit-project-plan-client";
+import EditProjectPlanClient from "./edit-project-plan-client"
 
 export default async function EditProjectPlanPage({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: Promise<{ id: string }>
 }) {
-  const { id } = await params;
+  const { id } = await params
 
-  return <EditProjectPlanClient id={id} />;
+  return <EditProjectPlanClient id={id} />
 }

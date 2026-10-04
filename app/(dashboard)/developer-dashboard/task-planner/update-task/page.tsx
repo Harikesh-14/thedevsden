@@ -34,7 +34,7 @@ export default function UpdateTaskPage() {
           className={cn(
             "relative overflow-hidden rounded-3xl p-6 sm:p-8",
             "border border-black/8 bg-white/70 shadow-[0_24px_60px_rgba(0,0,0,0.06)] backdrop-blur-2xl",
-            "dark:border-white/8 dark:bg-white/2 dark:shadow-[0_24px_60px_rgba(0,0,0,0.5)]",
+            "dark:border-white/8 dark:bg-white/2 dark:shadow-[0_24px_60px_rgba(0,0,0,0.5)]"
           )}
         >
           {/* Subtle top border glow */}
@@ -74,7 +74,8 @@ export default function UpdateTaskPage() {
 
             <p className="mt-3 text-[13px] leading-relaxed text-neutral-600 dark:text-white/50">
               Nice try telephoning into the raw route! To update a task, you
-              actually need to select an actual task first so we know which one you&apos;re trying to fix.
+              actually need to select an actual task first so we know which one
+              you&apos;re trying to fix.
             </p>
 
             <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
@@ -85,7 +86,7 @@ export default function UpdateTaskPage() {
                   "border border-black/10 bg-neutral-100 text-neutral-700",
                   "hover:bg-neutral-200 hover:text-neutral-900",
                   "dark:border-white/10 dark:bg-white/5 dark:text-white/80 dark:hover:bg-white/10 dark:hover:text-white",
-                  "text-[12px] font-medium transition-all duration-150 active:scale-[0.98]",
+                  "text-[12px] font-medium transition-all duration-150 active:scale-[0.98]"
                 )}
               >
                 <ArrowLeft className="size-4" />
@@ -98,7 +99,7 @@ export default function UpdateTaskPage() {
                   "flex h-11 w-full items-center justify-center gap-2 rounded-xl px-5 sm:w-auto",
                   "border border-emerald-500/30 bg-emerald-500/15 text-emerald-700 hover:bg-emerald-500/25 dark:text-emerald-300 dark:hover:text-emerald-200",
                   "shadow-[0_0_20px_rgba(52,211,153,0.15)]",
-                  "text-[12px] font-semibold transition-all duration-150 active:scale-[0.98]",
+                  "text-[12px] font-semibold transition-all duration-150 active:scale-[0.98]"
                 )}
               >
                 <Compass className="size-4" />
@@ -110,7 +111,11 @@ export default function UpdateTaskPage() {
 
         {/* Footer meme tag */}
         <p className="mt-6 text-center text-[11px] text-neutral-400 dark:text-white/20">
-          Maintained by the <code className="rounded bg-neutral-200/60 px-1 py-0.5 text-neutral-600 dark:bg-white/5 dark:text-neutral-300">no-id-no-entry</code> gang
+          Maintained by the{" "}
+          <code className="rounded bg-neutral-200/60 px-1 py-0.5 text-neutral-600 dark:bg-white/5 dark:text-neutral-300">
+            no-id-no-entry
+          </code>{" "}
+          gang
         </p>
       </div>
     </main>
