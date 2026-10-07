@@ -21,6 +21,7 @@ import {
   accentByDominant,
   categoryMeta,
   ProjectPlan,
+  ProjectStatsResponse,
   SkillCategory,
 } from "@/lib/project-planner"
 import { apiFetch } from "@/lib/api"
@@ -363,13 +364,14 @@ export default function ProjectPlannerPage() {
   const [search, setSearch] = useState("")
   const [view, setView] = useState<"grid" | "list">("grid")
   const [projectPlans, setProjectPlans] = useState<ProjectPlan[]>([])
+  const [projectStats, setProjectStats] = useState<ProjectStatsResponse>()
   const router = useRouter()
 
   const stats = [
-    { label: "Total plans", value: String(projectPlans.length), accent: false },
-    { label: "Active", value: "4", accent: true },
-    { label: "Tech stacks", value: "12", accent: false },
-    { label: "Completed", value: "2", accent: false },
+    { label: "Total plans", value: String(projectStats?.totalPlans), accent: false },
+    { label: "Active", value: String(projectStats?.activePlans), accent: true },
+    { label: "Tech stacks", value: String(projectStats?.totalTechStack), accent: false },
+    { label: "Completed", value: String(projectStats?.completedPlans), accent: false },
   ]
 
   const filtered = projectPlans.filter(
@@ -390,6 +392,23 @@ export default function ProjectPlannerPage() {
     }
     const data: ProjectPlan[] = await response.json()
     setProjectPlans(data)
+  }
+
+  async function fetchOverallStats() {
+    const response = await apiFetch('/new-projects-plan/get/overall-stats')
+
+    if (!response.ok) {
+      toast.error("Oops", {
+        description: "Error fetching the stats",
+        closeButton: true,
+      })
+
+      return
+    }
+
+    const data: ProjectStatsResponse = await response.json()
+
+    setProjectStats(data)
   }
 
   async function toggleComplete(id: string, currentStatus: boolean) {
@@ -444,7 +463,10 @@ export default function ProjectPlannerPage() {
   }
 
   useEffect(() => {
-    fetchProjectPlans()
+    Promise.all([
+      fetchProjectPlans(),
+      fetchOverallStats()
+    ])
   }, [])
 
   return (
@@ -662,7 +684,7 @@ export default function ProjectPlannerPage() {
                 onToggleComplete={() =>
                   toggleComplete(project._id, project.isActive)
                 }
-                onUpdate={() => {}}
+                onUpdate={() => { }}
                 onDelete={() => deleteProjectPlan(project._id)}
               />
             ))}

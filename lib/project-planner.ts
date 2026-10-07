@@ -289,3 +289,10 @@ export const accentByDominant: Record<SkillCategory, string> = {
   testing: "from-rose-500   via-rose-600",
   other: "from-neutral-500 via-neutral-600",
 }
+
+export interface ProjectStatsResponse {
+  totalPlans: number;
+  activePlans: number;
+  completedPlans: number;
+  totalTechStack: number;
+}

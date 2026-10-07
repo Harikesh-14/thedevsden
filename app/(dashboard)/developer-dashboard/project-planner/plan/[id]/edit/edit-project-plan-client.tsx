@@ -301,12 +301,9 @@ export default function EditProjectPlanClient({ id }: { id: string }) {
 
     try {
       const response = await apiFetch(
-        `/new-projects-plan/${encodeURIComponent(id)}/`,
+        `/new-projects-plan/update/${encodeURIComponent(id)}/`,
         {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          method: "PUT",
           body: JSON.stringify({
             title: trimmedTitle,
             shortDescription: shortDescription.trim(),
@@ -337,7 +334,7 @@ export default function EditProjectPlanClient({ id }: { id: string }) {
       toast.success("Project plan updated")
 
       router.push(
-        `/developer-dashboard/project-planner/${encodeURIComponent(id)}`
+        `/developer-dashboard/project-planner/plan/${encodeURIComponent(id)}`
       )
 
       router.refresh()
