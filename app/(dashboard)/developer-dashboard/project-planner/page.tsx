@@ -220,7 +220,7 @@ function ProjectCard({
           </h3>
 
           <ProjectActionMenu
-            isCompleted={project.isActive}
+            isCompleted={!project.isActive}
             onToggleComplete={onToggleComplete}
             onUpdate={onUpdate}
             onDelete={onDelete}
@@ -430,7 +430,7 @@ export default function ProjectPlannerPage() {
         prev.map((p) => (p._id === updated._id ? updated : p))
       )
       toast.success(
-        !updated.isActive
+        updated.isActive
           ? "Project marked as active"
           : "Project marked as completed"
       )
