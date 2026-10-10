@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   ArrowUpRight,
   CheckCircle2,
@@ -8,63 +8,58 @@ import {
   Map,
   Plus,
   Route,
+  LoaderCircle,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 type Roadmap = {
-  id: string;
+  _id: string;
   title: string;
   description: string;
-  category: string;
-  progress: number;
-  completedMilestones: number;
-  totalMilestones: number;
-  updatedAt: string;
+  slug: string;
+  visibility: string;
+  updatedAt?: string;
 };
 
-const roadmaps: Roadmap[] = [
-  {
-    id: "1",
-    title: "AI Engineering",
-    description:
-      "Build a strong foundation in machine learning, LLMs, and AI application development.",
-    category: "Artificial Intelligence",
-    progress: 35,
-    completedMilestones: 4,
-    totalMilestones: 12,
-    updatedAt: "2 hours ago",
-  },
-  {
-    id: "2",
-    title: "Backend Engineering",
-    description:
-      "Explore system design, distributed systems, databases, and scalable backend architecture.",
-    category: "Backend Development",
-    progress: 60,
-    completedMilestones: 6,
-    totalMilestones: 10,
-    updatedAt: "Yesterday",
-  },
-  {
-    id: "3",
-    title: "Russian Language",
-    description:
-      "Progress from beginner fundamentals to everyday conversations and practical vocabulary.",
-    category: "Language Learning",
-    progress: 20,
-    completedMilestones: 2,
-    totalMilestones: 10,
-    updatedAt: "3 days ago",
-  },
-];
+const API_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 export default function RoadmapPage() {
   const router = useRouter();
   const [search, setSearch] = useState("");
+  const [roadmaps, setRoadmaps] = useState<Roadmap[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function fetchRoadmaps() {
+      if (!API_URL) {
+        setError("NEXT_PUBLIC_BACKEND_URL is not configured.");
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const res = await fetch(`${API_URL.replace(/\/+$/, "")}/roadmap`);
+        if (!res.ok) {
+          throw new Error("Failed to fetch roadmaps from backend.");
+        }
+        const data = await res.json();
+        setRoadmaps(data);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Something went wrong.");
+        toast.error("Failed to load roadmaps from backend.");
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchRoadmaps();
+  }, []);
 
   const filteredRoadmaps = roadmaps.filter((roadmap) =>
-    `${roadmap.title} ${roadmap.description} ${roadmap.category}`
+    `${roadmap.title} ${roadmap.description || ""} ${roadmap.slug}`
       .toLowerCase()
       .includes(search.toLowerCase())
   );
@@ -76,18 +71,13 @@ export default function RoadmapPage() {
       icon: Map,
     },
     {
-      label: "In progress",
-      value: roadmaps.filter(
-        (roadmap) => roadmap.progress > 0 && roadmap.progress < 100
-      ).length,
+      label: "Public roadmaps",
+      value: roadmaps.filter((r) => r.visibility === "public").length,
       icon: Route,
     },
     {
-      label: "Milestones completed",
-      value: roadmaps.reduce(
-        (total, roadmap) => total + roadmap.completedMilestones,
-        0
-      ),
+      label: "Private / Unlisted",
+      value: roadmaps.filter((r) => r.visibility !== "public").length,
       icon: CheckCircle2,
     },
   ];
@@ -204,23 +194,27 @@ export default function RoadmapPage() {
             </span>
           </div>
 
-          {filteredRoadmaps.length === 0 ? (
+          {loading ? (
+            <div className="flex justify-center py-20">
+              <LoaderCircle className="size-6 animate-spin text-emerald-500" />
+            </div>
+          ) : filteredRoadmaps.length === 0 ? (
             <div className="rounded-[18px] border border-dashed border-neutral-200 py-16 text-center dark:border-white/10">
               <p className="text-sm font-medium text-neutral-500 dark:text-white/50">
                 No roadmaps found
               </p>
               <p className="mt-1 text-xs text-neutral-400 dark:text-white/25">
-                Try another search term.
+                {error ? error : "Try creating your first roadmap or adjusting your search."}
               </p>
             </div>
           ) : (
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {filteredRoadmaps.map((roadmap) => (
                 <article
-                  key={roadmap.id}
+                  key={roadmap._id}
                   onClick={() =>
                     router.push(
-                      `/developer-dashboard/roadmap/${roadmap.id}`
+                      `/developer-dashboard/roadmap/${roadmap._id}`
                     )
                   }
                   className={cn(
@@ -231,17 +225,10 @@ export default function RoadmapPage() {
                     "dark:hover:border-white/[0.14] dark:hover:bg-white/5"
                   )}
                 >
-                  {/* <div
-                    className={cn(
-                      "h-0.75 w-full bg-linear-to-r to-transparent",
-                      roadmap.accent
-                    )}
-                  /> */}
-
                   <div className="flex flex-1 flex-col p-5">
                     <div className="mb-3 flex items-start justify-between gap-3">
-                      <span className="rounded-md border border-neutral-200 bg-neutral-50 px-2 py-1 text-[9px] font-semibold tracking-wide text-neutral-500 dark:border-white/8 dark:bg-white/4 dark:text-white/40">
-                        {roadmap.category}
+                      <span className="rounded-md border border-neutral-200 bg-neutral-50 px-2 py-1 text-[9px] font-semibold tracking-wide text-neutral-500 uppercase dark:border-white/8 dark:bg-white/4 dark:text-white/40">
+                        {roadmap.visibility || "private"}
                       </span>
 
                       <ArrowUpRight className="size-4 text-neutral-300 transition-all group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-emerald-600 dark:text-white/20 dark:group-hover:text-emerald-400" />
@@ -252,46 +239,20 @@ export default function RoadmapPage() {
                     </h3>
 
                     <p className="mt-2 line-clamp-3 text-[12px] leading-[1.7] text-neutral-500 dark:text-white/35">
-                      {roadmap.description}
+                      {roadmap.description || "No description provided."}
                     </p>
 
-                    {/* Progress */}
-                    <div className="mt-auto pt-6">
-                      <div className="mb-2 flex items-center justify-between">
-                        <span className="text-[10px] font-medium text-neutral-400 dark:text-white/30">
-                          Overall progress
-                        </span>
-                        <span className="text-[11px] font-semibold text-emerald-600 dark:text-emerald-400">
-                          {roadmap.progress}%
-                        </span>
-                      </div>
+                    <div className="mt-auto pt-6 border-t border-neutral-100 dark:border-white/5 flex items-center justify-between">
+                      <span className="text-[10px] font-mono text-neutral-400 dark:text-white/30 truncate max-w-32.5">
+                        /{roadmap.slug}
+                      </span>
 
-                      <div
-                        className="h-1.5 overflow-hidden rounded-full bg-neutral-100 dark:bg-white/8"
-                        role="progressbar"
-                        aria-valuenow={roadmap.progress}
-                        aria-valuemin={0}
-                        aria-valuemax={100}
-                        aria-label={`${roadmap.title} progress`}
-                      >
-                        <div
-                          className="h-full rounded-full bg-emerald-500 transition-all duration-500 dark:bg-emerald-400"
-                          style={{ width: `${roadmap.progress}%` }}
-                        />
-                      </div>
-
-                      <div className="mt-4 flex items-center justify-between border-t border-neutral-100 pt-3 dark:border-white/5">
-                        <span className="flex items-center gap-1.5 text-[10px] text-neutral-400 dark:text-white/30">
-                          <CheckCircle2 className="size-3.5" />
-                          {roadmap.completedMilestones}/
-                          {roadmap.totalMilestones} milestones
-                        </span>
-
-                        <span className="flex items-center gap-1 text-[10px] text-neutral-400 dark:text-white/25">
-                          <Clock3 className="size-3" />
-                          {roadmap.updatedAt}
-                        </span>
-                      </div>
+                      <span className="flex items-center gap-1 text-[10px] text-neutral-400 dark:text-white/25">
+                        <Clock3 className="size-3" />
+                        {roadmap.updatedAt
+                          ? new Date(roadmap.updatedAt).toLocaleDateString()
+                          : "Recently"}
+                      </span>
                     </div>
                   </div>
                 </article>
@@ -308,7 +269,7 @@ export default function RoadmapPage() {
                   "dark:border-white/9 dark:bg-white/1.5 dark:hover:border-emerald-500/25 dark:hover:bg-emerald-500/3"
                 )}
               >
-                <div className="flex size-10 items-center justify-center rounded-xl border border-emerald-200 bg-emerald-50 text-emerald-600 transition-all group-hover:bg-emerald-100 dark:border-emerald-500/20 dark:bg-emerald-500/[0.07] dark:text-emerald-400/60">
+                <div className="flex size-10 items-center justify-center rounded-xl border border-emerald-200 bg-emerald-50 text-emerald-700 transition-all group-hover:bg-emerald-100 dark:border-emerald-500/20 dark:bg-emerald-500/[0.07] dark:text-emerald-400/60">
                   <Plus className="size-4 transition-transform duration-200 group-hover:rotate-90" />
                 </div>
 
