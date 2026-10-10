@@ -26,6 +26,7 @@ import {
 } from "@/lib/project-planner"
 import { apiFetch } from "@/lib/api"
 import { toast } from "sonner"
+import { formatRelativeTime } from "@/lib/helper-functions"
 
 // ── Helpers ────────────────────────────────────────────────────────────────
 function getDominantCategory(skills: ProjectPlan["skills"]): SkillCategory {
@@ -283,7 +284,7 @@ function ProjectCard({
           )}
         >
           <span className="text-[10px] text-neutral-400 dark:text-white/20">
-            Updated {project.updatedAt}
+            Updated {formatRelativeTime(project.updatedAt)}
           </span>
 
           <div
@@ -590,7 +591,7 @@ export default function ProjectPlannerPage() {
           </div>
 
           {/* Filter */}
-          <button
+          {/* <button
             className={cn(
               "flex h-9 items-center gap-2 rounded-xl px-3.5 transition-all duration-150",
               "text-[12px] font-medium",
@@ -604,10 +605,10 @@ export default function ProjectPlannerPage() {
           >
             <SlidersHorizontal className="size-3.5" />
             Filter
-          </button>
+          </button> */}
 
           {/* Sort */}
-          <button
+          {/* <button
             className={cn(
               "flex h-9 items-center gap-2 rounded-xl px-3.5 transition-all duration-150",
               "text-[12px] font-medium",
@@ -621,7 +622,7 @@ export default function ProjectPlannerPage() {
           >
             <ArrowUpDown className="size-3.5" />
             Sort
-          </button>
+          </button> */}
 
           {/* View toggle */}
           <div
