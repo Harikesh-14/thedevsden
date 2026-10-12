@@ -204,7 +204,7 @@ export default function ContactSection() {
                   </a>
                 )
               )}
-            </div>
+            </div> 
           </div>
 
           {/* ───────────── Right: Contact Form ───────────── */}
