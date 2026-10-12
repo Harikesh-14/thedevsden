@@ -385,6 +385,7 @@ export default function Sidebar() {
                 "hover:text-neutral-800 dark:hover:text-neutral-200",
                 "transition-all duration-150"
               )}
+              onClick={() => router.push("/developer-dashboard/profile")}
             >
               <User2 className="size-3.5" />
               Profile
