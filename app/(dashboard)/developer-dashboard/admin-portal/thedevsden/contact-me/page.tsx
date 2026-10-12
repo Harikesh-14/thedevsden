@@ -34,12 +34,12 @@ export default function AdminPortalContactMe() {
   const [filter, setFilter] = useState<"all" | "unread" | "replied">("all");
 
   useEffect(() => {
-    fetchMessages();
+    void fetchMessages();
   }, []);
 
   async function fetchMessages() {
     try {
-      const response = await apiFetch("/contacts", { method: "GET" });
+      const response = await apiFetch("/contact-me", { method: "GET" });
       if (!response.ok) throw new Error("Failed to fetch messages.");
       const data = await response.json();
       setMessages(data);
@@ -52,10 +52,14 @@ export default function AdminPortalContactMe() {
 
   async function toggleStatus(id: string, field: "isRead" | "replied", currentVal: boolean) {
     try {
-      const response = await apiFetch(`/contacts/${id}`, {
+      const endpoint = field === "isRead" ? `/contact-me/${id}/read` : `/contact-me/${id}/replied`;
+      const bodyPayload = field === "isRead" ? { isRead: !currentVal } : { replied: !currentVal };
+
+      const response = await apiFetch(endpoint, {
         method: "PATCH",
-        body: JSON.stringify({ [field]: !currentVal }),
+        body: JSON.stringify(bodyPayload),
       });
+
       if (!response.ok) throw new Error("Failed to update status.");
       
       setMessages((prev) =>
@@ -70,7 +74,7 @@ export default function AdminPortalContactMe() {
   async function handleDelete(id: string) {
     if (!window.confirm("Are you sure you want to delete this message?")) return;
     try {
-      const response = await apiFetch(`/contacts/${id}`, { method: "DELETE" });
+      const response = await apiFetch(`/contact-me/${id}`, { method: "DELETE" });
       if (!response.ok) throw new Error("Failed to delete message.");
       
       setMessages((prev) => prev.filter((msg) => msg._id !== id));
@@ -109,7 +113,6 @@ export default function AdminPortalContactMe() {
           </p>
         </header>
 
-        {/* Filters & Search */}
         <section className="mb-4 flex flex-col gap-2.5 sm:flex-row sm:items-center sm:justify-between">
           <div className="relative min-w-0 flex-1 sm:max-w-xs">
             <Search size={15} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-neutral-500" />
@@ -118,7 +121,7 @@ export default function AdminPortalContactMe() {
               placeholder="Search sender, email, subject..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="h-8 border-white/1 bg-[#111111] pl-8 text-xs text-neutral-100 placeholder:text-neutral-600 focus-visible:border-emerald-500 focus-visible:ring-emerald-500/20"
+              className="h-8 border-white/10 bg-[#111111] pl-8 text-xs text-neutral-100 placeholder:text-neutral-600 focus-visible:border-emerald-500 focus-visible:ring-emerald-500/20"
             />
           </div>
           <div className="flex gap-1.5 text-xs">
@@ -138,7 +141,6 @@ export default function AdminPortalContactMe() {
           </div>
         </section>
 
-        {/* Message List */}
         {loading ? (
           <div className="flex min-h-36 items-center justify-center rounded-xl border border-white/8 bg-[#111111]">
             <LoaderCircle size={20} className="animate-spin text-emerald-400" />
@@ -187,8 +189,8 @@ export default function AdminPortalContactMe() {
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => toggleStatus(msg._id, "isRead", msg.isRead)}
-                      className="h-7 gap-1 border-white/1 bg-transparent px-2.5 text-[11px] text-neutral-300 hover:bg-white/5"
+                      onClick={() => void toggleStatus(msg._id, "isRead", msg.isRead)}
+                      className="h-7 gap-1 border-white/10 bg-transparent px-2.5 text-[11px] text-neutral-300 hover:bg-white/5"
                     >
                       {msg.isRead ? <MailOpen size={13} /> : <Mail size={13} />}
                       {msg.isRead ? "Mark Unread" : "Mark Read"}
@@ -196,8 +198,8 @@ export default function AdminPortalContactMe() {
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => toggleStatus(msg._id, "replied", msg.replied)}
-                      className={`h-7 gap-1 border-white/1 px-2.5 text-[11px] ${
+                      onClick={() => void toggleStatus(msg._id, "replied", msg.replied)}
+                      className={`h-7 gap-1 border-white/10 px-2.5 text-[11px] ${
                         msg.replied
                           ? "bg-blue-500/10 text-blue-400 border-blue-500/30"
                           : "bg-transparent text-neutral-300 hover:bg-white/5"
@@ -210,7 +212,7 @@ export default function AdminPortalContactMe() {
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={() => handleDelete(msg._id)}
+                    onClick={() => void handleDelete(msg._id)}
                     className="h-7 gap-1 border-red-500/20 bg-transparent px-2.5 text-[11px] text-red-400 hover:bg-red-500/10"
                   >
                     <Trash2 size={13} />

@@ -1,3 +1,5 @@
+"use client"
+
 import {
   ArrowUpRight,
   GitBranch,
@@ -10,6 +12,10 @@ import {
 
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import { useState } from "react";
+import { toast } from "sonner";
+import { LoaderCircle } from "lucide-react";
+import { apiFetch } from "@/lib/api";
 
 const contactMethods = [
   {
@@ -39,6 +45,45 @@ const contactMethods = [
 ]
 
 export default function ContactSection() {
+  const [loading, setLoading] = useState(false);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    subject: "",
+    message: "",
+  });
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      const response = await apiFetch("/contact-me", {
+        method: "POST",
+        body: JSON.stringify({
+          name: formData.name.trim(),
+          email: formData.email.trim().toLowerCase(),
+          subject: formData.subject.trim(),
+          message: formData.message.trim(),
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => null);
+        throw new Error(errorData?.message || "Failed to send message.");
+      }
+
+      toast.success("Message sent successfully! I'll get back to you soon.");
+      setFormData({ name: "", email: "", subject: "", message: "" });
+    } catch (error) {
+      toast.error(
+        error instanceof Error ? error.message : "Something went wrong."
+      );
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return (
     <main id="contact-me" className="border-b bg-background">
       <div className="mx-auto max-w-7xl px-6 py-20 sm:px-8 lg:px-12 lg:py-28">
@@ -136,11 +181,10 @@ export default function ContactSection() {
                         ? "noopener noreferrer"
                         : undefined
                     }
-                    className={`group flex items-center gap-4 p-5 transition-colors hover:bg-neutral-50 dark:hover:bg-neutral-800/50 ${
-                      index !== contactMethods.length - 1
-                        ? "border-b border-neutral-100 dark:border-neutral-800"
-                        : ""
-                    }`}
+                    className={`group flex items-center gap-4 p-5 transition-colors hover:bg-neutral-50 dark:hover:bg-neutral-800/50 ${index !== contactMethods.length - 1
+                      ? "border-b border-neutral-100 dark:border-neutral-800"
+                      : ""
+                      }`}
                   >
                     <div className="flex size-9 shrink-0 items-center justify-center rounded-xl border border-emerald-200 bg-emerald-50 dark:border-emerald-900 dark:bg-emerald-950/60">
                       <Icon className="size-4 text-emerald-600 dark:text-emerald-400" />
@@ -175,7 +219,7 @@ export default function ContactSection() {
               </p>
             </div>
 
-            <form className="space-y-5">
+            <form onSubmit={handleSubmit} className="space-y-5">
               {/* Name */}
               <div className="space-y-2">
                 <label
@@ -189,6 +233,11 @@ export default function ContactSection() {
                   id="name"
                   name="name"
                   type="text"
+                  required
+                  value={formData.name}
+                  onChange={(e) =>
+                    setFormData({ ...formData, name: e.target.value })
+                  }
                   placeholder="Your name"
                   className="h-11 w-full rounded-xl border border-neutral-200 bg-neutral-50 px-3.5 text-sm text-neutral-900 transition outline-none placeholder:text-neutral-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/10 dark:border-neutral-800 dark:bg-neutral-950 dark:text-neutral-100 dark:placeholder:text-neutral-600"
                 />
@@ -207,6 +256,11 @@ export default function ContactSection() {
                   id="email"
                   name="email"
                   type="email"
+                  required
+                  value={formData.email}
+                  onChange={(e) =>
+                    setFormData({ ...formData, email: e.target.value })
+                  }
                   placeholder="you@example.com"
                   className="h-11 w-full rounded-xl border border-neutral-200 bg-neutral-50 px-3.5 text-sm text-neutral-900 transition outline-none placeholder:text-neutral-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/10 dark:border-neutral-800 dark:bg-neutral-950 dark:text-neutral-100 dark:placeholder:text-neutral-600"
                 />
@@ -225,6 +279,10 @@ export default function ContactSection() {
                   id="subject"
                   name="subject"
                   type="text"
+                  value={formData.subject}
+                  onChange={(e) =>
+                    setFormData({ ...formData, subject: e.target.value })
+                  }
                   placeholder="What's on your mind?"
                   className="h-11 w-full rounded-xl border border-neutral-200 bg-neutral-50 px-3.5 text-sm text-neutral-900 transition outline-none placeholder:text-neutral-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/10 dark:border-neutral-800 dark:bg-neutral-950 dark:text-neutral-100 dark:placeholder:text-neutral-600"
                 />
@@ -243,18 +301,33 @@ export default function ContactSection() {
                   id="message"
                   name="message"
                   rows={6}
+                  required
+                  value={formData.message}
+                  onChange={(e) =>
+                    setFormData({ ...formData, message: e.target.value })
+                  }
                   placeholder="Tell me about your idea, project, or question..."
                   className="w-full resize-none rounded-xl border border-neutral-200 bg-neutral-50 px-3.5 py-3 text-sm leading-6 text-neutral-900 transition outline-none placeholder:text-neutral-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/10 dark:border-neutral-800 dark:bg-neutral-950 dark:text-neutral-100 dark:placeholder:text-neutral-600"
                 />
               </div>
 
-              {/* Submit */}
+              {/* Submit Button */}
               <Button
                 type="submit"
+                disabled={loading}
                 className="h-11 w-full rounded-full bg-emerald-500 text-white hover:bg-emerald-600 dark:bg-emerald-500 dark:hover:bg-emerald-400"
               >
-                Send message
-                <ArrowUpRight className="ml-1.5 size-4" />
+                {loading ? (
+                  <>
+                    <LoaderCircle className="mr-1.5 size-4 animate-spin" />
+                    Sending...
+                  </>
+                ) : (
+                  <>
+                    Send message
+                    <ArrowUpRight className="ml-1.5 size-4" />
+                  </>
+                )}
               </Button>
 
               <p className="text-center text-xs text-neutral-400 dark:text-neutral-600">

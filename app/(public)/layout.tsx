@@ -1,4 +1,5 @@
 import Header from "@/components/header"
+import { Toaster } from "@/components/ui/sonner"
 import React from "react"
 
 export default function PorfolioLayout({
@@ -9,6 +10,7 @@ export default function PorfolioLayout({
   return (
     <section>
       <Header />
+      <Toaster position="top-right" />
       {children}
     </section>
   )
