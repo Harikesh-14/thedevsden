@@ -10,6 +10,8 @@ import { apiFetch } from "@/lib/api"
 import { toast } from "sonner"
 import { IThought } from "@/lib/though-of-the-day"
 import { ITask } from "@/lib/task-planner"
+import { IRoadmap } from "@/lib/roadmap"
+import { ProjectPlan } from "@/lib/project-planner"
 
 function getGreeting() {
   const h = new Date().getHours()
@@ -30,6 +32,8 @@ function getFormattedDate() {
 export default function DeveloperDashboardPage() {
   const [thought, setThought] = useState<IThought | null>(null)
   const [taskCount, setTaskCount] = useState<number>(0)
+  const [roadmaps, setRoadmaps] = useState<number>(0)
+  const [projectPlans, setProjectPlans] = useState<number>(0)
 
   const router = useRouter()
 
@@ -40,7 +44,7 @@ export default function DeveloperDashboardPage() {
       label: "Project Planner",
       href: "/project-planner",
       icon: LayoutDashboard,
-      meta: "3 active projects",
+      meta: `${projectPlans} project(s) available`,
     },
     {
       label: "Task Planner",
@@ -52,7 +56,7 @@ export default function DeveloperDashboardPage() {
       label: "Roadmap",
       href: "/roadmap",
       icon: Map,
-      meta: "Next milestone: v2.0",
+      meta: `${roadmaps} roadmap(s) pending`,
     },
   ]
 
@@ -90,13 +94,47 @@ export default function DeveloperDashboardPage() {
     setTaskCount(data.length)
   }
 
+  async function fetchRoadmapsCount() {
+    const response = await apiFetch("/roadmap")
+
+    if (!response.ok) {
+      toast.error("Oops", {
+        description: "Failed to fetch the roadmaps.",
+        closeButton: true,
+      })
+
+      throw new Error("Failed to fetch the roadmaps.")
+    }
+
+    const data: IRoadmap[] = await response.json()
+
+    setRoadmaps(data.length)
+  }
+
+  async function fetchProjectPlannerCount() {
+    const response = await apiFetch("/new-projects-plan/get/all")
+
+    if (!response.ok) {
+      toast.error("Oops", {
+        description: "Failed to fetch the project plan count.",
+        closeButton: true,
+      })
+
+      throw new Error("Failed to fetch the project plan count.")
+    }
+
+    const data: ProjectPlan[] = await response.json()
+
+    setProjectPlans(data.length)
+  }
+
   useEffect(() => {
     if (!loading && !isAuthenticated) {
       router.replace("/login")
     }
 
     if (!loading && isAuthenticated) {
-      Promise.all([fetchThought(), fetchTasksCount()])
+      Promise.all([fetchThought(), fetchTasksCount(), fetchRoadmapsCount(), fetchProjectPlannerCount()])
     }
   }, [loading, isAuthenticated, router])
 
