@@ -251,18 +251,18 @@ export default function Sidebar() {
               <AccordionContent className="pt-0.5 pb-1">
                 <div className="ml-3.25 border-l border-neutral-200/70 pl-3 dark:border-neutral-800/70">
                   <Link
-                    href="/blooplingo"
+                    href="/developer-dashboard/admin-portal/thedevsden"
                     onClick={closeSidebar}
                     className={cn(
                       "flex items-center gap-2 rounded-lg px-2.5 py-1.5",
                       "text-[11.5px] font-medium transition-all duration-150",
-                      pathname === "/blooplingo"
+                      pathname === "/developer-dashboard/admin-portal/thedevsden"
                         ? "bg-emerald-500/10 text-emerald-600 dark:bg-emerald-400/10 dark:text-emerald-400"
                         : "text-neutral-500 hover:bg-neutral-100 hover:text-neutral-800 dark:text-neutral-500 dark:hover:bg-white/5 dark:hover:text-neutral-300"
                     )}
                   >
                     <span className="size-1.5 rounded-full bg-emerald-500/70 dark:bg-emerald-400/70" />
-                    Blooplingo
+                    thedevsden
                   </Link>
                 </div>
               </AccordionContent>
