@@ -1,6 +1,6 @@
-"use client";
+"use client"
 
-import { useEffect, useState } from "react";
+import { useEffect, useState } from "react"
 import {
   ArrowUpRight,
   CheckCircle2,
@@ -13,63 +13,71 @@ import {
   BookOpen,
   Copy,
   PenLine,
-} from "lucide-react";
-import { cn } from "@/lib/utils";
-import { useRouter } from "next/navigation";
-import { toast } from "sonner";
-import { ContextMenu, ContextMenuContent, ContextMenuGroup, ContextMenuItem, ContextMenuLabel, ContextMenuSeparator, ContextMenuTrigger } from "@/components/ui/context-menu";
-import { apiFetch } from "@/lib/api";
-import { Badge } from "@/components/ui/badge";
+} from "lucide-react"
+import { cn } from "@/lib/utils"
+import { useRouter } from "next/navigation"
+import { toast } from "sonner"
+import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuGroup,
+  ContextMenuItem,
+  ContextMenuLabel,
+  ContextMenuSeparator,
+  ContextMenuTrigger,
+} from "@/components/ui/context-menu"
+import { apiFetch } from "@/lib/api"
+import { Badge } from "@/components/ui/badge"
 
 type Roadmap = {
-  _id: string;
-  title: string;
-  description: string;
-  slug: string;
-  visibility: string;
-  updatedAt?: string;
-};
+  _id: string
+  title: string
+  description: string
+  slug: string
+  visibility: string
+  updatedAt?: string
+}
 
-const API_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
+const API_URL = process.env.NEXT_PUBLIC_BACKEND_URL
 
 export default function RoadmapPage() {
-  const router = useRouter();
-  const [search, setSearch] = useState("");
-  const [roadmaps, setRoadmaps] = useState<Roadmap[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const router = useRouter()
+  const [search, setSearch] = useState("")
+  const [roadmaps, setRoadmaps] = useState<Roadmap[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     async function fetchRoadmaps() {
       if (!API_URL) {
-        setError("NEXT_PUBLIC_BACKEND_URL is not configured.");
-        setLoading(false);
-        return;
+        setError("NEXT_PUBLIC_BACKEND_URL is not configured.")
+        setLoading(false)
+        return
       }
 
       try {
-        const res = await fetch(`${API_URL.replace(/\/+$/, "")}/roadmap`);
+        const res = await fetch(`${API_URL.replace(/\/+$/, "")}/roadmap`)
         if (!res.ok) {
-          throw new Error("Failed to fetch roadmaps from backend.");
+          throw new Error("Failed to fetch roadmaps from backend.")
         }
-        const data = await res.json();
-        setRoadmaps(data);
+        const data = await res.json()
+        setRoadmaps(data)
       } catch (err) {
-        setError(err instanceof Error ? err.message : "Something went wrong.");
-        toast.error("Failed to load roadmaps from backend.");
+        setError(err instanceof Error ? err.message : "Something went wrong.")
+        toast.error("Failed to load roadmaps from backend.")
       } finally {
-        setLoading(false);
+        setLoading(false)
       }
     }
 
-    fetchRoadmaps();
-  }, []);
+    fetchRoadmaps()
+  }, [])
 
   const filteredRoadmaps = roadmaps.filter((roadmap) =>
     `${roadmap.title} ${roadmap.description || ""} ${roadmap.slug}`
       .toLowerCase()
       .includes(search.toLowerCase())
-  );
+  )
 
   const stats = [
     {
@@ -87,33 +95,34 @@ export default function RoadmapPage() {
       value: roadmaps.filter((r) => r.visibility !== "public").length,
       icon: CheckCircle2,
     },
-  ];
+  ]
 
   async function handleDelete(_id: string) {
     try {
       const response = await apiFetch(`/roadmap/${_id}`, {
-        method: "DELETE"
+        method: "DELETE",
       })
 
       if (!response.ok) {
         toast.error("Oops!", {
           description: "Unable to delete the roadmap. Please try again",
-          closeButton: true
+          closeButton: true,
         })
 
-        return;
+        return
       }
 
-      setRoadmaps((prev) => prev.filter((roadmap) => roadmap._id !== _id));
+      setRoadmaps((prev) => prev.filter((roadmap) => roadmap._id !== _id))
 
       toast.success("Yeyy!", {
         description: "Roadmap deleted successfully",
-        closeButton: true
+        closeButton: true,
       })
     } catch {
       toast.error("Oops!", {
-        description: "An unforeseen error occurred while performing the delete operation",
-        closeButton: true
+        description:
+          "An unforeseen error occurred while performing the delete operation",
+        closeButton: true,
       })
     }
   }
@@ -127,7 +136,7 @@ export default function RoadmapPage() {
       />
       <div
         aria-hidden
-        className="pointer-events-none fixed -bottom-16 right-1/4 h-52 w-72 rounded-full bg-emerald-400/15 blur-3xl dark:bg-emerald-500/6"
+        className="pointer-events-none fixed right-1/4 -bottom-16 h-52 w-72 rounded-full bg-emerald-400/15 blur-3xl dark:bg-emerald-500/6"
       />
 
       <div className="relative mx-auto w-full max-w-5xl px-4 py-8 sm:px-6 lg:px-8">
@@ -204,7 +213,7 @@ export default function RoadmapPage() {
             placeholder="Search your roadmaps..."
             aria-label="Search roadmaps"
             className={cn(
-              "h-10 w-full rounded-xl px-4 outline-none transition-all sm:max-w-sm",
+              "h-10 w-full rounded-xl px-4 transition-all outline-none sm:max-w-sm",
               "border border-neutral-200 bg-white text-[12.5px] text-neutral-700",
               "placeholder:text-neutral-400 focus:border-emerald-300 focus:ring-2 focus:ring-emerald-500/10",
               "dark:border-white/[0.07] dark:bg-white/4 dark:text-white/70",
@@ -240,7 +249,9 @@ export default function RoadmapPage() {
                 No roadmaps found
               </p>
               <p className="mt-1 text-xs text-neutral-400 dark:text-white/25">
-                {error ? error : "Try creating your first roadmap or adjusting your search."}
+                {error
+                  ? error
+                  : "Try creating your first roadmap or adjusting your search."}
               </p>
             </div>
           ) : (
@@ -269,7 +280,7 @@ export default function RoadmapPage() {
                             {roadmap.visibility || "private"}
                           </span>
 
-                          <ArrowUpRight className="size-4 text-neutral-300 transition-all group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-emerald-600 dark:text-white/20 dark:group-hover:text-emerald-400" />
+                          <ArrowUpRight className="size-4 text-neutral-300 transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-emerald-600 dark:text-white/20 dark:group-hover:text-emerald-400" />
                         </div>
 
                         <h3 className="text-[14px] font-semibold tracking-tight text-neutral-900 dark:text-white/88">
@@ -280,8 +291,8 @@ export default function RoadmapPage() {
                           {roadmap.description || "No description provided."}
                         </p>
 
-                        <div className="mt-auto pt-6 border-t border-neutral-100 dark:border-white/5 flex items-center justify-between">
-                          <span className="text-[10px] font-mono text-neutral-400 dark:text-white/30 truncate max-w-32.5">
+                        <div className="mt-auto flex items-center justify-between border-t border-neutral-100 pt-6 dark:border-white/5">
+                          <span className="max-w-32.5 truncate font-mono text-[10px] text-neutral-400 dark:text-white/30">
                             /{roadmap.slug}
                           </span>
 
@@ -314,14 +325,24 @@ export default function RoadmapPage() {
                           <PenLine />
                           Update metadata
                         </div>
-                        <Badge variant={"outline"} className="border border-red-500 text-red-500">Soon</Badge>
+                        <Badge
+                          variant={"outline"}
+                          className="border border-red-500 text-red-500"
+                        >
+                          Soon
+                        </Badge>
                       </ContextMenuItem>
-                      <ContextMenuItem className="cursor-pointer flex justify-between">
+                      <ContextMenuItem className="flex cursor-pointer justify-between">
                         <div className="flex gap-2">
                           <Copy />
                           Copy
                         </div>
-                        <Badge variant={"outline"} className="border border-red-500 text-red-500">Soon</Badge>
+                        <Badge
+                          variant={"outline"}
+                          className="border border-red-500 text-red-500"
+                        >
+                          Soon
+                        </Badge>
                       </ContextMenuItem>
                     </ContextMenuGroup>
 
@@ -331,7 +352,7 @@ export default function RoadmapPage() {
                       <ContextMenuLabel>Danger Zone</ContextMenuLabel>
                       <ContextMenuItem
                         onClick={() => handleDelete(roadmap._id)}
-                        className="text-red-500 cursor-pointer"
+                        className="cursor-pointer text-red-500"
                       >
                         <Trash />
                         Delete
@@ -370,5 +391,5 @@ export default function RoadmapPage() {
         </section>
       </div>
     </main>
-  );
+  )
 }

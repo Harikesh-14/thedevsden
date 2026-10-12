@@ -291,8 +291,8 @@ export const accentByDominant: Record<SkillCategory, string> = {
 }
 
 export interface ProjectStatsResponse {
-  totalPlans: number;
-  activePlans: number;
-  completedPlans: number;
-  totalTechStack: number;
+  totalPlans: number
+  activePlans: number
+  completedPlans: number
+  totalTechStack: number
 }

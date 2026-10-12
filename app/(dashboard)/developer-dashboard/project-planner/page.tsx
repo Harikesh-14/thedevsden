@@ -369,10 +369,22 @@ export default function ProjectPlannerPage() {
   const router = useRouter()
 
   const stats = [
-    { label: "Total plans", value: String(projectStats?.totalPlans), accent: false },
+    {
+      label: "Total plans",
+      value: String(projectStats?.totalPlans),
+      accent: false,
+    },
     { label: "Active", value: String(projectStats?.activePlans), accent: true },
-    { label: "Tech stacks", value: String(projectStats?.totalTechStack), accent: false },
-    { label: "Completed", value: String(projectStats?.completedPlans), accent: false },
+    {
+      label: "Tech stacks",
+      value: String(projectStats?.totalTechStack),
+      accent: false,
+    },
+    {
+      label: "Completed",
+      value: String(projectStats?.completedPlans),
+      accent: false,
+    },
   ]
 
   const filtered = projectPlans.filter(
@@ -396,7 +408,7 @@ export default function ProjectPlannerPage() {
   }
 
   async function fetchOverallStats() {
-    const response = await apiFetch('/new-projects-plan/get/overall-stats')
+    const response = await apiFetch("/new-projects-plan/get/overall-stats")
 
     if (!response.ok) {
       toast.error("Oops", {
@@ -464,10 +476,7 @@ export default function ProjectPlannerPage() {
   }
 
   useEffect(() => {
-    Promise.all([
-      fetchProjectPlans(),
-      fetchOverallStats()
-    ])
+    Promise.all([fetchProjectPlans(), fetchOverallStats()])
   }, [])
 
   return (
@@ -685,7 +694,7 @@ export default function ProjectPlannerPage() {
                 onToggleComplete={() =>
                   toggleComplete(project._id, project.isActive)
                 }
-                onUpdate={() => { }}
+                onUpdate={() => {}}
                 onDelete={() => deleteProjectPlan(project._id)}
               />
             ))}

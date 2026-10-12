@@ -1,6 +1,6 @@
-"use client";
+"use client"
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react"
 import {
   addEdge,
   applyEdgeChanges,
@@ -20,8 +20,8 @@ import {
   type Node,
   type NodeChange,
   type NodeProps,
-} from "@xyflow/react";
-import "@xyflow/react/dist/style.css";
+} from "@xyflow/react"
+import "@xyflow/react/dist/style.css"
 import {
   ArrowLeft,
   BookOpen,
@@ -35,73 +35,65 @@ import {
   Save,
   Trash2,
   X,
-} from "lucide-react";
-import Link from "next/link";
-import { useParams } from "next/navigation";
-import { toast } from "sonner";
-import { cn } from "@/lib/utils";
+} from "lucide-react"
+import Link from "next/link"
+import { useParams } from "next/navigation"
+import { toast } from "sonner"
+import { cn } from "@/lib/utils"
 
-type NodeType =
-  | "topic"
-  | "project"
-  | "resource"
-  | "section"
-  | "decision";
+type NodeType = "topic" | "project" | "resource" | "section" | "decision"
 
-type EdgeType =
-  | "prerequisite"
-  | "related"
-  | "optional";
+type EdgeType = "prerequisite" | "related" | "optional"
 
 type RoadmapNodeData = {
-  title: string;
-  description: string;
-  nodeType: NodeType;
-  isOptional: boolean;
-  data: Record<string, unknown>;
-};
+  title: string
+  description: string
+  nodeType: NodeType
+  isOptional: boolean
+  data: Record<string, unknown>
+}
 
-type RoadmapNode = Node<RoadmapNodeData>;
+type RoadmapNode = Node<RoadmapNodeData>
 
 type RoadmapEdgeData = {
-  edgeType: EdgeType;
-  label: string | null;
-};
+  edgeType: EdgeType
+  label: string | null
+}
 
-type RoadmapEdge = Edge<RoadmapEdgeData>;
+type RoadmapEdge = Edge<RoadmapEdgeData>
 
 type NodeRecord = {
-  _id: string;
-  title: string;
-  description?: string;
-  type: NodeType;
-  position: { x: number; y: number };
-  isOptional?: boolean;
-  data?: Record<string, unknown>;
-};
+  _id: string
+  title: string
+  description?: string
+  type: NodeType
+  position: { x: number; y: number }
+  isOptional?: boolean
+  data?: Record<string, unknown>
+}
 
 type EdgeRecord = {
-  _id: string;
-  sourceNodeId: string;
-  targetNodeId: string;
-  type: EdgeType;
-  label?: string | null;
-};
+  _id: string
+  sourceNodeId: string
+  targetNodeId: string
+  type: EdgeType
+  label?: string | null
+}
 
 type RoadmapRecord = {
-  _id: string;
-  title: string;
-  description?: string;
-  slug: string;
-};
+  _id: string
+  title: string
+  description?: string
+  slug: string
+}
 
-const API_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
+const API_URL = process.env.NEXT_PUBLIC_BACKEND_URL
 
 const NODE_OPTIONS: {
-  type: NodeType;
-  label: string;
-  description: string;
-  icon: typeof BookOpen;
+  type: NodeType
+  label: string
+  description: string
+  icon: typeof BookOpen
 }[] = [
   {
     type: "topic",
@@ -133,63 +125,51 @@ const NODE_OPTIONS: {
     description: "A branching point",
     icon: CircleDot,
   },
-];
+]
 
 function endpoint(path: string) {
   if (!API_URL) {
-    throw new Error(
-      "NEXT_PUBLIC_BACKEND_URL is not configured.",
-    );
+    throw new Error("NEXT_PUBLIC_BACKEND_URL is not configured.")
   }
 
-  return `${API_URL.replace(/\/+$/, "")}${path}`;
+  return `${API_URL.replace(/\/+$/, "")}${path}`
 }
 
-async function request<T>(
-  path: string,
-  init?: RequestInit,
-): Promise<T> {
+async function request<T>(path: string, init?: RequestInit): Promise<T> {
   const response = await fetch(endpoint(path), {
     ...init,
     headers: {
       "Content-Type": "application/json",
       ...init?.headers,
     },
-  });
+  })
 
-  const result = await response.json().catch(() => null);
+  const result = await response.json().catch(() => null)
 
   if (!response.ok) {
     const message = Array.isArray(result?.message)
       ? result.message.join(" ")
-      : result?.message;
+      : result?.message
 
-    throw new Error(
-      message || "The request could not be completed.",
-    );
+    throw new Error(message || "The request could not be completed.")
   }
 
-  return result as T;
+  return result as T
 }
 
-function RoadmapNodeCard({
-  data,
-  selected,
-}: NodeProps<RoadmapNode>) {
-  const option = NODE_OPTIONS.find(
-    (item) => item.type === data.nodeType,
-  );
+function RoadmapNodeCard({ data, selected }: NodeProps<RoadmapNode>) {
+  const option = NODE_OPTIONS.find((item) => item.type === data.nodeType)
 
-  const Icon = option?.icon ?? BookOpen;
+  const Icon = option?.icon ?? BookOpen
 
   return (
     <div
       className={cn(
-        "min-w-52.5 max-w-62.5 rounded-2xl border bg-white shadow-sm transition-all",
+        "max-w-62.5 min-w-52.5 rounded-2xl border bg-white shadow-sm transition-all",
         "dark:bg-[#171a19]",
         selected
           ? "border-emerald-400 ring-2 ring-emerald-500/10"
-          : "border-neutral-200 hover:border-emerald-300 dark:border-white/10",
+          : "border-neutral-200 hover:border-emerald-300 dark:border-white/10"
       )}
     >
       <Handle
@@ -205,7 +185,7 @@ function RoadmapNodeCard({
 
         <div className="min-w-0 flex-1">
           <div className="mb-1 flex flex-wrap items-center gap-1.5">
-            <span className="text-[9px] font-semibold uppercase tracking-wider text-neutral-400 dark:text-white/35">
+            <span className="text-[9px] font-semibold tracking-wider text-neutral-400 uppercase dark:text-white/35">
               {data.nodeType}
             </span>
 
@@ -216,12 +196,12 @@ function RoadmapNodeCard({
             )}
           </div>
 
-          <p className="wrap-break-word text-sm font-semibold text-neutral-800 dark:text-white/85">
+          <p className="text-sm font-semibold wrap-break-word text-neutral-800 dark:text-white/85">
             {data.title}
           </p>
 
           {data.description && (
-            <p className="mt-1 line-clamp-2 whitespace-pre-wrap wrap-break-word text-[11px] leading-5 text-neutral-500 dark:text-white/40">
+            <p className="mt-1 line-clamp-2 text-[11px] leading-5 wrap-break-word whitespace-pre-wrap text-neutral-500 dark:text-white/40">
               {data.description}
             </p>
           )}
@@ -234,67 +214,50 @@ function RoadmapNodeCard({
         className="size-2.5! border-2! border-white! bg-emerald-500! dark:border-[#171a19]!"
       />
     </div>
-  );
+  )
 }
 
 function RoadmapEditor() {
-  const params = useParams<{ id: string }>();
-  const roadmapId = params.id;
+  const params = useParams<{ id: string }>()
+  const roadmapId = params.id
 
-  const [roadmap, setRoadmap] =
-    useState<RoadmapRecord | null>(null);
+  const [roadmap, setRoadmap] = useState<RoadmapRecord | null>(null)
 
-  const [nodes, setNodes] = useState<RoadmapNode[]>([]);
-  const [edges, setEdges] = useState<RoadmapEdge[]>([]);
+  const [nodes, setNodes] = useState<RoadmapNode[]>([])
+  const [edges, setEdges] = useState<RoadmapEdge[]>([])
 
-  const [selectedNodeId, setSelectedNodeId] =
-    useState<string | null>(null);
+  const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null)
 
-  const [selectedEdgeId, setSelectedEdgeId] =
-    useState<string | null>(null);
+  const [selectedEdgeId, setSelectedEdgeId] = useState<string | null>(null)
 
-  const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
-  const [addingNode, setAddingNode] = useState(false);
-  const [deleting, setDeleting] = useState(false);
+  const [loading, setLoading] = useState(true)
+  const [saving, setSaving] = useState(false)
+  const [addingNode, setAddingNode] = useState(false)
+  const [deleting, setDeleting] = useState(false)
 
-  const [edgeType, setEdgeType] =
-    useState<EdgeType>("prerequisite");
+  const [edgeType, setEdgeType] = useState<EdgeType>("prerequisite")
 
-  const [edgeLabel, setEdgeLabel] = useState("");
+  const [edgeLabel, setEdgeLabel] = useState("")
 
-  const [pendingChanges, setPendingChanges] =
-    useState(0);
+  const [pendingChanges, setPendingChanges] = useState(0)
 
-  const selectedNode = nodes.find(
-    (node) => node.id === selectedNodeId,
-  );
+  const selectedNode = nodes.find((node) => node.id === selectedNodeId)
 
-  const selectedEdge = edges.find(
-    (edge) => edge.id === selectedEdgeId,
-  );
+  const selectedEdge = edges.find((edge) => edge.id === selectedEdgeId)
 
-  const nodeTypes = useMemo(
-    () => ({ roadmapNode: RoadmapNodeCard }),
-    [],
-  );
+  const nodeTypes = useMemo(() => ({ roadmapNode: RoadmapNodeCard }), [])
 
   const loadRoadmap = useCallback(async () => {
-    setLoading(true);
+    setLoading(true)
 
     try {
-      const [roadmapResult, nodeResults, edgeResults] =
-        await Promise.all([
-          request<RoadmapRecord>(`/roadmap/${roadmapId}`),
-          request<NodeRecord[]>(
-            `/roadmap/${roadmapId}/nodes`,
-          ),
-          request<EdgeRecord[]>(
-            `/roadmap/${roadmapId}/edges`,
-          ),
-        ]);
+      const [roadmapResult, nodeResults, edgeResults] = await Promise.all([
+        request<RoadmapRecord>(`/roadmap/${roadmapId}`),
+        request<NodeRecord[]>(`/roadmap/${roadmapId}/nodes`),
+        request<EdgeRecord[]>(`/roadmap/${roadmapId}/edges`),
+      ])
 
-      setRoadmap(roadmapResult);
+      setRoadmap(roadmapResult)
 
       setNodes(
         nodeResults.map((item) => ({
@@ -308,8 +271,8 @@ function RoadmapEditor() {
             isOptional: item.isOptional ?? false,
             data: item.data ?? {},
           },
-        })),
-      );
+        }))
+      )
 
       setEdges(
         edgeResults.map((item) => ({
@@ -338,70 +301,55 @@ function RoadmapEditor() {
             stroke: "#a3a3a3",
             strokeWidth: 1.5,
           },
-        })),
-      );
+        }))
+      )
 
-      setPendingChanges(0);
+      setPendingChanges(0)
     } catch (error) {
       toast.error(
-        error instanceof Error
-          ? error.message
-          : "Unable to load this roadmap.",
-      );
+        error instanceof Error ? error.message : "Unable to load this roadmap."
+      )
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  }, [roadmapId]);
+  }, [roadmapId])
 
   useEffect(() => {
-    void loadRoadmap();
-  }, [loadRoadmap]);
+    void loadRoadmap()
+  }, [loadRoadmap])
 
-  const onNodesChange = useCallback(
-    (changes: NodeChange<RoadmapNode>[]) => {
-      setNodes((current) =>
-        applyNodeChanges(changes, current),
-      );
-    },
-    [],
-  );
+  const onNodesChange = useCallback((changes: NodeChange<RoadmapNode>[]) => {
+    setNodes((current) => applyNodeChanges(changes, current))
+  }, [])
 
-  const onEdgesChange = useCallback(
-    (changes: EdgeChange<RoadmapEdge>[]) => {
-      setEdges((current) =>
-        applyEdgeChanges(changes, current),
-      );
-    },
-    [],
-  );
+  const onEdgesChange = useCallback((changes: EdgeChange<RoadmapEdge>[]) => {
+    setEdges((current) => applyEdgeChanges(changes, current))
+  }, [])
 
   const addNode = async (type: NodeType) => {
-    if (addingNode) return;
+    if (addingNode) return
 
-    setAddingNode(true);
+    setAddingNode(true)
 
     try {
-      const offset = nodes.length * 30;
+      const offset = nodes.length * 30
 
-      const created = await request<NodeRecord>(
-        `/roadmap/${roadmapId}/nodes`,
-        {
-          method: "POST",
-          body: JSON.stringify({
-            type,
-            title:
-              NODE_OPTIONS.find((item) => item.type === type)
-                ?.label ?? "New node",
-            description: "",
-            position: {
-              x: 250 + offset,
-              y: 100 + offset,
-            },
-            data: {},
-            isOptional: false,
-          }),
-        },
-      );
+      const created = await request<NodeRecord>(`/roadmap/${roadmapId}/nodes`, {
+        method: "POST",
+        body: JSON.stringify({
+          type,
+          title:
+            NODE_OPTIONS.find((item) => item.type === type)?.label ??
+            "New node",
+          description: "",
+          position: {
+            x: 250 + offset,
+            y: 100 + offset,
+          },
+          data: {},
+          isOptional: false,
+        }),
+      })
 
       const node: RoadmapNode = {
         id: created._id,
@@ -414,24 +362,22 @@ function RoadmapEditor() {
           isOptional: created.isOptional ?? false,
           data: created.data ?? {},
         },
-      };
+      }
 
-      setNodes((current) => [...current, node]);
-      setSelectedNodeId(node.id);
-      setSelectedEdgeId(null);
-      setPendingChanges((current) => current + 1);
+      setNodes((current) => [...current, node])
+      setSelectedNodeId(node.id)
+      setSelectedEdgeId(null)
+      setPendingChanges((current) => current + 1)
 
-      toast.success("Node added to your roadmap.");
+      toast.success("Node added to your roadmap.")
     } catch (error) {
       toast.error(
-        error instanceof Error
-          ? error.message
-          : "Unable to add node.",
-      );
+        error instanceof Error ? error.message : "Unable to add node."
+      )
     } finally {
-      setAddingNode(false);
+      setAddingNode(false)
     }
-  };
+  }
 
   const onConnect = useCallback(
     async (connection: Connection) => {
@@ -440,19 +386,18 @@ function RoadmapEditor() {
         !connection.target ||
         connection.source === connection.target
       ) {
-        toast.error("Choose two different nodes.");
-        return;
+        toast.error("Choose two different nodes.")
+        return
       }
 
       const alreadyExists = edges.some(
         (edge) =>
-          edge.source === connection.source &&
-          edge.target === connection.target,
-      );
+          edge.source === connection.source && edge.target === connection.target
+      )
 
       if (alreadyExists) {
-        toast.error("This connection already exists.");
-        return;
+        toast.error("This connection already exists.")
+        return
       }
 
       try {
@@ -466,8 +411,8 @@ function RoadmapEditor() {
               type: edgeType,
               label: edgeLabel.trim() || null,
             }),
-          },
-        );
+          }
+        )
 
         const newEdge: RoadmapEdge = {
           id: created._id,
@@ -487,29 +432,27 @@ function RoadmapEditor() {
             stroke: "#a3a3a3",
             strokeWidth: 1.5,
           },
-        };
+        }
 
-        setEdges((current) =>
-          addEdge(newEdge, current),
-        );
+        setEdges((current) => addEdge(newEdge, current))
 
-        setPendingChanges((current) => current + 1);
-        toast.success("Connection created.");
+        setPendingChanges((current) => current + 1)
+        toast.success("Connection created.")
       } catch (error) {
         toast.error(
           error instanceof Error
             ? error.message
-            : "Unable to connect these nodes.",
-        );
+            : "Unable to connect these nodes."
+        )
       }
     },
-    [roadmapId, edges, edgeType, edgeLabel],
-  );
+    [roadmapId, edges, edgeType, edgeLabel]
+  )
 
   const saveNode = async () => {
-    if (!selectedNode) return;
+    if (!selectedNode) return
 
-    setSaving(true);
+    setSaving(true)
 
     try {
       await request<NodeRecord>(
@@ -524,125 +467,105 @@ function RoadmapEditor() {
             data: selectedNode.data.data,
             position: selectedNode.position,
           }),
-        },
-      );
+        }
+      )
 
-      setPendingChanges((current) =>
-        Math.max(0, current - 1),
-      );
+      setPendingChanges((current) => Math.max(0, current - 1))
 
-      toast.success("Node details saved.");
+      toast.success("Node details saved.")
     } catch (error) {
       toast.error(
-        error instanceof Error
-          ? error.message
-          : "Unable to save node.",
-      );
+        error instanceof Error ? error.message : "Unable to save node."
+      )
     } finally {
-      setSaving(false);
+      setSaving(false)
     }
-  };
+  }
 
   const savePosition = async (node: RoadmapNode) => {
     try {
-      await request<NodeRecord>(
-        `/roadmap/${roadmapId}/nodes/${node.id}`,
-        {
-          method: "PATCH",
-          body: JSON.stringify({
-            position: node.position,
-          }),
-        },
-      );
+      await request<NodeRecord>(`/roadmap/${roadmapId}/nodes/${node.id}`, {
+        method: "PATCH",
+        body: JSON.stringify({
+          position: node.position,
+        }),
+      })
     } catch (error) {
-      setPendingChanges((current) => current + 1);
+      setPendingChanges((current) => current + 1)
 
       toast.error(
-        error instanceof Error
-          ? error.message
-          : "Unable to save node position.",
-      );
+        error instanceof Error ? error.message : "Unable to save node position."
+      )
     }
-  };
+  }
 
   const deleteNode = async () => {
-    if (!selectedNode || deleting) return;
+    if (!selectedNode || deleting) return
 
-    if (!window.confirm(
-      `Delete "${selectedNode.data.title}" and its connections?`,
-    )) {
-      return;
+    if (
+      !window.confirm(
+        `Delete "${selectedNode.data.title}" and its connections?`
+      )
+    ) {
+      return
     }
 
-    setDeleting(true);
+    setDeleting(true)
 
     try {
-      await request(
-        `/roadmap/${roadmapId}/nodes/${selectedNode.id}`,
-        { method: "DELETE" },
-      );
+      await request(`/roadmap/${roadmapId}/nodes/${selectedNode.id}`, {
+        method: "DELETE",
+      })
 
       setNodes((current) =>
-        current.filter(
-          (node) => node.id !== selectedNode.id,
-        ),
-      );
+        current.filter((node) => node.id !== selectedNode.id)
+      )
 
       setEdges((current) =>
         current.filter(
           (edge) =>
-            edge.source !== selectedNode.id &&
-            edge.target !== selectedNode.id,
-        ),
-      );
+            edge.source !== selectedNode.id && edge.target !== selectedNode.id
+        )
+      )
 
-      setSelectedNodeId(null);
-      toast.success("Node deleted.");
+      setSelectedNodeId(null)
+      toast.success("Node deleted.")
     } catch (error) {
       toast.error(
-        error instanceof Error
-          ? error.message
-          : "Unable to delete node.",
-      );
+        error instanceof Error ? error.message : "Unable to delete node."
+      )
     } finally {
-      setDeleting(false);
+      setDeleting(false)
     }
-  };
+  }
 
   const deleteEdge = async () => {
-    if (!selectedEdge || deleting) return;
+    if (!selectedEdge || deleting) return
 
-    setDeleting(true);
+    setDeleting(true)
 
     try {
-      await request(
-        `/roadmap/${roadmapId}/edges/${selectedEdge.id}`,
-        { method: "DELETE" },
-      );
+      await request(`/roadmap/${roadmapId}/edges/${selectedEdge.id}`, {
+        method: "DELETE",
+      })
 
       setEdges((current) =>
-        current.filter(
-          (edge) => edge.id !== selectedEdge.id,
-        ),
-      );
+        current.filter((edge) => edge.id !== selectedEdge.id)
+      )
 
-      setSelectedEdgeId(null);
-      toast.success("Connection deleted.");
+      setSelectedEdgeId(null)
+      toast.success("Connection deleted.")
     } catch (error) {
       toast.error(
-        error instanceof Error
-          ? error.message
-          : "Unable to delete connection.",
-      );
+        error instanceof Error ? error.message : "Unable to delete connection."
+      )
     } finally {
-      setDeleting(false);
+      setDeleting(false)
     }
-  };
+  }
 
-  const updateSelectedNode = (
-    updates: Partial<RoadmapNodeData>,
-  ) => {
-    if (!selectedNodeId) return;
+  const updateSelectedNode = (updates: Partial<RoadmapNodeData>) => {
+    if (!selectedNodeId) return
 
     setNodes((current) =>
       current.map((node) =>
@@ -651,19 +574,19 @@ function RoadmapEditor() {
               ...node,
               data: { ...node.data, ...updates },
             }
-          : node,
-      ),
-    );
+          : node
+      )
+    )
 
-    setPendingChanges((current) => current + 1);
-  };
+    setPendingChanges((current) => current + 1)
+  }
 
   if (loading) {
     return (
       <main className="flex min-h-screen items-center justify-center bg-white dark:bg-transparent">
         <LoaderCircle className="size-6 animate-spin text-emerald-600" />
       </main>
-    );
+    )
   }
 
   if (!roadmap) {
@@ -684,7 +607,7 @@ function RoadmapEditor() {
           </Link>
         </div>
       </main>
-    );
+    )
   }
 
   return (
@@ -722,9 +645,7 @@ function RoadmapEditor() {
           </button>
 
           <button
-            onClick={() =>
-              void addNode("topic")
-            }
+            onClick={() => void addNode("topic")}
             disabled={addingNode}
             className="flex h-9 items-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 px-3.5 text-xs font-semibold text-emerald-700 transition-colors hover:bg-emerald-100 disabled:opacity-50 dark:border-emerald-500/20 dark:bg-emerald-500/10 dark:text-emerald-400 dark:hover:bg-emerald-500/15"
           >
@@ -743,7 +664,7 @@ function RoadmapEditor() {
 
           <div className="space-y-2">
             {NODE_OPTIONS.map((option) => {
-              const Icon = option.icon;
+              const Icon = option.icon
 
               return (
                 <button
@@ -764,7 +685,7 @@ function RoadmapEditor() {
                     </span>
                   </span>
                 </button>
-              );
+              )
             })}
           </div>
 
@@ -793,8 +714,8 @@ function RoadmapEditor() {
                   Build your learning path
                 </h2>
                 <p className="mt-2 text-xs leading-6 text-neutral-500 dark:text-white/40">
-                  Start with a topic, add projects and resources,
-                  then connect everything into your own roadmap.
+                  Start with a topic, add projects and resources, then connect
+                  everything into your own roadmap.
                 </p>
                 <button
                   onClick={() => void addNode("topic")}
@@ -807,7 +728,7 @@ function RoadmapEditor() {
             </div>
           )}
 
-          <div className="absolute left-3 top-3 z-5 flex items-center gap-2 rounded-xl border border-neutral-200 bg-white/95 px-3 py-2 shadow-sm backdrop-blur dark:border-white/10 dark:bg-[#171a19]/95">
+          <div className="absolute top-3 left-3 z-5 flex items-center gap-2 rounded-xl border border-neutral-200 bg-white/95 px-3 py-2 shadow-sm backdrop-blur dark:border-white/10 dark:bg-[#171a19]/95">
             <GitBranch className="size-3.5 text-emerald-600 dark:text-emerald-400" />
             <span className="text-[11px] font-medium text-neutral-600 dark:text-white/60">
               {nodes.length} nodes · {edges.length} connections
@@ -821,24 +742,22 @@ function RoadmapEditor() {
             onNodesChange={onNodesChange}
             onEdgesChange={onEdgesChange}
             onNodeClick={(_, node) => {
-              setSelectedNodeId(node.id);
-              setSelectedEdgeId(null);
+              setSelectedNodeId(node.id)
+              setSelectedEdgeId(null)
             }}
             onEdgeClick={(_, edge) => {
-              setSelectedEdgeId(edge.id);
-              setSelectedNodeId(null);
-              setEdgeType(
-                edge.data?.edgeType ?? "prerequisite",
-              );
-              setEdgeLabel(edge.data?.label ?? "");
+              setSelectedEdgeId(edge.id)
+              setSelectedNodeId(null)
+              setEdgeType(edge.data?.edgeType ?? "prerequisite")
+              setEdgeLabel(edge.data?.label ?? "")
             }}
             onPaneClick={() => {
-              setSelectedNodeId(null);
-              setSelectedEdgeId(null);
+              setSelectedNodeId(null)
+              setSelectedEdgeId(null)
             }}
             onConnect={(connection) => void onConnect(connection)}
             onNodeDragStop={(_, node) => {
-              void savePosition(node);
+              void savePosition(node)
             }}
             fitView
             deleteKeyCode={null}
@@ -857,23 +776,19 @@ function RoadmapEditor() {
               size={1}
               color="#d4d4d4"
             />
-            <Controls
-              className="overflow-hidden! rounded-xl! border-neutral-200! shadow-sm! dark:border-white/10!"
-            />
+            <Controls className="overflow-hidden! rounded-xl! border-neutral-200! shadow-sm! dark:border-white/10!" />
             <MiniMap
               pannable
               zoomable
-              nodeColor={(node) =>
-                node.selected ? "#10b981" : "#a7d8c1"
-              }
+              nodeColor={(node) => (node.selected ? "#10b981" : "#a7d8c1")}
               className="overflow-hidden! rounded-xl! border! border-neutral-200! bg-white! dark:border-white/10! dark:bg-[#171a19]!"
             />
           </ReactFlow>
 
           {/* Mobile node toolbar */}
-          <div className="absolute bottom-3 left-3 right-3 z-5 flex gap-2 overflow-x-auto rounded-xl border border-neutral-200 bg-white/95 p-2 shadow-sm backdrop-blur md:hidden dark:border-white/10 dark:bg-[#171a19]/95">
+          <div className="absolute right-3 bottom-3 left-3 z-5 flex gap-2 overflow-x-auto rounded-xl border border-neutral-200 bg-white/95 p-2 shadow-sm backdrop-blur md:hidden dark:border-white/10 dark:bg-[#171a19]/95">
             {NODE_OPTIONS.map((option) => {
-              const Icon = option.icon;
+              const Icon = option.icon
 
               return (
                 <button
@@ -884,13 +799,13 @@ function RoadmapEditor() {
                   <Icon className="size-3.5 text-emerald-600 dark:text-emerald-400" />
                   {option.label}
                 </button>
-              );
+              )
             })}
           </div>
         </section>
 
         {/* Right inspector */}
-        <aside className="z-6 flex w-72.5 shrink-0 flex-col overflow-y-auto border-l border-neutral-200 bg-white dark:border-white/[0.07] dark:bg-[#121413] max-sm:absolute max-sm:bottom-0 max-sm:right-0 max-sm:top-17 max-sm:w-[min(320px,88vw)] max-sm:shadow-xl">
+        <aside className="z-6 flex w-72.5 shrink-0 flex-col overflow-y-auto border-l border-neutral-200 bg-white max-sm:absolute max-sm:top-17 max-sm:right-0 max-sm:bottom-0 max-sm:w-[min(320px,88vw)] max-sm:shadow-xl dark:border-white/[0.07] dark:bg-[#121413]">
           {selectedNode ? (
             <>
               <div className="flex items-center justify-between border-b border-neutral-100 p-4 dark:border-white/[0.07]">
@@ -942,10 +857,7 @@ function RoadmapEditor() {
                     className="h-10 w-full rounded-xl border border-neutral-200 bg-white px-3 text-xs text-neutral-700 outline-none focus:border-emerald-400 dark:border-white/10 dark:bg-[#171a19] dark:text-white/75"
                   >
                     {NODE_OPTIONS.map((option) => (
-                      <option
-                        key={option.type}
-                        value={option.type}
-                      >
+                      <option key={option.type} value={option.type}>
                         {option.label}
                       </option>
                     ))}
@@ -1051,7 +963,8 @@ function RoadmapEditor() {
                     <option value="optional">Optional</option>
                   </select>
                   <p className="mt-2 text-[10px] leading-5 text-neutral-400">
-                    To change relationship type, delete this connection and recreate it with the desired type.
+                    To change relationship type, delete this connection and
+                    recreate it with the desired type.
                   </p>
                 </div>
 
@@ -1061,9 +974,7 @@ function RoadmapEditor() {
                   </label>
                   <input
                     value={edgeLabel}
-                    onChange={(event) =>
-                      setEdgeLabel(event.target.value)
-                    }
+                    onChange={(event) => setEdgeLabel(event.target.value)}
                     placeholder="e.g. Learn this first"
                     className="h-10 w-full rounded-xl border border-neutral-200 bg-white px-3 text-xs dark:border-white/10 dark:bg-white/3 dark:text-white/75"
                   />
@@ -1088,8 +999,8 @@ function RoadmapEditor() {
                 Your workspace
               </h2>
               <p className="mt-2 text-xs leading-5 text-neutral-500 dark:text-white/40">
-                Select a node or connection to view its settings.
-                Add a node to start building your learning path.
+                Select a node or connection to view its settings. Add a node to
+                start building your learning path.
               </p>
 
               <div className="mt-5 w-full rounded-xl border border-neutral-200 p-3 text-left dark:border-white/[0.07]">
@@ -1127,9 +1038,7 @@ function RoadmapEditor() {
           </span>
           <select
             value={edgeType}
-            onChange={(event) =>
-              setEdgeType(event.target.value as EdgeType)
-            }
+            onChange={(event) => setEdgeType(event.target.value as EdgeType)}
             className="rounded-lg border border-neutral-200 bg-white px-2 py-1.5 text-[10px] text-neutral-600 dark:border-white/10 dark:bg-[#171a19] dark:text-white/60"
           >
             <option value="prerequisite">Prerequisite</option>
@@ -1144,7 +1053,7 @@ function RoadmapEditor() {
         </div>
       </footer>
     </main>
-  );
+  )
 }
 
 export default function RoadmapEditorPage() {
@@ -1152,5 +1061,5 @@ export default function RoadmapEditorPage() {
     <ReactFlowProvider>
       <RoadmapEditor />
     </ReactFlowProvider>
-  );
+  )
 }

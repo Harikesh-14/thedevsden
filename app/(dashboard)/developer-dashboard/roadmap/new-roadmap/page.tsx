@@ -1,10 +1,6 @@
-"use client";
+"use client"
 
-import {
-  SyntheticEvent,
-  useEffect,
-  useState,
-} from "react";
+import { SyntheticEvent, useEffect, useState } from "react"
 import {
   ArrowLeft,
   ArrowUpRight,
@@ -15,23 +11,23 @@ import {
   Map,
   Plus,
   Sparkles,
-} from "lucide-react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { toast } from "sonner";
+} from "lucide-react"
+import Link from "next/link"
+import { useRouter } from "next/navigation"
+import { toast } from "sonner"
 
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils"
 
-type Visibility = "private" | "public" | "unlisted";
+type Visibility = "private" | "public" | "unlisted"
 
 type CreateRoadmapPayload = {
-  title: string;
-  slug: string;
-  description: string;
-  visibility: Visibility;
-};
+  title: string
+  slug: string
+  description: string
+  visibility: Visibility
+}
 
-const API_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
+const API_URL = process.env.NEXT_PUBLIC_BACKEND_URL
 
 function createSlug(value: string) {
   return value
@@ -40,62 +36,61 @@ function createSlug(value: string) {
     .replace(/[^a-z0-9\s-]/g, "")
     .replace(/\s+/g, "-")
     .replace(/-+/g, "-")
-    .replace(/^-|-$/g, "");
+    .replace(/^-|-$/g, "")
 }
 
 export default function RoadmapCreatorPage() {
-  const router = useRouter();
+  const router = useRouter()
 
-  const [title, setTitle] = useState("");
-  const [slug, setSlug] = useState("");
-  const [description, setDescription] = useState("");
-  const [visibility, setVisibility] =
-    useState<Visibility>("private");
+  const [title, setTitle] = useState("")
+  const [slug, setSlug] = useState("")
+  const [description, setDescription] = useState("")
+  const [visibility, setVisibility] = useState<Visibility>("private")
 
-  const [slugEdited, setSlugEdited] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [slugEdited, setSlugEdited] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const [slugTouched, setSlugTouched] = useState(false);
+  const [slugTouched, setSlugTouched] = useState(false)
 
   useEffect(() => {
     if (!slugEdited) {
-      setSlug(createSlug(title));
+      setSlug(createSlug(title))
     }
-  }, [title, slugEdited]);
+  }, [title, slugEdited])
 
   const titleError =
     title.trim().length > 0 && title.trim().length < 3
       ? "Title must contain at least 3 characters."
       : title.length > 100
         ? "Title cannot exceed 100 characters."
-        : "";
+        : ""
 
   const slugError =
     slugTouched && !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)
       ? "Use lowercase letters, numbers, and single hyphens."
       : slug.length > 120
         ? "Slug cannot exceed 120 characters."
-        : "";
+        : ""
 
   const canSubmit =
     title.trim().length >= 3 &&
     title.trim().length <= 100 &&
     slug.length <= 120 &&
     /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug) &&
-    !isSubmitting;
+    !isSubmitting
 
   async function handleSubmit(event: SyntheticEvent<HTMLFormElement>) {
-    event.preventDefault();
-    setSlugTouched(true);
+    event.preventDefault()
+    setSlugTouched(true)
 
     if (!canSubmit) {
-      toast.error("Please check the highlighted fields.");
-      return;
+      toast.error("Please check the highlighted fields.")
+      return
     }
 
     if (!API_URL) {
-      toast.error("API URL is not configured.");
-      return;
+      toast.error("API URL is not configured.")
+      return
     }
 
     const payload: CreateRoadmapPayload = {
@@ -103,55 +98,48 @@ export default function RoadmapCreatorPage() {
       slug,
       description: description.trim(),
       visibility,
-    };
+    }
 
-    setIsSubmitting(true);
+    setIsSubmitting(true)
 
     try {
-      const response = await fetch(
-        `${API_URL.replace(/\/$/, "")}/roadmap`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(payload),
+      const response = await fetch(`${API_URL.replace(/\/$/, "")}/roadmap`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-      );
+        body: JSON.stringify(payload),
+      })
 
-      const result = await response.json().catch(() => null);
+      const result = await response.json().catch(() => null)
 
       if (!response.ok) {
         const message = Array.isArray(result?.message)
           ? result.message.join(" ")
-          : result?.message;
+          : result?.message
 
-        throw new Error(
-          message || "Unable to create your roadmap.",
-        );
+        throw new Error(message || "Unable to create your roadmap.")
       }
 
-      toast.success("Roadmap created successfully!");
+      toast.success("Roadmap created successfully!")
 
-      const roadmapId = result?._id ?? result?.id;
+      const roadmapId = result?._id ?? result?.id
 
       if (roadmapId) {
-        router.push(
-          `/developer-dashboard/roadmap/${roadmapId}`,
-        );
+        router.push(`/developer-dashboard/roadmap/${roadmapId}`)
       } else {
-        router.push("/developer-dashboard/roadmap");
+        router.push("/developer-dashboard/roadmap")
       }
 
-      router.refresh();
+      router.refresh()
     } catch (error) {
       toast.error(
         error instanceof Error
           ? error.message
-          : "Something went wrong. Please try again.",
-      );
+          : "Something went wrong. Please try again."
+      )
     } finally {
-      setIsSubmitting(false);
+      setIsSubmitting(false)
     }
   }
 
@@ -164,7 +152,7 @@ export default function RoadmapCreatorPage() {
       />
       <div
         aria-hidden
-        className="pointer-events-none fixed -bottom-16 right-1/4 h-52 w-72 rounded-full bg-emerald-400/15 blur-3xl dark:bg-emerald-500/6"
+        className="pointer-events-none fixed right-1/4 -bottom-16 h-52 w-72 rounded-full bg-emerald-400/15 blur-3xl dark:bg-emerald-500/6"
       />
 
       <div className="relative mx-auto w-full max-w-5xl px-4 py-8 sm:px-6 lg:px-8">
@@ -194,8 +182,8 @@ export default function RoadmapCreatorPage() {
           </h1>
 
           <p className="mt-2 max-w-lg text-sm leading-6 text-neutral-500 dark:text-white/35">
-            Give your next big goal a name. You can add topics,
-            milestones, and connections after creating it.
+            Give your next big goal a name. You can add topics, milestones, and
+            connections after creating it.
           </p>
         </header>
 
@@ -207,7 +195,7 @@ export default function RoadmapCreatorPage() {
                 className={cn(
                   "rounded-[20px] border p-5 sm:p-6",
                   "border-neutral-200 bg-white shadow-sm shadow-neutral-900/4",
-                  "dark:border-white/[0.07] dark:bg-white/3 dark:shadow-none",
+                  "dark:border-white/[0.07] dark:bg-white/3 dark:shadow-none"
                 )}
               >
                 <div className="mb-6 flex items-start gap-3">
@@ -220,8 +208,7 @@ export default function RoadmapCreatorPage() {
                       The essentials
                     </h2>
                     <p className="mt-1 text-xs leading-5 text-neutral-400 dark:text-white/35">
-                      Start with the basics. You can refine
-                      everything later.
+                      Start with the basics. You can refine everything later.
                     </p>
                   </div>
                 </div>
@@ -249,25 +236,21 @@ export default function RoadmapCreatorPage() {
                     minLength={3}
                     maxLength={100}
                     value={title}
-                    onChange={(event) =>
-                      setTitle(event.target.value)
-                    }
+                    onChange={(event) => setTitle(event.target.value)}
                     placeholder="e.g. AI Engineering"
                     aria-invalid={!!titleError}
                     className={cn(
-                      "h-11 w-full rounded-xl border px-3.5 text-sm outline-none transition-all",
+                      "h-11 w-full rounded-xl border px-3.5 text-sm transition-all outline-none",
                       "border-neutral-200 bg-white text-neutral-800 placeholder:text-neutral-400",
                       "focus:border-emerald-400 focus:ring-2 focus:ring-emerald-500/10",
                       "dark:border-white/8 dark:bg-white/3 dark:text-white/85 dark:placeholder:text-white/20",
                       "dark:focus:border-emerald-500/40",
-                      titleError && "border-red-400 focus:border-red-400",
+                      titleError && "border-red-400 focus:border-red-400"
                     )}
                   />
 
                   {titleError && (
-                    <p className="mt-2 text-xs text-red-500">
-                      {titleError}
-                    </p>
+                    <p className="mt-2 text-xs text-red-500">{titleError}</p>
                   )}
 
                   <p className="mt-2 text-[11px] text-neutral-400 dark:text-white/25">
@@ -292,7 +275,7 @@ export default function RoadmapCreatorPage() {
                       "flex h-11 overflow-hidden rounded-xl border transition-all",
                       "border-neutral-200 bg-neutral-50 focus-within:border-emerald-400 focus-within:ring-2 focus-within:ring-emerald-500/10",
                       "dark:border-white/8 dark:bg-white/2 dark:focus-within:border-emerald-500/40",
-                      slugError && "border-red-400",
+                      slugError && "border-red-400"
                     )}
                   >
                     <span className="flex items-center border-r border-neutral-200 px-3 text-xs text-neutral-400 dark:border-white/[0.07] dark:text-white/25">
@@ -305,9 +288,9 @@ export default function RoadmapCreatorPage() {
                       maxLength={120}
                       value={slug}
                       onChange={(event) => {
-                        setSlugEdited(true);
-                        setSlugTouched(true);
-                        setSlug(createSlug(event.target.value));
+                        setSlugEdited(true)
+                        setSlugTouched(true)
+                        setSlug(createSlug(event.target.value))
                       }}
                       onBlur={() => setSlugTouched(true)}
                       placeholder="ai-engineering"
@@ -317,9 +300,7 @@ export default function RoadmapCreatorPage() {
                   </div>
 
                   {slugError ? (
-                    <p className="mt-2 text-xs text-red-500">
-                      {slugError}
-                    </p>
+                    <p className="mt-2 text-xs text-red-500">{slugError}</p>
                   ) : (
                     <p className="mt-2 text-[11px] text-neutral-400 dark:text-white/25">
                       Generated from the title. You can customize it.
@@ -350,22 +331,19 @@ export default function RoadmapCreatorPage() {
                     rows={4}
                     maxLength={1000}
                     value={description}
-                    onChange={(event) =>
-                      setDescription(event.target.value)
-                    }
+                    onChange={(event) => setDescription(event.target.value)}
                     placeholder="What do you want to learn? What will you be able to do when you're done?"
                     className={cn(
-                      "w-full resize-y rounded-xl border px-3.5 py-3 text-sm leading-6 outline-none transition-all",
+                      "w-full resize-y rounded-xl border px-3.5 py-3 text-sm leading-6 transition-all outline-none",
                       "border-neutral-200 bg-white text-neutral-700 placeholder:text-neutral-400",
                       "focus:border-emerald-400 focus:ring-2 focus:ring-emerald-500/10",
                       "dark:border-white/8 dark:bg-white/3 dark:text-white/75 dark:placeholder:text-white/20",
-                      "dark:focus:border-emerald-500/40",
+                      "dark:focus:border-emerald-500/40"
                     )}
                   />
 
                   <p className="mt-2 text-[11px] text-neutral-400 dark:text-white/25">
-                    A little context helps future-you remember why
-                    you started.
+                    A little context helps future-you remember why you started.
                   </p>
                 </div>
               </section>
@@ -375,7 +353,7 @@ export default function RoadmapCreatorPage() {
                 className={cn(
                   "rounded-[20px] border p-5 sm:p-6",
                   "border-neutral-200 bg-white shadow-sm shadow-neutral-900/4",
-                  "dark:border-white/[0.07] dark:bg-white/3 dark:shadow-none",
+                  "dark:border-white/[0.07] dark:bg-white/3 dark:shadow-none"
                 )}
               >
                 <div className="mb-5 flex items-start gap-3">
@@ -416,23 +394,20 @@ export default function RoadmapCreatorPage() {
                       },
                     ] as const
                   ).map((option) => {
-                    const Icon = option.icon;
-                    const selected =
-                      visibility === option.value;
+                    const Icon = option.icon
+                    const selected = visibility === option.value
 
                     return (
                       <button
                         key={option.value}
                         type="button"
-                        onClick={() =>
-                          setVisibility(option.value)
-                        }
+                        onClick={() => setVisibility(option.value)}
                         aria-pressed={selected}
                         className={cn(
                           "flex w-full items-center gap-3 rounded-xl border p-3 text-left transition-all",
                           selected
                             ? "border-emerald-300 bg-emerald-50/70 dark:border-emerald-500/30 dark:bg-emerald-500/[0.07]"
-                            : "border-neutral-200 hover:border-neutral-300 hover:bg-neutral-50 dark:border-white/[0.07] dark:hover:border-white/12 dark:hover:bg-white/2.5",
+                            : "border-neutral-200 hover:border-neutral-300 hover:bg-neutral-50 dark:border-white/[0.07] dark:hover:border-white/12 dark:hover:bg-white/2.5"
                         )}
                       >
                         <div
@@ -440,7 +415,7 @@ export default function RoadmapCreatorPage() {
                             "flex size-9 shrink-0 items-center justify-center rounded-lg",
                             selected
                               ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-400"
-                              : "bg-neutral-100 text-neutral-500 dark:bg-white/5 dark:text-white/40",
+                              : "bg-neutral-100 text-neutral-500 dark:bg-white/5 dark:text-white/40"
                           )}
                         >
                           <Icon className="size-4" />
@@ -460,13 +435,13 @@ export default function RoadmapCreatorPage() {
                             "flex size-5 shrink-0 items-center justify-center rounded-full border",
                             selected
                               ? "border-emerald-600 bg-emerald-600 text-white dark:border-emerald-400 dark:bg-emerald-400 dark:text-neutral-950"
-                              : "border-neutral-300 dark:border-white/15",
+                              : "border-neutral-300 dark:border-white/15"
                           )}
                         >
                           {selected && <Check className="size-3" />}
                         </div>
                       </button>
-                    );
+                    )
                   })}
                 </div>
               </section>
@@ -476,9 +451,7 @@ export default function RoadmapCreatorPage() {
                 <button
                   type="button"
                   disabled={isSubmitting}
-                  onClick={() =>
-                    router.push("/developer-dashboard/roadmap")
-                  }
+                  onClick={() => router.push("/developer-dashboard/roadmap")}
                   className="h-11 rounded-xl border border-neutral-200 px-5 text-xs font-semibold text-neutral-600 transition-colors hover:bg-neutral-50 disabled:opacity-50 dark:border-white/10 dark:text-white/55 dark:hover:bg-white/5"
                 >
                   Cancel
@@ -492,7 +465,7 @@ export default function RoadmapCreatorPage() {
                     "border border-emerald-200 bg-emerald-50 text-emerald-700 hover:border-emerald-300 hover:bg-emerald-100",
                     "dark:border-emerald-500/20 dark:bg-emerald-500/10 dark:text-emerald-400",
                     "dark:hover:border-emerald-500/35 dark:hover:bg-emerald-500/15",
-                    "disabled:cursor-not-allowed disabled:opacity-40",
+                    "disabled:cursor-not-allowed disabled:opacity-40"
                   )}
                 >
                   {isSubmitting ? (
@@ -516,7 +489,7 @@ export default function RoadmapCreatorPage() {
                 className={cn(
                   "overflow-hidden rounded-[20px] border",
                   "border-neutral-200 bg-white shadow-sm shadow-neutral-900/4",
-                  "dark:border-white/[0.07] dark:bg-white/3 dark:shadow-none",
+                  "dark:border-white/[0.07] dark:bg-white/3 dark:shadow-none"
                 )}
               >
                 <div className="flex items-center justify-between border-b border-neutral-100 px-5 py-4 dark:border-white/6">
@@ -537,7 +510,7 @@ export default function RoadmapCreatorPage() {
                     className={cn(
                       "group rounded-[17px] border p-4 transition-colors",
                       "border-neutral-200 bg-white hover:border-emerald-300",
-                      "dark:border-white/[0.07] dark:bg-white/2 dark:hover:border-white/[0.14]",
+                      "dark:border-white/[0.07] dark:bg-white/2 dark:hover:border-white/[0.14]"
                     )}
                   >
                     <div className="mb-4 flex items-start justify-between gap-3">
@@ -548,11 +521,11 @@ export default function RoadmapCreatorPage() {
                       <ArrowUpRight className="size-4 text-neutral-300 dark:text-white/20" />
                     </div>
 
-                    <h3 className="wrap-break-word text-sm font-semibold tracking-tight text-neutral-900 dark:text-white/88">
+                    <h3 className="text-sm font-semibold tracking-tight wrap-break-word text-neutral-900 dark:text-white/88">
                       {title.trim() || "Your roadmap title"}
                     </h3>
 
-                    <p className="mt-2 min-h-15 whitespace-pre-wrap wrap-break-word text-xs leading-[1.7] text-neutral-500 dark:text-white/35">
+                    <p className="mt-2 min-h-15 text-xs leading-[1.7] wrap-break-word whitespace-pre-wrap text-neutral-500 dark:text-white/35">
                       {description.trim() ||
                         "Your description will appear here. Explain what you want to learn and why it matters to you."}
                     </p>
@@ -572,8 +545,8 @@ export default function RoadmapCreatorPage() {
                   <div className="mt-4 flex items-start gap-2.5 rounded-xl bg-emerald-50/70 p-3 dark:bg-emerald-500/5">
                     <Sparkles className="mt-0.5 size-3.5 shrink-0 text-emerald-700 dark:text-emerald-400" />
                     <p className="text-[11px] leading-5 text-neutral-600 dark:text-white/40">
-                      Don't worry about getting everything perfect.
-                      You can build your roadmap one node at a time.
+                      Don't worry about getting everything perfect. You can
+                      build your roadmap one node at a time.
                     </p>
                   </div>
                 </div>
@@ -590,10 +563,7 @@ export default function RoadmapCreatorPage() {
                     "Add your first topic",
                     "Connect related topics",
                   ].map((step, index) => (
-                    <div
-                      key={step}
-                      className="flex items-center gap-2.5"
-                    >
+                    <div key={step} className="flex items-center gap-2.5">
                       <span className="flex size-5 shrink-0 items-center justify-center rounded-full border border-neutral-200 text-[10px] font-medium text-neutral-500 dark:border-white/10 dark:text-white/40">
                         {index + 1}
                       </span>
@@ -610,5 +580,5 @@ export default function RoadmapCreatorPage() {
         </form>
       </div>
     </main>
-  );
+  )
 }
