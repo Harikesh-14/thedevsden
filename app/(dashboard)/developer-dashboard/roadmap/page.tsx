@@ -9,10 +9,17 @@ import {
   Plus,
   Route,
   LoaderCircle,
+  Trash,
+  BookOpen,
+  Copy,
+  PenLine,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { ContextMenu, ContextMenuContent, ContextMenuGroup, ContextMenuItem, ContextMenuLabel, ContextMenuSeparator, ContextMenuTrigger } from "@/components/ui/context-menu";
+import { apiFetch } from "@/lib/api";
+import { Badge } from "@/components/ui/badge";
 
 type Roadmap = {
   _id: string;
@@ -81,6 +88,35 @@ export default function RoadmapPage() {
       icon: CheckCircle2,
     },
   ];
+
+  async function handleDelete(_id: string) {
+    try {
+      const response = await apiFetch(`/roadmap/${_id}`, {
+        method: "DELETE"
+      })
+
+      if (!response.ok) {
+        toast.error("Oops!", {
+          description: "Unable to delete the roadmap. Please try again",
+          closeButton: true
+        })
+
+        return;
+      }
+
+      setRoadmaps((prev) => prev.filter((roadmap) => roadmap._id !== _id));
+
+      toast.success("Yeyy!", {
+        description: "Roadmap deleted successfully",
+        closeButton: true
+      })
+    } catch {
+      toast.error("Oops!", {
+        description: "An unforeseen error occurred while performing the delete operation",
+        closeButton: true
+      })
+    }
+  }
 
   return (
     <main className="relative min-h-screen overflow-hidden bg-white dark:bg-transparent">
@@ -210,52 +246,99 @@ export default function RoadmapPage() {
           ) : (
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {filteredRoadmaps.map((roadmap) => (
-                <article
-                  key={roadmap._id}
-                  onClick={() =>
-                    router.push(
-                      `/developer-dashboard/roadmap/${roadmap._id}`
-                    )
-                  }
-                  className={cn(
-                    "group flex min-h-64 cursor-pointer flex-col overflow-hidden rounded-[20px] transition-all duration-200",
-                    "border border-neutral-200 bg-white shadow-[0_1px_3px_rgba(0,0,0,0.06),0_4px_16px_rgba(0,0,0,0.04)]",
-                    "hover:-translate-y-1 hover:border-emerald-300 hover:shadow-[0_8px_28px_rgba(0,0,0,0.10)]",
-                    "dark:border-white/[0.07] dark:bg-white/3 dark:shadow-none",
-                    "dark:hover:border-white/[0.14] dark:hover:bg-white/5"
-                  )}
-                >
-                  <div className="flex flex-1 flex-col p-5">
-                    <div className="mb-3 flex items-start justify-between gap-3">
-                      <span className="rounded-md border border-neutral-200 bg-neutral-50 px-2 py-1 text-[9px] font-semibold tracking-wide text-neutral-500 uppercase dark:border-white/8 dark:bg-white/4 dark:text-white/40">
-                        {roadmap.visibility || "private"}
-                      </span>
+                <ContextMenu>
+                  <ContextMenuTrigger>
+                    <article
+                      key={roadmap._id}
+                      onClick={() =>
+                        router.push(
+                          `/developer-dashboard/roadmap/${roadmap._id}`
+                        )
+                      }
+                      className={cn(
+                        "group flex min-h-64 cursor-pointer flex-col overflow-hidden rounded-[20px] transition-all duration-200",
+                        "border border-neutral-200 bg-white shadow-[0_1px_3px_rgba(0,0,0,0.06),0_4px_16px_rgba(0,0,0,0.04)]",
+                        "hover:-translate-y-1 hover:border-emerald-300 hover:shadow-[0_8px_28px_rgba(0,0,0,0.10)]",
+                        "dark:border-white/[0.07] dark:bg-white/3 dark:shadow-none",
+                        "dark:hover:border-white/[0.14] dark:hover:bg-white/5"
+                      )}
+                    >
+                      <div className="flex flex-1 flex-col p-5">
+                        <div className="mb-3 flex items-start justify-between gap-3">
+                          <span className="rounded-md border border-neutral-200 bg-neutral-50 px-2 py-1 text-[9px] font-semibold tracking-wide text-neutral-500 uppercase dark:border-white/8 dark:bg-white/4 dark:text-white/40">
+                            {roadmap.visibility || "private"}
+                          </span>
 
-                      <ArrowUpRight className="size-4 text-neutral-300 transition-all group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-emerald-600 dark:text-white/20 dark:group-hover:text-emerald-400" />
-                    </div>
+                          <ArrowUpRight className="size-4 text-neutral-300 transition-all group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-emerald-600 dark:text-white/20 dark:group-hover:text-emerald-400" />
+                        </div>
 
-                    <h3 className="text-[14px] font-semibold tracking-tight text-neutral-900 dark:text-white/88">
-                      {roadmap.title}
-                    </h3>
+                        <h3 className="text-[14px] font-semibold tracking-tight text-neutral-900 dark:text-white/88">
+                          {roadmap.title}
+                        </h3>
 
-                    <p className="mt-2 line-clamp-3 text-[12px] leading-[1.7] text-neutral-500 dark:text-white/35">
-                      {roadmap.description || "No description provided."}
-                    </p>
+                        <p className="mt-2 line-clamp-3 text-[12px] leading-[1.7] text-neutral-500 dark:text-white/35">
+                          {roadmap.description || "No description provided."}
+                        </p>
 
-                    <div className="mt-auto pt-6 border-t border-neutral-100 dark:border-white/5 flex items-center justify-between">
-                      <span className="text-[10px] font-mono text-neutral-400 dark:text-white/30 truncate max-w-32.5">
-                        /{roadmap.slug}
-                      </span>
+                        <div className="mt-auto pt-6 border-t border-neutral-100 dark:border-white/5 flex items-center justify-between">
+                          <span className="text-[10px] font-mono text-neutral-400 dark:text-white/30 truncate max-w-32.5">
+                            /{roadmap.slug}
+                          </span>
 
-                      <span className="flex items-center gap-1 text-[10px] text-neutral-400 dark:text-white/25">
-                        <Clock3 className="size-3" />
-                        {roadmap.updatedAt
-                          ? new Date(roadmap.updatedAt).toLocaleDateString()
-                          : "Recently"}
-                      </span>
-                    </div>
-                  </div>
-                </article>
+                          <span className="flex items-center gap-1 text-[10px] text-neutral-400 dark:text-white/25">
+                            <Clock3 className="size-3" />
+                            {roadmap.updatedAt
+                              ? new Date(roadmap.updatedAt).toLocaleDateString()
+                              : "Recently"}
+                          </span>
+                        </div>
+                      </div>
+                    </article>
+                  </ContextMenuTrigger>
+                  <ContextMenuContent>
+                    <ContextMenuLabel>Basic Ops</ContextMenuLabel>
+                    <ContextMenuGroup>
+                      <ContextMenuItem
+                        className="cursor-pointer"
+                        onClick={() =>
+                          router.push(
+                            `/developer-dashboard/roadmap/${roadmap._id}`
+                          )
+                        }
+                      >
+                        <BookOpen />
+                        Open
+                      </ContextMenuItem>
+                      <ContextMenuItem className="cursor-pointer">
+                        <div className="flex gap-2">
+                          <PenLine />
+                          Update metadata
+                        </div>
+                        <Badge variant={"outline"} className="border border-red-500 text-red-500">Soon</Badge>
+                      </ContextMenuItem>
+                      <ContextMenuItem className="cursor-pointer flex justify-between">
+                        <div className="flex gap-2">
+                          <Copy />
+                          Copy
+                        </div>
+                        <Badge variant={"outline"} className="border border-red-500 text-red-500">Soon</Badge>
+                      </ContextMenuItem>
+                    </ContextMenuGroup>
+
+                    <ContextMenuSeparator />
+
+                    <ContextMenuGroup>
+                      <ContextMenuLabel>Danger Zone</ContextMenuLabel>
+                      <ContextMenuItem
+                        onClick={() => handleDelete(roadmap._id)}
+                        className="text-red-500 cursor-pointer"
+                      >
+                        <Trash />
+                        Delete
+                      </ContextMenuItem>
+                    </ContextMenuGroup>
+                  </ContextMenuContent>
+                </ContextMenu>
               ))}
 
               {/* New roadmap card */}
