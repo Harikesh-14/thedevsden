@@ -69,7 +69,7 @@ export default function ThoughtOfTheDay() {
         toast.error("Oops!", {
           description: "Failed to fetch the thought.",
           closeButton: true
-        })
+        });
       }
       const data: IThought = await response.json();
       setThought(data);
@@ -164,15 +164,15 @@ export default function ThoughtOfTheDay() {
   }
 
   return (
-    <main className="min-h-screen bg-[#090909] px-3 py-5 text-[#ededed] sm:px-5">
+    <main className="min-h-screen bg-white px-3 py-5 text-neutral-900 sm:px-5 dark:bg-[#090909] dark:text-[#ededed]">
       <div className="mx-auto max-w-4xl">
         <header className="mb-5">
           <div className="mb-2 flex flex-wrap items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-neutral-500">
             <span className="h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.6)]" />
             <span>Admin Portal</span>
-            <span className="text-neutral-700">/</span>
+            <span className="text-neutral-400 dark:text-neutral-700">/</span>
             <span>TheDevsDen</span>
-            <span className="text-neutral-700">/</span>
+            <span className="text-neutral-400 dark:text-neutral-700">/</span>
             <span className="text-emerald-500">Thoughts</span>
           </div>
           <h1 className="text-xl font-bold tracking-tight sm:text-2xl">
@@ -183,7 +183,7 @@ export default function ThoughtOfTheDay() {
           </p>
         </header>
 
-        <section className="mb-5 rounded-xl border border-white/8 bg-[#111111] p-3">
+        <section className="mb-5 rounded-xl border border-neutral-200 bg-neutral-50 p-3 dark:border-white/8 dark:bg-[#111111]">
           <form
             className="flex flex-col gap-2 sm:flex-row"
             onSubmit={(event) => {
@@ -200,14 +200,14 @@ export default function ThoughtOfTheDay() {
                 type="date"
                 value={searchDate}
                 onChange={(event) => setSearchDate(event.target.value)}
-                className="h-9 border-white/1 bg-[#191919] pl-9 text-xs text-neutral-100 scheme-dark focus-visible:border-emerald-500 focus-visible:ring-emerald-500/20"
+                className="h-9 border border-neutral-200 bg-white pl-9 text-xs text-neutral-900 scheme-light focus-visible:border-emerald-500 focus-visible:ring-emerald-500/20 dark:border-white/1 dark:bg-[#191919] dark:text-neutral-100 dark:scheme-dark"
                 aria-label="Search thought by date"
               />
             </div>
             <Button
               type="submit"
               disabled={loading || !searchDate}
-              className="h-9 gap-1.5 border border-white/12 bg-transparent px-3 text-xs font-semibold text-neutral-100 hover:border-emerald-500/50 hover:bg-emerald-500/10"
+              className="h-9 gap-1.5 border border-neutral-300 bg-transparent px-3 text-xs font-semibold text-neutral-800 hover:border-emerald-500/50 hover:bg-emerald-500/10 dark:border-white/12 dark:text-neutral-100"
             >
               {loading ? (
                 <LoaderCircle className="animate-spin" size={14} />
@@ -233,14 +233,14 @@ export default function ThoughtOfTheDay() {
               <h2 className="shrink-0 text-[10px] font-bold uppercase tracking-widest text-emerald-500">
                 Results
               </h2>
-              <div className="h-px flex-1 bg-white/6" />
+              <div className="h-px flex-1 bg-neutral-200 dark:bg-white/6" />
               <span className="text-xs text-neutral-500">
                 {loading ? "Searching..." : thought ? "1 result" : "0 results"}
               </span>
             </div>
 
             {loading ? (
-              <div className="flex min-h-24 items-center justify-center rounded-xl border border-white/8 bg-[#111111]">
+              <div className="flex min-h-24 items-center justify-center rounded-xl border border-neutral-200 bg-neutral-50 dark:border-white/8 dark:bg-[#111111]">
                 <LoaderCircle
                   size={18}
                   className="animate-spin text-emerald-400"
@@ -249,17 +249,17 @@ export default function ThoughtOfTheDay() {
             ) : thought ? (
               <ContextMenu>
                 <ContextMenuTrigger asChild>
-                  <article className="group flex cursor-pointer items-center gap-3 rounded-xl border border-white/8 bg-[#111111] p-3 transition-colors hover:border-emerald-500/30">
+                  <article className="group flex cursor-pointer items-center gap-3 rounded-xl border border-neutral-200 bg-neutral-50 p-3 transition-colors hover:border-emerald-500/30 dark:border-white/8 dark:bg-[#111111]">
                     <div className="flex h-12 w-10 shrink-0 flex-col items-center justify-center rounded-lg border border-emerald-500/30 bg-emerald-500/6">
-                      <span className="text-base font-bold tracking-tight text-emerald-400">
+                      <span className="text-base font-bold tracking-tight text-emerald-600 dark:text-emerald-400">
                         {format(parseISO(thought.displayDate), "dd")}
                       </span>
-                      <span className="text-[9px] font-bold uppercase tracking-wider text-emerald-600">
+                      <span className="text-[9px] font-bold uppercase tracking-wider text-emerald-700 dark:text-emerald-600">
                         {format(parseISO(thought.displayDate), "MMM")}
                       </span>
                     </div>
                     <div className="min-w-0 flex-1">
-                      <p className="text-xs font-medium italic leading-relaxed text-neutral-300 sm:text-sm">
+                      <p className="text-xs font-medium italic leading-relaxed text-neutral-700 dark:text-neutral-300 sm:text-sm">
                         <span className="mr-0.5 font-bold text-emerald-500">
                           &ldquo;
                         </span>
@@ -271,7 +271,7 @@ export default function ThoughtOfTheDay() {
                     </div>
                   </article>
                 </ContextMenuTrigger>
-                <ContextMenuContent className="w-40 border-white/1 bg-[#151515] text-xs text-neutral-200">
+                <ContextMenuContent className="w-40 border-neutral-200 bg-white text-xs text-neutral-800 dark:border-white/1 dark:bg-[#151515] dark:text-neutral-200">
                   <ContextMenuItem
                     onSelect={() => openEditDialog(thought)}
                     className="gap-2 cursor-pointer"
@@ -282,7 +282,7 @@ export default function ThoughtOfTheDay() {
                   <ContextMenuItem
                     onSelect={() => void handleDelete()}
                     disabled={deleting}
-                    className="gap-2 text-red-400 cursor-pointer"
+                    className="gap-2 text-red-500 dark:text-red-400 cursor-pointer"
                   >
                     <Trash2 size={13} />
                     Delete thought
@@ -290,11 +290,11 @@ export default function ThoughtOfTheDay() {
                 </ContextMenuContent>
               </ContextMenu>
             ) : (
-              <div className="flex min-h-32 flex-col items-center justify-center rounded-xl border border-dashed border-white/8 bg-[#0d0d0d] px-4 py-10 text-center">
-                <div className="mb-2.5 flex h-9 w-9 items-center justify-center rounded-lg border border-white/8 bg-[#151515]">
+              <div className="flex min-h-32 flex-col items-center justify-center rounded-xl border border-dashed border-neutral-300 bg-neutral-50 px-4 py-10 text-center dark:border-white/8 dark:bg-[#0d0d0d]">
+                <div className="mb-2.5 flex h-9 w-9 items-center justify-center rounded-lg border border-neutral-200 bg-white dark:border-white/8 dark:bg-[#151515]">
                   <Search size={16} className="text-neutral-500" />
                 </div>
-                <h3 className="text-xs font-semibold text-neutral-300">
+                <h3 className="text-xs font-semibold text-neutral-800 dark:text-neutral-300">
                   No thought found
                 </h3>
                 <p className="mt-1 max-w-xs text-[11px] text-neutral-500">
@@ -305,7 +305,7 @@ export default function ThoughtOfTheDay() {
                   type="button"
                   variant="outline"
                   onClick={openNewDialog}
-                  className="mt-3 h-8 gap-1.5 border-white/1 bg-transparent px-3 text-xs text-neutral-200 hover:border-emerald-500/40 hover:bg-emerald-500/10"
+                  className="mt-3 h-8 gap-1.5 border-neutral-200 bg-transparent px-3 text-xs text-neutral-800 hover:border-emerald-500/40 hover:bg-emerald-500/10 dark:border-white/1 dark:text-neutral-200"
                 >
                   <Plus size={14} />
                   Create Thought
@@ -317,13 +317,13 @@ export default function ThoughtOfTheDay() {
 
         {!searched && (
           <div className="flex min-h-40 flex-col items-center justify-center text-center">
-            <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg border border-white/8 bg-[#111111]">
-              <Search size={18} className="text-neutral-600" />
+            <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg border border-neutral-200 bg-neutral-50 dark:border-white/8 dark:bg-[#111111]">
+              <Search size={18} className="text-neutral-500 dark:text-neutral-600" />
             </div>
-            <h2 className="text-sm font-semibold text-neutral-300">
+            <h2 className="text-sm font-semibold text-neutral-800 dark:text-neutral-300">
               Search for a thought
             </h2>
-            <p className="mt-1 text-[11px] text-neutral-600">
+            <p className="mt-1 text-[11px] text-neutral-500 dark:text-neutral-600">
               Pick a date above to find the thought assigned to that day.
             </p>
           </div>
@@ -337,7 +337,7 @@ export default function ThoughtOfTheDay() {
           if (!open) setEditingThought(null);
         }}
       >
-        <DialogContent className="border-white/1 bg-[#111111] text-neutral-100 sm:max-w-sm">
+        <DialogContent className="border-neutral-200 bg-white text-neutral-900 dark:border-white/1 dark:bg-[#111111] dark:text-neutral-100 sm:max-w-sm">
           <DialogHeader className="space-y-1">
             <DialogTitle className="text-sm font-bold">
               {editingThought ? "Edit thought" : "New thought"}
@@ -352,7 +352,7 @@ export default function ThoughtOfTheDay() {
             <div className="space-y-1">
               <label
                 htmlFor="thought-date"
-                className="text-[11px] font-medium text-neutral-300"
+                className="text-[11px] font-medium text-neutral-700 dark:text-neutral-300"
               >
                 Display Date
               </label>
@@ -361,13 +361,13 @@ export default function ThoughtOfTheDay() {
                 type="date"
                 value={formDate}
                 onChange={(event) => setFormDate(event.target.value)}
-                className="h-8 border-white/1 bg-[#191919] text-xs scheme-darkfocus-visible:border-emerald-500 focus-visible:ring-emerald-500/20"
+                className="h-8 border border-neutral-200 bg-white text-xs text-neutral-950 scheme-light focus-visible:border-emerald-500 focus-visible:ring-emerald-500/20 dark:border-white/1 dark:bg-[#191919] dark:text-neutral-100 dark:scheme-dark"
               />
             </div>
             <div className="space-y-1">
               <label
                 htmlFor="thought-content"
-                className="text-[11px] font-medium text-neutral-300"
+                className="text-[11px] font-medium text-neutral-700 dark:text-neutral-300"
               >
                 Thought
               </label>
@@ -378,9 +378,9 @@ export default function ThoughtOfTheDay() {
                 placeholder="Write something worth remembering..."
                 rows={3}
                 maxLength={1000}
-                className="resize-none border-white/1 bg-[#191919] text-xs text-neutral-100 placeholder:text-neutral-600 focus-visible:border-emerald-500 focus-visible:ring-emerald-500/20"
+                className="resize-none border border-neutral-200 bg-white text-xs text-neutral-900 placeholder:text-neutral-400 focus-visible:border-emerald-500 focus-visible:ring-emerald-500/20 dark:border-white/1 dark:bg-[#191919] dark:text-neutral-100 dark:placeholder:text-neutral-600"
               />
-              <p className="text-right text-[10px] text-neutral-600">
+              <p className="text-right text-[10px] text-neutral-500 dark:text-neutral-600">
                 {formThought.length}/1000
               </p>
             </div>
@@ -391,7 +391,7 @@ export default function ThoughtOfTheDay() {
               variant="outline"
               onClick={() => setDialogOpen(false)}
               disabled={saving}
-              className="h-8 border-white/1 bg-transparent text-xs text-neutral-300 hover:bg-white/5"
+              className="h-8 border border-neutral-200 bg-transparent text-xs text-neutral-700 hover:bg-neutral-100 dark:border-white/1 dark:text-neutral-300 dark:hover:bg-white/5"
             >
               Cancel
             </Button>
