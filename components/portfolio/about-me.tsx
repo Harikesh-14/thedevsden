@@ -23,8 +23,8 @@ const facts = [
   {
     icon: Code2,
     label: "What I do",
-    body: "Full-stack development, backend engineering, APIs and software architecture.",
-    tags: ["Backend", "APIs", "Architecture"],
+    body: "Full-stack web development, backend engineering, APIs and software architecture.",
+    tags: ["Frontend", "Backend", "APIs", "Architecture"],
   },
   {
     icon: BriefcaseBusiness,

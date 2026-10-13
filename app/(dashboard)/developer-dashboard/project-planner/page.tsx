@@ -371,18 +371,22 @@ export default function ProjectPlannerPage() {
   const stats = [
     {
       label: "Total plans",
-      value: String(projectStats?.totalPlans),
+      value: String(projectStats?.totalPlans ?? 0),
       accent: false,
     },
-    { label: "Active", value: String(projectStats?.activePlans), accent: true },
+    {
+      label: "Active",
+      value: String(projectStats?.activePlans ?? 0),
+      accent: true
+    },
     {
       label: "Tech stacks",
-      value: String(projectStats?.totalTechStack),
+      value: String(projectStats?.totalTechStack ?? 0),
       accent: false,
     },
     {
       label: "Completed",
-      value: String(projectStats?.completedPlans),
+      value: String(projectStats?.completedPlans ?? 0),
       accent: false,
     },
   ]
@@ -408,20 +412,24 @@ export default function ProjectPlannerPage() {
   }
 
   async function fetchOverallStats() {
-    const response = await apiFetch("/new-projects-plan/get/overall-stats")
+    try {
+      const response = await apiFetch("/new-projects-plan/get/overall-stats")
 
-    if (!response.ok) {
-      toast.error("Oops", {
-        description: "Error fetching the stats",
-        closeButton: true,
-      })
+      if (!response.ok) {
+        toast.error("Oops", {
+          description: "Error fetching the stats",
+          closeButton: true,
+        })
 
-      return
+        return
+      }
+
+      const data: ProjectStatsResponse = await response.json()
+
+      setProjectStats(data)
+    } catch {
+      throw new Error("An unforeseen error has occurred while fetching the stats")
     }
-
-    const data: ProjectStatsResponse = await response.json()
-
-    setProjectStats(data)
   }
 
   async function toggleComplete(id: string, currentStatus: boolean) {
@@ -533,10 +541,8 @@ export default function ProjectPlannerPage() {
             className={cn(
               "group flex h-10 items-center gap-2 rounded-xl px-4",
               "text-[12.5px] font-semibold transition-all duration-150 active:scale-[0.98]",
-              // Light
               "border border-emerald-200 bg-emerald-50 text-emerald-700",
               "hover:border-emerald-300 hover:bg-emerald-100",
-              // Dark
               "dark:border-emerald-500/20 dark:bg-emerald-500/8 dark:text-emerald-400/80",
               "dark:hover:border-emerald-500/35 dark:hover:bg-emerald-500/13 dark:hover:text-emerald-400"
             )}
@@ -553,9 +559,7 @@ export default function ProjectPlannerPage() {
               key={label}
               className={cn(
                 "rounded-[18px] border p-4 backdrop-blur-xl",
-                // Light: white card on the neutral-50 page — clear hierarchy
                 "border-neutral-200 bg-white shadow-sm shadow-neutral-900/4",
-                // Dark
                 "dark:border-white/[0.07] dark:bg-white/3 dark:shadow-none"
               )}
             >
@@ -587,11 +591,9 @@ export default function ProjectPlannerPage() {
               placeholder="Search project plans…"
               className={cn(
                 "h-9 w-full rounded-xl pr-4 pl-9 transition-all duration-150 outline-none",
-                // Light
                 "border border-neutral-200 bg-white shadow-sm shadow-neutral-900/4",
                 "text-[12.5px] text-neutral-700 placeholder:text-neutral-400",
                 "focus:border-emerald-300 focus:bg-emerald-50/40 focus:ring-2 focus:ring-emerald-500/10",
-                // Dark
                 "dark:border-white/[0.07] dark:bg-white/4 dark:shadow-none",
                 "dark:text-white/70 dark:placeholder:text-white/20",
                 "dark:focus:border-emerald-500/30 dark:focus:bg-emerald-500/4 dark:focus:ring-0"
@@ -637,9 +639,7 @@ export default function ProjectPlannerPage() {
           <div
             className={cn(
               "flex gap-1 rounded-xl border p-1",
-              // Light
               "border-neutral-200 bg-white shadow-sm shadow-neutral-900/4",
-              // Dark
               "dark:border-white/[0.07] dark:bg-white/3 dark:shadow-none"
             )}
           >
@@ -694,7 +694,7 @@ export default function ProjectPlannerPage() {
                 onToggleComplete={() =>
                   toggleComplete(project._id, project.isActive)
                 }
-                onUpdate={() => {}}
+                onUpdate={() => { }}
                 onDelete={() => deleteProjectPlan(project._id)}
               />
             ))}
