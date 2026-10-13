@@ -61,7 +61,7 @@ export default function AdminPortalContactMe() {
       });
 
       if (!response.ok) throw new Error("Failed to update status.");
-      
+
       setMessages((prev) =>
         prev.map((msg) => (msg._id === id ? { ...msg, [field]: !currentVal } : msg))
       );
@@ -76,7 +76,7 @@ export default function AdminPortalContactMe() {
     try {
       const response = await apiFetch(`/contact-me/${id}`, { method: "DELETE" });
       if (!response.ok) throw new Error("Failed to delete message.");
-      
+
       setMessages((prev) => prev.filter((msg) => msg._id !== id));
       toast.success("Message deleted.");
     } catch (error) {
@@ -96,13 +96,13 @@ export default function AdminPortalContactMe() {
   });
 
   return (
-    <main className="min-h-screen bg-[#090909] px-3 py-5 text-[#ededed] sm:px-5">
+    <main className="min-h-screen bg-white px-3 py-5 text-neutral-900 sm:px-5 dark:bg-[#090909] dark:text-[#ededed]">
       <div className="mx-auto max-w-5xl">
         <header className="mb-5">
           <div className="mb-2 flex flex-wrap items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-neutral-500">
             <span className="h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.6)]" />
             <span>Admin Portal</span>
-            <span className="text-neutral-700">/</span>
+            <span className="text-neutral-400 dark:text-neutral-700">/</span>
             <span className="text-emerald-500">Contact Inquiries</span>
           </div>
           <h1 className="text-xl font-bold tracking-tight sm:text-2xl">
@@ -121,7 +121,7 @@ export default function AdminPortalContactMe() {
               placeholder="Search sender, email, subject..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="h-8 border-white/10 bg-[#111111] pl-8 text-xs text-neutral-100 placeholder:text-neutral-600 focus-visible:border-emerald-500 focus-visible:ring-emerald-500/20"
+              className="h-8 border border-neutral-200 bg-neutral-50 pl-8 text-xs text-neutral-900 placeholder:text-neutral-400 focus-visible:border-emerald-500 focus-visible:ring-emerald-500/20 dark:border-white/10 dark:bg-[#111111] dark:text-neutral-100 dark:placeholder:text-neutral-600"
             />
           </div>
           <div className="flex gap-1.5 text-xs">
@@ -129,11 +129,10 @@ export default function AdminPortalContactMe() {
               <button
                 key={tab}
                 onClick={() => setFilter(tab)}
-                className={`rounded-lg px-3 py-1.5 font-medium capitalize transition-colors ${
-                  filter === tab
-                    ? "bg-emerald-500/10 border border-emerald-500/30 text-emerald-400"
-                    : "border border-white/8 bg-[#111111] text-neutral-400 hover:text-neutral-200"
-                }`}
+                className={`rounded-lg px-3 py-1.5 font-medium capitalize transition-colors ${filter === tab
+                    ? "bg-emerald-500/10 border border-emerald-500/30 text-emerald-600 dark:text-emerald-400"
+                    : "border border-neutral-200 bg-neutral-50 text-neutral-600 hover:text-neutral-900 dark:border-white/8 dark:bg-[#111111] dark:text-neutral-400 dark:hover:text-neutral-200"
+                  }`}
               >
                 {tab}
               </button>
@@ -142,7 +141,7 @@ export default function AdminPortalContactMe() {
         </section>
 
         {loading ? (
-          <div className="flex min-h-36 items-center justify-center rounded-xl border border-white/8 bg-[#111111]">
+          <div className="flex min-h-36 items-center justify-center rounded-xl border border-neutral-200 bg-neutral-50 dark:border-white/8 dark:bg-[#111111]">
             <LoaderCircle size={20} className="animate-spin text-emerald-400" />
           </div>
         ) : filteredMessages.length > 0 ? (
@@ -150,30 +149,31 @@ export default function AdminPortalContactMe() {
             {filteredMessages.map((msg) => (
               <article
                 key={msg._id}
-                className={`rounded-xl border bg-[#111111] p-3.5 transition-colors ${
-                  !msg.isRead ? "border-emerald-500/30 bg-emerald-500/2" : "border-white/8"
-                }`}
+                className={`rounded-xl border p-3.5 transition-colors ${!msg.isRead
+                    ? "border-emerald-500/30 bg-emerald-500/5 dark:bg-emerald-500/2"
+                    : "border-neutral-200 bg-neutral-50 dark:border-white/8 dark:bg-[#111111]"
+                  }`}
               >
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0 flex-1">
                     <div className="flex flex-wrap items-center gap-2">
-                      <h2 className="text-xs font-bold text-neutral-200">{msg.name}</h2>
+                      <h2 className="text-xs font-bold text-neutral-900 dark:text-neutral-200">{msg.name}</h2>
                       <span className="text-[11px] text-neutral-500">({msg.email})</span>
                       {!msg.isRead && (
-                        <span className="rounded-full bg-emerald-500/10 px-2 py-0.5 text-[9px] font-semibold text-emerald-400">
+                        <span className="rounded-full bg-emerald-500/10 px-2 py-0.5 text-[9px] font-semibold text-emerald-600 dark:text-emerald-400">
                           New
                         </span>
                       )}
                       {msg.replied && (
-                        <span className="rounded-full bg-blue-500/10 px-2 py-0.5 text-[9px] font-semibold text-blue-400">
+                        <span className="rounded-full bg-blue-500/10 px-2 py-0.5 text-[9px] font-semibold text-blue-600 dark:text-blue-400">
                           Replied
                         </span>
                       )}
                     </div>
-                    <p className="mt-1 text-xs font-medium text-neutral-300">
-                      Subject: <span className="text-neutral-400">{msg.subject}</span>
+                    <p className="mt-1 text-xs font-medium text-neutral-800 dark:text-neutral-300">
+                      Subject: <span className="text-neutral-600 dark:text-neutral-400">{msg.subject}</span>
                     </p>
-                    <p className="mt-2 text-xs leading-relaxed text-neutral-400 bg-[#161616] p-2.5 rounded-lg border border-white/4">
+                    <p className="mt-2 text-xs leading-relaxed text-neutral-700 bg-white p-2.5 rounded-lg border border-neutral-200 dark:text-neutral-400 dark:bg-[#161616] dark:border-white/4">
                       {msg.message}
                     </p>
                   </div>
@@ -184,13 +184,13 @@ export default function AdminPortalContactMe() {
                   </div>
                 </div>
 
-                <div className="mt-3 flex items-center justify-between border-t border-white/6 pt-2.5 text-xs">
+                <div className="mt-3 flex items-center justify-between border-t border-neutral-200 pt-2.5 text-xs dark:border-white/6">
                   <div className="flex items-center gap-1.5">
                     <Button
                       variant="outline"
                       size="sm"
                       onClick={() => void toggleStatus(msg._id, "isRead", msg.isRead)}
-                      className="h-7 gap-1 border-white/10 bg-transparent px-2.5 text-[11px] text-neutral-300 hover:bg-white/5"
+                      className="h-7 gap-1 border-neutral-200 bg-transparent px-2.5 text-[11px] text-neutral-700 hover:bg-neutral-100 dark:border-white/10 dark:text-neutral-300 dark:hover:bg-white/5"
                     >
                       {msg.isRead ? <MailOpen size={13} /> : <Mail size={13} />}
                       {msg.isRead ? "Mark Unread" : "Mark Read"}
@@ -199,11 +199,10 @@ export default function AdminPortalContactMe() {
                       variant="outline"
                       size="sm"
                       onClick={() => void toggleStatus(msg._id, "replied", msg.replied)}
-                      className={`h-7 gap-1 border-white/10 px-2.5 text-[11px] ${
-                        msg.replied
-                          ? "bg-blue-500/10 text-blue-400 border-blue-500/30"
-                          : "bg-transparent text-neutral-300 hover:bg-white/5"
-                      }`}
+                      className={`h-7 gap-1 px-2.5 text-[11px] ${msg.replied
+                          ? "bg-blue-500/10 text-blue-600 border-blue-500/30 dark:text-blue-400"
+                          : "border-neutral-200 bg-transparent text-neutral-700 hover:bg-neutral-100 dark:border-white/10 dark:text-neutral-300 dark:hover:bg-white/5"
+                        }`}
                     >
                       <CheckCircle2 size={13} />
                       {msg.replied ? "Replied" : "Mark Replied"}
@@ -213,7 +212,7 @@ export default function AdminPortalContactMe() {
                     variant="outline"
                     size="sm"
                     onClick={() => void handleDelete(msg._id)}
-                    className="h-7 gap-1 border-red-500/20 bg-transparent px-2.5 text-[11px] text-red-400 hover:bg-red-500/10"
+                    className="h-7 gap-1 border-red-500/20 bg-transparent px-2.5 text-[11px] text-red-500 hover:bg-red-500/10 dark:text-red-400"
                   >
                     <Trash2 size={13} />
                     Delete
@@ -223,11 +222,11 @@ export default function AdminPortalContactMe() {
             ))}
           </div>
         ) : (
-          <div className="flex min-h-40 flex-col items-center justify-center rounded-xl border border-dashed border-white/8 bg-[#0d0d0d] px-4 text-center">
-            <div className="mb-2.5 flex h-9 w-9 items-center justify-center rounded-lg border border-white/8 bg-[#151515]">
+          <div className="flex min-h-40 flex-col items-center justify-center rounded-xl border border-dashed border-neutral-300 bg-neutral-50 px-4 text-center dark:border-white/8 dark:bg-[#0d0d0d]">
+            <div className="mb-2.5 flex h-9 w-9 items-center justify-center rounded-lg border border-neutral-200 bg-white dark:border-white/8 dark:bg-[#151515]">
               <MessageSquare size={16} className="text-neutral-500" />
             </div>
-            <h3 className="text-xs font-semibold text-neutral-300">No messages found</h3>
+            <h3 className="text-xs font-semibold text-neutral-800 dark:text-neutral-300">No messages found</h3>
             <p className="mt-1 text-[11px] text-neutral-500">
               There are no contact inquiries matching your filter.
             </p>
