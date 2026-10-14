@@ -46,7 +46,7 @@ const skillGroups = [
     title: "Databases",
     description: "Designing and working with application data and persistence.",
     icon: Database,
-    skills: ["MongoDB", "Mongoose", "SwiftData", "Core Data"],
+    skills: ["MongoDB", "Mongoose", "SwiftData"],
   },
   {
     title: "Programming Languages",
@@ -62,11 +62,10 @@ const skillGroups = [
     icon: BrainCircuit,
     skills: [
       "Machine Learning",
+      "Deep Learning",
+      "Image Classification",
       "AI Engineering",
-      "NLP",
-      "Speech Recognition",
       "Model Training",
-      "LLMs",
     ],
   },
   {
@@ -90,7 +89,7 @@ const skillGroups = [
     icon: TestTube2,
     skills: ["Selenium", "Playwright"],
   },
-]
+] as const;
 
 const coreSkills = [
   "Software Architecture",

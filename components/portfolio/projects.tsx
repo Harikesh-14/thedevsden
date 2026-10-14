@@ -252,7 +252,7 @@ export default function ProjectsSection() {
           ))}
         </div>
 
-        <div className="mt-12 flex flex-col gap-3 border-t border-neutral-200 pt-8 sm:flex-row sm:items-center sm:justify-between dark:border-neutral-800">
+        <div className="mt-12 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between dark:border-neutral-800">
           <p className="text-sm text-neutral-500 dark:text-neutral-400">
             Always building. Usually experimenting.
           </p>
