@@ -8,6 +8,18 @@ import {
   Search,
   Star,
   Trash2,
+  Circle,
+  Zap,
+  Rocket,
+  Brain,
+  Wrench,
+  Globe,
+  Smartphone,
+  Shield,
+  Target,
+  Flame,
+  Lightbulb,
+  Settings,
 } from "lucide-react"
 import { toast } from "sonner"
 import { cn } from "@/lib/utils"
@@ -38,6 +50,27 @@ import { Project, Filter } from "@/lib/projects"
 
 const MAX_FEATURED = 4
 
+const PROJECT_ICONS = {
+  Circle,
+  Zap,
+  Rocket,
+  Brain,
+  Wrench,
+  Globe,
+  Smartphone,
+  Shield,
+  Target,
+  Flame,
+  Lightbulb,
+  Settings,
+}
+
+type ProjectIconName = keyof typeof PROJECT_ICONS
+
+function getProjectIcon(name: string) {
+  return PROJECT_ICONS[name as ProjectIconName] ?? Circle
+}
+
 // ── Featured slot indicator ────────────────────────────────────────────────
 function FeaturedSlots({ count }: { count: number }) {
   const remaining = MAX_FEATURED - count
@@ -45,19 +78,19 @@ function FeaturedSlots({ count }: { count: number }) {
   return (
     <div className={cn(
       "flex flex-wrap items-center justify-between gap-3 rounded-[14px] border px-4 py-3",
-      "border-emerald-200/80 bg-emerald-50/60",
-      "dark:border-emerald-500/15 dark:bg-emerald-500/4",
+      "border-neutral-200 bg-white/60 shadow-xs",
+      "dark:border-white/8 dark:bg-white/2",
     )}>
       <div className="flex items-center gap-3">
         <div className={cn(
           "flex size-8 items-center justify-center rounded-xl",
-          "border border-emerald-200 bg-emerald-50 text-emerald-600",
-          "dark:border-emerald-500/20 dark:bg-emerald-500/8 dark:text-emerald-400",
+          "border border-neutral-200 bg-neutral-50 text-neutral-600",
+          "dark:border-white/10 dark:bg-white/5 dark:text-neutral-300",
         )}>
-          <Star className="size-3.5" />
+          <Star className="size-3.5 text-emerald-600 dark:text-emerald-400" />
         </div>
-        <p className="text-[12.5px] font-medium text-neutral-600 dark:text-white/55">
-          <span className="font-semibold text-emerald-700 dark:text-emerald-400">
+        <p className="text-[12.5px] font-medium text-neutral-600 dark:text-white/60">
+          <span className="font-semibold text-neutral-900 dark:text-white">
             {count} of {MAX_FEATURED}
           </span>{" "}
           featured slots used
@@ -75,7 +108,7 @@ function FeaturedSlots({ count }: { count: number }) {
             className={cn(
               "h-2 w-7 rounded-full transition-colors",
               i < count
-                ? "bg-emerald-500 dark:bg-emerald-400"
+                ? "bg-emerald-600 dark:bg-emerald-400"
                 : "bg-neutral-200 dark:bg-white/10",
             )}
           />
@@ -105,54 +138,53 @@ function ProjectCard({
     <article className={cn(
       "group relative flex items-start gap-4 overflow-hidden rounded-[16px] border p-4 sm:p-5",
       "transition-all duration-150",
-      project.isFeatured
-        ? "border-emerald-200/80 bg-emerald-50/30 shadow-sm shadow-emerald-900/4"
-        : "border-neutral-200 bg-white shadow-sm shadow-neutral-900/4",
-      "hover:shadow-md",
-      project.isFeatured
-        ? "dark:border-emerald-500/18 dark:bg-emerald-500/[0.035]"
-        : "dark:border-white/[0.07] dark:bg-white/3 dark:shadow-none",
-      "dark:hover:border-white/12 dark:hover:bg-white/5",
+      "border-neutral-200 bg-white shadow-xs shadow-neutral-900/4",
+      "hover:border-neutral-300 hover:shadow-sm",
+      "dark:border-white/[0.07] dark:bg-white/2 dark:shadow-none",
+      "dark:hover:border-white/15 dark:hover:bg-white/4",
     )}>
       {/* Featured left accent bar */}
       {project.isFeatured && (
-        <div className="absolute inset-y-0 left-0 w-0.75 rounded-l-[16px] bg-linear-to-b from-emerald-500 via-emerald-400 to-transparent" />
+        <div className="absolute inset-y-0 left-0 w-1 rounded-l-[16px] bg-emerald-500 dark:bg-emerald-400" />
       )}
 
       {/* Icon */}
       <div className={cn(
-        "flex size-10 shrink-0 items-center justify-center rounded-xl text-xl",
-        "border border-neutral-200 bg-white",
-        "dark:border-white/8 dark:bg-white/4",
+        "flex size-10 shrink-0 items-center justify-center rounded-xl",
+        "border border-neutral-200 bg-neutral-50 text-neutral-700",
+        "dark:border-white/10 dark:bg-white/5 dark:text-neutral-200",
       )}>
-        {project.icon}
+        {(() => {
+          const Icon = getProjectIcon(project.icon)
+          return <Icon className="size-5" />
+        })()}
       </div>
 
       {/* Body */}
       <div className="min-w-0 flex-1">
         <div className="mb-1 flex flex-wrap items-center gap-2">
           <h3 className="text-[14px] font-semibold tracking-[-0.01em]
-            text-neutral-900 dark:text-white/85">
+            text-neutral-900 dark:text-white/90">
             {project.title}
           </h3>
 
           {project.isFeatured && (
             <span className={cn(
               "rounded-[5px] border px-1.5 py-px text-[9px] font-semibold uppercase tracking-widest",
-              "border-emerald-200/80 bg-emerald-50 text-emerald-700",
-              "dark:border-emerald-500/25 dark:bg-emerald-500/8 dark:text-emerald-400/85",
+              "border-emerald-200 bg-emerald-50 text-emerald-700",
+              "dark:border-emerald-500/25 dark:bg-emerald-500/10 dark:text-emerald-400",
             )}>
               Featured
             </span>
           )}
         </div>
 
-        <p className="mb-2 text-[11.5px] text-neutral-400 dark:text-white/30">
+        <p className="mb-2 text-[11.5px] text-neutral-400 dark:text-white/40">
           {project.type}
         </p>
 
         <p className="mb-3 line-clamp-2 text-[12px] leading-[1.65]
-          text-neutral-500 dark:text-white/35">
+          text-neutral-600 dark:text-white/50">
           {project.description}
         </p>
 
@@ -162,8 +194,8 @@ function ProjectCard({
               key={s}
               className={cn(
                 "rounded-[6px] border px-2 py-px text-[10.5px] font-medium",
-                "border-neutral-200 bg-neutral-50 text-neutral-500",
-                "dark:border-white/[0.07] dark:bg-white/4 dark:text-white/35",
+                "border-neutral-200 bg-neutral-50 text-neutral-600",
+                "dark:border-white/[0.07] dark:bg-white/5 dark:text-white/45",
               )}
             >
               {s}
@@ -173,7 +205,7 @@ function ProjectCard({
             <span className={cn(
               "rounded-[6px] border px-2 py-px text-[10.5px] font-medium",
               "border-neutral-200 bg-neutral-50 text-neutral-400",
-              "dark:border-white/[0.07] dark:bg-white/4 dark:text-white/25",
+              "dark:border-white/[0.07] dark:bg-white/5 dark:text-white/30",
             )}>
               +{project.skills.length - 5}
             </span>
@@ -194,17 +226,17 @@ function ProjectCard({
             "disabled:cursor-not-allowed disabled:opacity-30",
             project.isFeatured
               ? [
-                  "border-emerald-200 bg-emerald-50 text-emerald-600",
-                  "hover:border-red-200 hover:bg-red-50 hover:text-red-500",
-                  "dark:border-emerald-500/25 dark:bg-emerald-500/1 dark:text-emerald-400",
-                  "dark:hover:border-red-500/20 dark:hover:bg-red-500/[0.07] dark:hover:text-red-400",
-                ]
+                "border-emerald-200 bg-emerald-50 text-emerald-600",
+                "hover:border-red-200 hover:bg-red-50 hover:text-red-500",
+                "dark:border-emerald-500/25 dark:bg-emerald-500/10 dark:text-emerald-400",
+                "dark:hover:border-red-500/20 dark:hover:bg-red-500/[0.07] dark:hover:text-red-400",
+              ]
               : [
-                  "border-neutral-200 bg-white text-neutral-400",
-                  "hover:border-emerald-200 hover:bg-emerald-50 hover:text-emerald-600",
-                  "dark:border-white/[0.07] dark:bg-transparent dark:text-white/25",
-                  "dark:hover:border-emerald-500/25 dark:hover:bg-emerald-500/8 dark:hover:text-emerald-400",
-                ],
+                "border-neutral-200 bg-white text-neutral-400",
+                "hover:border-neutral-300 hover:bg-neutral-50 hover:text-neutral-700",
+                "dark:border-white/[0.07] dark:bg-transparent dark:text-white/30",
+                "dark:hover:border-white/15 dark:hover:bg-white/5 dark:hover:text-white/70",
+              ],
           )}
         >
           <Star className={cn("size-3.5", project.isFeatured && "fill-current")} />
@@ -218,8 +250,8 @@ function ProjectCard({
             "flex size-8 items-center justify-center rounded-lg border transition-all duration-150",
             "border-neutral-200 bg-white text-neutral-400",
             "hover:border-neutral-300 hover:bg-neutral-50 hover:text-neutral-700",
-            "dark:border-white/[0.07] dark:bg-transparent dark:text-white/25",
-            "dark:hover:border-white/[0.14] dark:hover:bg-white/[0.07] dark:hover:text-white/70",
+            "dark:border-white/[0.07] dark:bg-transparent dark:text-white/30",
+            "dark:hover:border-white/15 dark:hover:bg-white/5 dark:hover:text-white/70",
           )}
         >
           <Pencil className="size-3.5" />
@@ -233,7 +265,7 @@ function ProjectCard({
             "flex size-8 items-center justify-center rounded-lg border transition-all duration-150",
             "border-neutral-200 bg-white text-neutral-400",
             "hover:border-red-200 hover:bg-red-50 hover:text-red-500",
-            "dark:border-white/[0.07] dark:bg-transparent dark:text-white/25",
+            "dark:border-white/[0.07] dark:bg-transparent dark:text-white/30",
             "dark:hover:border-red-500/20 dark:hover:bg-red-500/[0.07] dark:hover:text-red-400",
           )}
         >
@@ -270,13 +302,13 @@ function EditDialog({
   useEffect(() => {
     if (project) {
       setForm({
-        title:       project.title,
+        title: project.title,
         description: project.description,
-        type:        project.type,
-        skills:      project.skills.join(", "),
-        href:        project.href,
-        icon:        project.icon,
-        slug:        project.slug,
+        type: project.type,
+        skills: project.skills.join(", "),
+        href: project.href,
+        icon: project.icon,
+        slug: project.slug,
       })
     }
   }, [project])
@@ -286,7 +318,7 @@ function EditDialog({
     setSaving(true)
     try {
       const response = await apiFetch(`/projects/${project._id}`, {
-        method: "PUT",
+        method: "PATCH",
         body: JSON.stringify({
           ...form,
           skills: form.skills.split(",").map((s) => s.trim()).filter(Boolean),
@@ -312,7 +344,7 @@ function EditDialog({
   ) => (
     <div className="space-y-1.5">
       <Label htmlFor={id} className="text-[10.5px] font-semibold uppercase tracking-widest
-        text-neutral-400 dark:text-white/35">
+        text-neutral-400 dark:text-white/40">
         {label}
       </Label>
       {multiline ? (
@@ -325,9 +357,8 @@ function EditDialog({
           className={cn(
             "resize-none rounded-xl text-[13px]",
             "border-neutral-200 bg-neutral-50 text-neutral-800 placeholder:text-neutral-400",
-            "focus-visible:border-emerald-400 focus-visible:ring-2 focus-visible:ring-emerald-500/10",
-            "dark:border-white/[0.07] dark:bg-white/4 dark:text-white/75 dark:placeholder:text-white/25",
-            "dark:focus-visible:border-emerald-500/40",
+            "focus-visible:border-emerald-500 focus-visible:ring-2 focus-visible:ring-emerald-500/10",
+            "dark:border-white/8 dark:bg-white/5 dark:text-white/80 dark:placeholder:text-white/30",
           )}
         />
       ) : (
@@ -339,9 +370,8 @@ function EditDialog({
           className={cn(
             "h-9 rounded-xl text-[13px]",
             "border-neutral-200 bg-neutral-50 text-neutral-800 placeholder:text-neutral-400",
-            "focus-visible:border-emerald-400 focus-visible:ring-2 focus-visible:ring-emerald-500/10",
-            "dark:border-white/[0.07] dark:bg-white/4 dark:text-white/75 dark:placeholder:text-white/25",
-            "dark:focus-visible:border-emerald-500/40",
+            "focus-visible:border-emerald-500 focus-visible:ring-2 focus-visible:ring-emerald-500/10",
+            "dark:border-white/8 dark:bg-white/5 dark:text-white/80 dark:placeholder:text-white/30",
           )}
         />
       )}
@@ -352,33 +382,61 @@ function EditDialog({
     <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
       <DialogContent className={cn(
         "max-w-lg rounded-[20px] p-6",
-        "border-neutral-200 bg-white dark:border-white/8 dark:bg-[#111]",
+        "border-neutral-200 bg-white dark:border-white/10 dark:bg-[#111]",
       )}>
         <DialogHeader className="mb-1">
           <DialogTitle className="text-[15px] font-semibold
-            text-neutral-900 dark:text-white/90">
+            text-neutral-900 dark:text-white">
             Edit project
           </DialogTitle>
           <DialogDescription className="text-[12.5px]
-            text-neutral-500 dark:text-white/35">
+            text-neutral-500 dark:text-white/40">
             Update the details for{" "}
-            <span className="font-medium text-neutral-700 dark:text-white/60">
+            <span className="font-medium text-neutral-700 dark:text-white/70">
               {project?.title}
             </span>
           </DialogDescription>
         </DialogHeader>
 
         <div className="mt-4 space-y-3.5">
-          {field("title",       "Title",       "Project title")}
+          {field("title", "Title", "Project title")}
           {field("description", "Description", "Short description", true)}
           <div className="grid grid-cols-2 gap-3">
             {field("type", "Type", "e.g. Web App, CLI Tool")}
-            {field("icon", "Icon", "Emoji or icon code")}
+            <div className="space-y-1.5">
+              <Label
+                htmlFor="icon"
+                className="text-[10.5px] font-semibold uppercase tracking-widest
+                text-neutral-400 dark:text-white/40"
+              >
+                Icon
+              </Label>
+
+              <select
+                id="icon"
+                value={form.icon}
+                onChange={(e) =>
+                  setForm((f) => ({ ...f, icon: e.target.value }))
+                }
+                className={cn(
+                  "h-9 w-full rounded-xl border px-3 text-[13px] outline-none",
+                  "border-neutral-200 bg-neutral-50 text-neutral-800",
+                  "focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/10",
+                  "dark:border-white/8 dark:bg-neutral-900 dark:text-white/80",
+                )}
+              >
+                {Object.keys(PROJECT_ICONS).map((name) => (
+                  <option key={name} value={name}>
+                    {name}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
           {field("skills", "Skills", "Next.js, TypeScript, Node.js…")}
           <div className="grid grid-cols-2 gap-3">
             {field("href", "Live URL", "https://…")}
-            {field("slug", "Slug",     "my-project")}
+            {field("slug", "Slug", "my-project")}
           </div>
         </div>
 
@@ -388,7 +446,7 @@ function EditDialog({
             className={cn(
               "h-9 rounded-xl border px-4 text-[12.5px] font-medium transition-colors",
               "border-neutral-200 bg-white text-neutral-600 hover:bg-neutral-50",
-              "dark:border-white/[0.07] dark:bg-transparent dark:text-white/40 dark:hover:bg-white/5",
+              "dark:border-white/8 dark:bg-transparent dark:text-white/50 dark:hover:bg-white/5",
             )}
           >
             Cancel
@@ -398,16 +456,14 @@ function EditDialog({
             disabled={saving}
             className={cn(
               "flex h-9 items-center gap-2 rounded-xl px-5 text-[12.5px] font-semibold transition-all",
-              "border border-emerald-200 bg-emerald-50 text-emerald-700",
-              "hover:border-emerald-300 hover:bg-emerald-100",
-              "dark:border-emerald-500/25 dark:bg-emerald-500/1 dark:text-emerald-300",
-              "dark:hover:bg-emerald-500/16",
+              "bg-neutral-900 text-white hover:bg-neutral-800",
+              "dark:bg-white dark:text-neutral-900 dark:hover:bg-white/90",
               "disabled:cursor-not-allowed disabled:opacity-40",
             )}
           >
             {saving && (
               <span className="size-3.5 animate-spin rounded-full border-2
-                border-emerald-300/30 border-t-emerald-500" />
+                border-white/30 border-t-white dark:border-neutral-900/30 dark:border-t-neutral-900" />
             )}
             Save changes
           </button>
@@ -420,13 +476,13 @@ function EditDialog({
 // ── Page ───────────────────────────────────────────────────────────────────
 export default function AdminPortalProjectsPage() {
   const router = useRouter()
-  const [projects,   setProjects]   = useState<Project[]>([])
-  const [loading,    setLoading]    = useState(true)
-  const [search,     setSearch]     = useState("")
-  const [filter,     setFilter]     = useState<Filter>("all")
+  const [projects, setProjects] = useState<Project[]>([])
+  const [loading, setLoading] = useState(true)
+  const [search, setSearch] = useState("")
+  const [filter, setFilter] = useState<Filter>("all")
   const [editTarget, setEditTarget] = useState<Project | null>(null)
   const [deleteTarget, setDeleteTarget] = useState<Project | null>(null)
-  const [deleting,   setDeleting]   = useState(false)
+  const [deleting, setDeleting] = useState(false)
 
   const featuredCount = projects.filter((p) => p.isFeatured).length
 
@@ -442,9 +498,9 @@ export default function AdminPortalProjectsPage() {
   })
 
   const stats = [
-    { label: "Total",       value: String(projects.length),    accent: false },
-    { label: "Featured",    value: `${featuredCount} / ${MAX_FEATURED}`, accent: true },
-    { label: "Types",       value: String(new Set(projects.map((p) => p.type)).size), accent: false },
+    { label: "Total", value: String(projects.length), accent: false },
+    { label: "Featured", value: `${featuredCount} / ${MAX_FEATURED}`, accent: true },
+    { label: "Types", value: String(new Set(projects.map((p) => p.type)).size), accent: false },
     { label: "Skills used", value: String(new Set(projects.flatMap((p) => p.skills)).size), accent: false },
   ]
 
@@ -473,7 +529,7 @@ export default function AdminPortalProjectsPage() {
 
     try {
       const res = await apiFetch(`/projects/${project._id}`, {
-        method: "PUT",
+        method: "PATCH",
         body: JSON.stringify({ isFeatured: willFeature }),
       })
       if (!res.ok) throw new Error()
@@ -506,15 +562,13 @@ export default function AdminPortalProjectsPage() {
   useEffect(() => { fetchProjects() }, [])
 
   return (
-    <main className="relative min-h-screen overflow-hidden bg-white dark:bg-transparent">
+    <main className="relative min-h-screen overflow-hidden bg-white dark:bg-neutral-950">
 
-      {/* Glows */}
-      <div aria-hidden className="pointer-events-none fixed -top-16 left-1/4 h-56 w-80 rounded-full blur-3xl
-        bg-emerald-400/20 dark:bg-emerald-500/9" />
-      <div aria-hidden className="pointer-events-none fixed -bottom-16 right-1/4 h-52 w-72 rounded-full blur-3xl
-        bg-emerald-400/15 dark:bg-emerald-500/6" />
+      {/* Subtle Glows */}
+      <div aria-hidden className="pointer-events-none fixed -top-24 left-1/4 h-72 w-96 rounded-full blur-[120px]
+        bg-emerald-500/5 dark:bg-emerald-500/10" />
 
-      <div className="relative mx-auto w-full max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
+      <div className="relative mx-auto w-full max-w-5xl px-4 py-8 sm:px-6 lg:px-8">
 
         {/* ── Header ── */}
         <header className="mb-8">
@@ -522,30 +576,29 @@ export default function AdminPortalProjectsPage() {
             <span className={cn(
               "size-2 rounded-full",
               "bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)]",
-              "dark:bg-emerald-400 dark:shadow-[0_0_12px_rgba(52,211,153,0.8)]",
             )} />
             <span className="text-[10px] font-semibold uppercase tracking-[0.18em]
-              text-neutral-400 dark:text-white/35">
+              text-neutral-400 dark:text-white/40">
               Admin Portal
             </span>
-            <span className="text-neutral-200 dark:text-white/15">/</span>
+            <span className="text-neutral-200 dark:text-white/20">/</span>
             <span className="text-[10px] font-semibold uppercase tracking-[0.18em]
-              text-neutral-400 dark:text-white/35">
+              text-neutral-400 dark:text-white/40">
               thedevsden
             </span>
-            <span className="text-neutral-200 dark:text-white/15">/</span>
+            <span className="text-neutral-200 dark:text-white/20">/</span>
             <span className="text-[10px] font-semibold uppercase tracking-[0.18em]
-              text-emerald-600/70 dark:text-emerald-500/55">
+              text-neutral-700 dark:text-white/80">
               Projects
             </span>
           </div>
 
           <h1 className="mb-2 text-3xl font-semibold tracking-tight sm:text-4xl
-            text-neutral-900 dark:text-white/90">
+            text-neutral-900 dark:text-white">
             Projects.
-            <span className="ml-2 text-neutral-300 dark:text-white/25">Manage all.</span>
+            <span className="ml-2 text-neutral-400 dark:text-white/40">Manage all.</span>
           </h1>
-          <p className="max-w-md text-sm leading-6 text-neutral-500 dark:text-white/35">
+          <p className="max-w-md text-sm leading-6 text-neutral-500 dark:text-white/50">
             Add, update, delete and feature projects shown on your portfolio.
           </p>
         </header>
@@ -555,15 +608,15 @@ export default function AdminPortalProjectsPage() {
           {stats.map(({ label, value, accent }) => (
             <div key={label} className={cn(
               "rounded-[16px] border p-4",
-              "border-neutral-200 bg-white shadow-sm shadow-neutral-900/4",
-              "dark:border-white/[0.07] dark:bg-white/3 dark:shadow-none",
+              "border-neutral-200 bg-white shadow-xs shadow-neutral-900/4",
+              "dark:border-white/[0.07] dark:bg-white/2 dark:shadow-none",
             )}>
-              <p className="text-[11px] font-medium text-neutral-400 dark:text-white/30">
+              <p className="text-[11px] font-medium text-neutral-400 dark:text-white/40">
                 {label}
               </p>
               <p className={cn(
                 "mt-1 text-[24px] font-semibold tracking-[-0.03em]",
-                accent ? "text-emerald-600 dark:text-emerald-400" : "text-neutral-800 dark:text-white/88",
+                accent ? "text-emerald-600 dark:text-emerald-400" : "text-neutral-900 dark:text-white",
               )}>
                 {value}
               </p>
@@ -580,19 +633,19 @@ export default function AdminPortalProjectsPage() {
         <div className="mb-5 flex flex-wrap items-center gap-2.5">
           <div className="relative min-w-45 flex-1">
             <Search className="absolute left-3 top-1/2 size-3.5 -translate-y-1/2
-              text-neutral-400 dark:text-white/20" />
+              text-neutral-400 dark:text-white/30" />
             <input
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search by title, type or skill…"
               className={cn(
                 "h-9 w-full rounded-xl pl-9 pr-4 text-[12.5px] outline-none transition-all",
-                "border border-neutral-200 bg-white shadow-sm shadow-neutral-900/4",
-                "text-neutral-700 placeholder:text-neutral-400",
-                "focus:border-emerald-300 focus:bg-emerald-50/30 focus:ring-2 focus:ring-emerald-500/10",
-                "dark:border-white/[0.07] dark:bg-white/4 dark:shadow-none",
-                "dark:text-white/70 dark:placeholder:text-white/20",
-                "dark:focus:border-emerald-500/30 dark:focus:bg-emerald-500/4 dark:focus:ring-0",
+                "border border-neutral-200 bg-white shadow-xs shadow-neutral-900/4",
+                "text-neutral-800 placeholder:text-neutral-400",
+                "focus:border-neutral-400 focus:ring-2 focus:ring-neutral-900/10",
+                "dark:border-white/[0.07] dark:bg-white/2 dark:shadow-none",
+                "dark:text-white/80 dark:placeholder:text-white/30",
+                "dark:focus:border-white/20 dark:focus:ring-0",
               )}
             />
           </div>
@@ -605,11 +658,11 @@ export default function AdminPortalProjectsPage() {
               className={cn(
                 "flex h-9 items-center gap-2 rounded-xl px-3.5 text-[12px] font-medium transition-all",
                 filter === f
-                  ? "border border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-500/25 dark:bg-emerald-500/1 dark:text-emerald-400"
-                  : "border border-neutral-200 bg-white text-neutral-500 hover:border-emerald-200 hover:bg-emerald-50 hover:text-emerald-700 dark:border-white/[0.07] dark:bg-white/3 dark:text-white/35 dark:hover:bg-white/6",
+                  ? "border border-neutral-300 bg-neutral-900 text-white dark:border-white/20 dark:bg-white dark:text-neutral-900"
+                  : "border border-neutral-200 bg-white text-neutral-600 hover:border-neutral-300 hover:bg-neutral-50 dark:border-white/[0.07] dark:bg-white/2 dark:text-white/50 dark:hover:bg-white/5 dark:hover:text-white",
               )}
             >
-              {f === "featured" && <Star className="size-3 fill-current" />}
+              {f === "featured" && <Star className="size-3 fill-current text-emerald-500" />}
               {f.charAt(0).toUpperCase() + f.slice(1)}
             </button>
           ))}
@@ -620,10 +673,10 @@ export default function AdminPortalProjectsPage() {
             className={cn(
               "group flex h-9 items-center gap-2 rounded-xl px-4 text-[12.5px] font-semibold",
               "transition-all duration-150 active:scale-[0.98]",
-              "border border-emerald-200 bg-emerald-50 text-emerald-700",
-              "hover:border-emerald-300 hover:bg-emerald-100",
-              "dark:border-emerald-500/20 dark:bg-emerald-500/8 dark:text-emerald-400/80",
-              "dark:hover:border-emerald-500/35 dark:hover:bg-emerald-500/13 dark:hover:text-emerald-400",
+              "border border-emerald-500/30 bg-emerald-50 text-emerald-700",
+              "hover:border-emerald-500 hover:bg-emerald-100",
+              "dark:border-emerald-500/30 dark:bg-emerald-500/10 dark:text-emerald-400",
+              "dark:hover:bg-emerald-500/20",
             )}
           >
             <Plus className="size-4 transition-transform duration-200 group-hover:rotate-90" />
@@ -634,11 +687,11 @@ export default function AdminPortalProjectsPage() {
         {/* ── Project list ── */}
         <div className="mb-4 flex items-center gap-3">
           <p className="text-[9px] font-bold uppercase tracking-[0.18em]
-            text-emerald-600/60 dark:text-emerald-500/50 whitespace-nowrap">
+            text-neutral-400 dark:text-white/40 whitespace-nowrap">
             {filter === "featured" ? "Featured projects" : "All projects"}
           </p>
-          <div className="h-px flex-1 bg-neutral-100 dark:bg-white/5" />
-          <p className="text-[10px] text-neutral-400 dark:text-white/20 whitespace-nowrap">
+          <div className="h-px flex-1 bg-neutral-200 dark:bg-white/10" />
+          <p className="text-[10px] text-neutral-400 dark:text-white/30 whitespace-nowrap">
             {filtered.length} project{filtered.length !== 1 ? "s" : ""}
           </p>
         </div>
@@ -649,16 +702,16 @@ export default function AdminPortalProjectsPage() {
               <div key={i} className={cn(
                 "h-27.5 animate-pulse rounded-[16px] border",
                 "border-neutral-200 bg-neutral-50",
-                "dark:border-white/[0.07] dark:bg-white/3",
+                "dark:border-white/[0.07] dark:bg-white/2",
               )} />
             ))}
           </div>
         ) : filtered.length === 0 ? (
           <div className="flex flex-col items-center justify-center gap-2 py-20">
-            <p className="text-sm font-medium text-neutral-400 dark:text-white/20">
+            <p className="text-sm font-medium text-neutral-400 dark:text-white/30">
               {search ? "No projects match your search" : "No projects yet"}
             </p>
-            <p className="text-xs text-neutral-300 dark:text-white/12">
+            <p className="text-xs text-neutral-300 dark:text-white/20">
               {search ? "Try a different keyword" : "Add your first project to get started"}
             </p>
           </div>
@@ -695,16 +748,16 @@ export default function AdminPortalProjectsPage() {
       >
         <AlertDialogContent className={cn(
           "max-w-sm rounded-[20px]",
-          "border-neutral-200 bg-white dark:border-white/8 dark:bg-[#111]",
+          "border-neutral-200 bg-white dark:border-white/10 dark:bg-[#111]",
         )}>
           <AlertDialogHeader>
             <AlertDialogTitle className="text-[15px] font-semibold
-              text-neutral-900 dark:text-white/90">
+              text-neutral-900 dark:text-white">
               Delete project?
             </AlertDialogTitle>
             <AlertDialogDescription className="text-[12.5px]
-              text-neutral-500 dark:text-white/40">
-              <span className="font-semibold text-neutral-700 dark:text-white/65">
+              text-neutral-500 dark:text-white/50">
+              <span className="font-semibold text-neutral-700 dark:text-white/80">
                 {deleteTarget?.title}
               </span>{" "}
               will be permanently removed. This cannot be undone.
@@ -714,7 +767,7 @@ export default function AdminPortalProjectsPage() {
             <AlertDialogCancel className={cn(
               "h-9 rounded-xl border text-[12.5px] font-medium",
               "border-neutral-200 bg-white text-neutral-600 hover:bg-neutral-50",
-              "dark:border-white/[0.07] dark:bg-transparent dark:text-white/40",
+              "dark:border-white/8 dark:bg-transparent dark:text-white/50",
             )}>
               Cancel
             </AlertDialogCancel>

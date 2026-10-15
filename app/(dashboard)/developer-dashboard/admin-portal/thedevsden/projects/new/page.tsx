@@ -6,21 +6,43 @@ import Link from "next/link"
 import {
   ArrowLeft,
   Blocks,
+  Brain,
+  Circle,
   Code2,
+  Flame,
+  Globe,
   Info,
-  Layers,
+  Lightbulb,
+  Rocket,
   Save,
+  Settings,
+  Shield,
+  Smartphone,
   Sparkles,
+  Target,
+  Wrench,
   X,
+  Zap,
 } from "lucide-react"
 import { toast } from "sonner"
 import { cn } from "@/lib/utils"
 import { apiFetch } from "@/lib/api"
 import { Switch } from "@/components/ui/switch"
-import { Label } from "@/components/ui/label"
 
-// ── Quick-pick icon options ────────────────────────────────────────────────
-const ICON_PRESETS = ["🟢", "⚡", "🚀", "🧠", "🛠️", "🌐", "📱", "🔒", "🎯", "🔥", "💡", "⚙️"]
+const ICON_PRESETS = [
+  { name: "Circle", icon: Circle },
+  { name: "Zap", icon: Zap },
+  { name: "Rocket", icon: Rocket },
+  { name: "Brain", icon: Brain },
+  { name: "Wrench", icon: Wrench },
+  { name: "Globe", icon: Globe },
+  { name: "Smartphone", icon: Smartphone },
+  { name: "Shield", icon: Shield },
+  { name: "Target", icon: Target },
+  { name: "Flame", icon: Flame },
+  { name: "Lightbulb", icon: Lightbulb },
+  { name: "Settings", icon: Settings },
+]
 
 // ── Skill tag input ────────────────────────────────────────────────────────
 function SkillInput({
@@ -59,14 +81,12 @@ function SkillInput({
         (e.currentTarget.querySelector("input") as HTMLInputElement)?.focus()
       }
       className={cn(
-        "flex min-h-[44px] cursor-text flex-wrap gap-1.5 rounded-xl border px-3 py-2",
+        "flex min-h-11 cursor-text flex-wrap gap-1.5 rounded-xl border px-3 py-2",
         "transition-colors duration-150",
-        // Light
         "border-neutral-200 bg-neutral-50",
         "focus-within:border-emerald-300 focus-within:bg-emerald-50/30 focus-within:ring-2 focus-within:ring-emerald-500/10",
-        // Dark
-        "dark:border-white/[0.07] dark:bg-white/[0.04]",
-        "dark:focus-within:border-emerald-500/35 dark:focus-within:bg-emerald-500/[0.04] dark:focus-within:ring-0",
+        "dark:border-white/[0.07] dark:bg-white/4",
+        "dark:focus-within:border-emerald-500/35 dark:focus-within:bg-emerald-500/4 dark:focus-within:ring-0",
       )}
     >
       {skills.map((skill) => (
@@ -75,7 +95,7 @@ function SkillInput({
           className={cn(
             "inline-flex items-center gap-1 rounded-[6px] border px-2 py-0.5 text-[11.5px] font-medium",
             "border-emerald-200/80 bg-emerald-50 text-emerald-700",
-            "dark:border-emerald-500/25 dark:bg-emerald-500/[0.1] dark:text-emerald-300/90",
+            "dark:border-emerald-500/25 dark:bg-emerald-500/1 dark:text-emerald-300/90",
           )}
         >
           {skill}
@@ -94,7 +114,7 @@ function SkillInput({
         onKeyDown={handleKeyDown}
         onBlur={() => addSkill(input)}
         placeholder={skills.length ? "Add more…" : "Type a skill and press Enter…"}
-        className="min-w-[100px] flex-1 bg-transparent text-[13px] outline-none
+        className="min-w-25 flex-1 bg-transparent text-[13px] outline-none
           text-neutral-700 placeholder:text-neutral-400
           dark:text-white/65 dark:placeholder:text-white/25"
       />
@@ -105,14 +125,12 @@ function SkillInput({
 // ── Shared field styles ────────────────────────────────────────────────────
 const inputClass = cn(
   "h-10 w-full rounded-xl px-4 text-[13px] outline-none transition-all duration-150",
-  // Light
   "border border-neutral-200 bg-neutral-50",
   "text-neutral-800 placeholder:text-neutral-400",
   "focus:border-emerald-300 focus:bg-emerald-50/30 focus:ring-2 focus:ring-emerald-500/10",
-  // Dark
-  "dark:border-white/[0.07] dark:bg-white/[0.04]",
+  "dark:border-white/[0.07] dark:bg-white/4",
   "dark:text-white/75 dark:placeholder:text-white/25",
-  "dark:focus:border-emerald-500/35 dark:focus:bg-emerald-500/[0.04] dark:focus:ring-0",
+  "dark:focus:border-emerald-500/35 dark:focus:bg-emerald-500/4 dark:focus:ring-0",
 )
 
 const textareaClass = cn(
@@ -120,9 +138,9 @@ const textareaClass = cn(
   "border border-neutral-200 bg-neutral-50",
   "text-neutral-800 placeholder:text-neutral-400",
   "focus:border-emerald-300 focus:bg-emerald-50/30 focus:ring-2 focus:ring-emerald-500/10",
-  "dark:border-white/[0.07] dark:bg-white/[0.04]",
+  "dark:border-white/[0.07] dark:bg-white/4",
   "dark:text-white/75 dark:placeholder:text-white/25",
-  "dark:focus:border-emerald-500/35 dark:focus:bg-emerald-500/[0.04] dark:focus:ring-0",
+  "dark:focus:border-emerald-500/35 dark:focus:bg-emerald-500/4 dark:focus:ring-0",
 )
 
 const fieldLabel = cn(
@@ -145,19 +163,17 @@ function SectionCard({
   return (
     <div className={cn(
       "rounded-[18px] border p-5",
-      // Light
-      "border-neutral-200 bg-white shadow-sm shadow-neutral-900/[0.04]",
-      // Dark
-      "dark:border-white/[0.07] dark:bg-white/[0.03] dark:shadow-none dark:backdrop-blur-xl",
+      "border-neutral-200 bg-white shadow-sm shadow-neutral-900/4",
+      "dark:border-white/[0.07] dark:bg-white/3 dark:shadow-none dark:backdrop-blur-xl",
     )}>
       <div className={cn(
         "mb-5 flex items-center gap-3 pb-4",
-        "border-b border-neutral-100 dark:border-white/[0.06]",
+        "border-b border-neutral-100 dark:border-white/6",
       )}>
         <div className={cn(
           "flex size-8 items-center justify-center rounded-xl",
           "border border-emerald-200/80 bg-emerald-50 text-emerald-600",
-          "dark:border-emerald-500/20 dark:bg-emerald-500/[0.08] dark:text-emerald-400",
+          "dark:border-emerald-500/20 dark:bg-emerald-500/8 dark:text-emerald-400",
         )}>
           <Icon className="size-4" />
         </div>
@@ -179,18 +195,16 @@ function SectionCard({
 export default function AdminPortalNewProjectPage() {
   const router = useRouter()
 
-  const [title,       setTitle]       = useState("")
+  const [title, setTitle] = useState("")
   const [description, setDescription] = useState("")
-  const [type,        setType]        = useState("")
-  const [skills,      setSkills]      = useState<string[]>([])
-  const [href,        setHref]        = useState("")
-  const [slug,        setSlug]        = useState("")
-  const [icon,        setIcon]        = useState("🟢")
-  const [customIcon,  setCustomIcon]  = useState("")
-  const [isFeatured,  setIsFeatured]  = useState(false)
-  const [saving,      setSaving]      = useState(false)
+  const [type, setType] = useState("")
+  const [skills, setSkills] = useState<string[]>([])
+  const [href, setHref] = useState("")
+  const [slug, setSlug] = useState("")
+  const [icon, setIcon] = useState("Circle")
+  const [isFeatured, setIsFeatured] = useState(false)
+  const [saving, setSaving] = useState(false)
 
-  // Auto-generate slug from title
   function handleTitleChange(value: string) {
     setTitle(value)
     if (!slug || slug === slugify(title)) {
@@ -208,27 +222,25 @@ export default function AdminPortalNewProjectPage() {
   async function handleSubmit(e: SyntheticEvent<HTMLFormElement>) {
     e.preventDefault()
 
-    if (!title.trim())       { toast.error("Title is required");       return }
+    if (!title.trim()) { toast.error("Title is required"); return }
     if (!description.trim()) { toast.error("Description is required"); return }
-    if (!type.trim())        { toast.error("Type is required");        return }
-    if (skills.length === 0) { toast.error("Add at least one skill");  return }
-    if (!href.trim())        { toast.error("Live URL is required");    return }
-    if (!slug.trim())        { toast.error("Slug is required");        return }
-
-    const finalIcon = customIcon.trim() || icon
+    if (!type.trim()) { toast.error("Type is required"); return }
+    if (skills.length === 0) { toast.error("Add at least one skill"); return }
+    if (!href.trim()) { toast.error("Live URL is required"); return }
+    if (!slug.trim()) { toast.error("Slug is required"); return }
 
     setSaving(true)
     try {
       const res = await apiFetch("/projects", {
         method: "POST",
         body: JSON.stringify({
-          title:       title.trim(),
+          title: title.trim(),
           description: description.trim(),
-          type:        type.trim(),
+          type: type.trim(),
           skills,
-          href:        href.trim(),
-          icon:        finalIcon,
-          slug:        slug.trim().toLowerCase(),
+          href: href.trim(),
+          icon: icon,
+          slug: slug.trim().toLowerCase(),
           isFeatured,
         }),
       })
@@ -238,7 +250,7 @@ export default function AdminPortalNewProjectPage() {
         try {
           const body = await res.json()
           if (typeof body?.message === "string") message = body.message
-        } catch {}
+        } catch { }
         toast.error(message)
         return
       }
@@ -257,11 +269,11 @@ export default function AdminPortalNewProjectPage() {
 
       {/* Glows */}
       <div aria-hidden className="pointer-events-none fixed -top-16 left-1/4 h-56 w-80 rounded-full blur-3xl
-        bg-emerald-400/20 dark:bg-emerald-500/[0.09]" />
+        bg-emerald-400/20 dark:bg-emerald-500/9" />
       <div aria-hidden className="pointer-events-none fixed -bottom-16 right-1/4 h-52 w-72 rounded-full blur-3xl
-        bg-emerald-400/15 dark:bg-emerald-500/[0.06]" />
+        bg-emerald-400/15 dark:bg-emerald-500/6" />
 
-      <div className="relative mx-auto w-full max-w-3xl px-4 py-8 sm:px-6 lg:px-8">
+      <div className="relative mx-auto w-full max-w-5xl px-4 py-8 sm:px-6 lg:px-8">
 
         {/* ── Header ── */}
         <header className="mb-8">
@@ -286,7 +298,7 @@ export default function AdminPortalNewProjectPage() {
             </span>
           </div>
 
-          <div className="mb-5 h-[2px] w-7 rounded-full bg-emerald-500" />
+          <div className="mb-5 h-0.5 w-7 rounded-full bg-emerald-500" />
 
           <h1 className="mb-2 text-3xl font-semibold tracking-tight sm:text-4xl
             text-neutral-900 dark:text-white/90">
@@ -395,44 +407,31 @@ export default function AdminPortalNewProjectPage() {
           {/* ── Icon ── */}
           <SectionCard icon={Blocks} title="Icon" subtitle="Shown on the project card — pick a preset or type your own">
             <div className="flex flex-wrap items-center gap-2">
-              {ICON_PRESETS.map((preset) => (
+              {ICON_PRESETS.map(({ name, icon: IconComponent }) => (
                 <button
-                  key={preset}
+                  key={name}
                   type="button"
-                  onClick={() => { setIcon(preset); setCustomIcon("") }}
+                  title={name}
+                  aria-label={name}
+                  onClick={() => {
+                    setIcon(name)
+                  }}
                   className={cn(
-                    "flex size-10 items-center justify-center rounded-xl border text-xl transition-all duration-100",
-                    icon === preset && !customIcon
+                    "flex size-10 items-center justify-center rounded-xl border transition-all duration-100",
+                    icon === name
                       ? [
-                          "border-emerald-300 bg-emerald-50 shadow-[0_0_0_2px_rgba(52,211,153,0.2)]",
-                          "dark:border-emerald-500/35 dark:bg-emerald-500/[0.12]",
-                        ]
+                        "border-emerald-300 bg-emerald-50 shadow-[0_0_0_2px_rgba(52,211,153,0.2)]",
+                        "dark:border-emerald-500/35 dark:bg-emerald-500/12",
+                      ]
                       : [
-                          "border-neutral-200 bg-white hover:border-neutral-300",
-                          "dark:border-white/[0.07] dark:bg-white/[0.03] dark:hover:border-white/[0.14]",
-                        ],
+                        "border-neutral-200 bg-white hover:border-neutral-300",
+                        "dark:border-white/[0.07] dark:bg-white/3 dark:hover:border-white/[0.14]",
+                      ],
                   )}
                 >
-                  {preset}
+                  <IconComponent className="size-5 text-emerald-600 dark:text-emerald-400" />
                 </button>
               ))}
-
-              {/* Custom input */}
-              <input
-                value={customIcon}
-                onChange={(e) => { setCustomIcon(e.target.value); setIcon("") }}
-                placeholder="Custom…"
-                maxLength={4}
-                className={cn(
-                  "h-10 w-24 rounded-xl px-3 text-center text-[16px] outline-none transition-all",
-                  "border border-neutral-200 bg-white",
-                  "placeholder:text-neutral-400 placeholder:text-[13px]",
-                  "focus:border-emerald-300 focus:ring-2 focus:ring-emerald-500/10",
-                  "dark:border-white/[0.07] dark:bg-white/[0.04]",
-                  "dark:text-white/75 dark:placeholder:text-white/25",
-                  "dark:focus:border-emerald-500/35 dark:focus:ring-0",
-                )}
-              />
             </div>
           </SectionCard>
 
@@ -482,7 +481,7 @@ export default function AdminPortalNewProjectPage() {
                   "border-neutral-200 bg-white text-neutral-500",
                   "hover:border-neutral-300 hover:bg-neutral-50 hover:text-neutral-700",
                   "dark:border-white/[0.07] dark:bg-transparent dark:text-white/35",
-                  "dark:hover:bg-white/[0.05] dark:hover:text-white/60",
+                  "dark:hover:bg-white/5 dark:hover:text-white/60",
                   "disabled:cursor-not-allowed disabled:opacity-40",
                 )}
               >
@@ -497,8 +496,8 @@ export default function AdminPortalNewProjectPage() {
                   "transition-all duration-150 active:scale-[0.98]",
                   "border border-emerald-200 bg-emerald-50 text-emerald-700",
                   "hover:border-emerald-300 hover:bg-emerald-100",
-                  "dark:border-emerald-500/25 dark:bg-emerald-500/[0.1] dark:text-emerald-300",
-                  "dark:hover:border-emerald-500/40 dark:hover:bg-emerald-500/[0.16]",
+                  "dark:border-emerald-500/25 dark:bg-emerald-500/1 dark:text-emerald-300",
+                  "dark:hover:border-emerald-500/40 dark:hover:bg-emerald-500/16",
                   "disabled:cursor-not-allowed disabled:opacity-40",
                 )}
               >
