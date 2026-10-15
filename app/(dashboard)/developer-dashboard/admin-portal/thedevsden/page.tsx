@@ -1,4 +1,4 @@
-import { MessageCircle, MessageSquareQuote, Plus } from "lucide-react"
+import { CodeXml, MessageCircle, MessageSquareQuote, Plus } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { PortalLink } from "@/lib/admin-portal-links"
 import { PortalCard } from "@/components/developer-dashboard/portal-card"
@@ -15,6 +15,12 @@ const portalLinks: PortalLink[] = [
     description: "Viewing all the messages sent to me via the portfolio mode of the 'thedevsden'",
     href: "/developer-dashboard/admin-portal/thedevsden/contact-me",
     icon: MessageCircle
+  },
+  {
+    title: "Projects",
+    description: "Managing all my latest projects for the portfolio mode of 'thedevsden'",
+    href: "/developer-dashboard/admin-portal/thedevsden/projects",
+    icon: CodeXml
   }
 ]
 
