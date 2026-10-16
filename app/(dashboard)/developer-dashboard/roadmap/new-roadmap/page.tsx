@@ -17,6 +17,7 @@ import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 
 import { cn } from "@/lib/utils"
+import { apiFetch } from "@/lib/api"
 
 type Visibility = "private" | "public" | "unlisted"
 
@@ -103,11 +104,8 @@ export default function RoadmapCreatorPage() {
     setIsSubmitting(true)
 
     try {
-      const response = await fetch(`${API_URL.replace(/\/$/, "")}/roadmap`, {
+      const response = await apiFetch(`/roadmap`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
         body: JSON.stringify(payload),
       })
 

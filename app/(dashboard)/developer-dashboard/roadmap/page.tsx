@@ -56,7 +56,7 @@ export default function RoadmapPage() {
       }
 
       try {
-        const res = await fetch(`${API_URL.replace(/\/+$/, "")}/roadmap`)
+        const res = await apiFetch("/roadmap")
         if (!res.ok) {
           throw new Error("Failed to fetch roadmaps from backend.")
         }

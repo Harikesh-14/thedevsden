@@ -142,6 +142,7 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
       "Content-Type": "application/json",
       ...init?.headers,
     },
+    credentials: "include"
   })
 
   const result = await response.json().catch(() => null)
