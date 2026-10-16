@@ -42,19 +42,19 @@ export default function DeveloperDashboardPage() {
   const quickLinks = [
     {
       label: "Project Planner",
-      href: "/project-planner",
+      href: "/developer-dashboard/project-planner",
       icon: LayoutDashboard,
       meta: `${projectPlans} project(s) available`,
     },
     {
       label: "Task Planner",
-      href: "/task-planner",
+      href: "/developer-dashboard/task-planner",
       icon: ListTodo,
       meta: `${taskCount} task(s) pending`,
     },
     {
       label: "Roadmap",
-      href: "/roadmap",
+      href: "/developer-dashboard/roadmap",
       icon: Map,
       meta: `${roadmaps} roadmap(s) pending`,
     },

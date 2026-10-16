@@ -337,7 +337,7 @@ export default function Sidebar() {
               htmlFor="toggle-portfolio"
               className="cursor-pointer text-[11.5px] font-medium text-neutral-600 dark:text-neutral-400"
             >
-              Portfolio mode
+              Dev mode
             </Label>
 
             {isDeveloperModeLoaded && (
