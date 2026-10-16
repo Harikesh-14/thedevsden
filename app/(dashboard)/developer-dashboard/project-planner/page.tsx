@@ -27,6 +27,7 @@ import {
 import { apiFetch } from "@/lib/api"
 import { toast } from "sonner"
 import { formatRelativeTime } from "@/lib/helper-functions"
+import LoaderPage from "@/components/developer-dashboard/loader"
 
 // ── Helpers ────────────────────────────────────────────────────────────────
 function getDominantCategory(skills: ProjectPlan["skills"]): SkillCategory {
@@ -366,6 +367,7 @@ export default function ProjectPlannerPage() {
   const [view, setView] = useState<"grid" | "list">("grid")
   const [projectPlans, setProjectPlans] = useState<ProjectPlan[]>([])
   const [projectStats, setProjectStats] = useState<ProjectStatsResponse>()
+  const [loading, setLoading] = useState<boolean>(false)
   const router = useRouter()
 
   const stats = [
@@ -399,16 +401,27 @@ export default function ProjectPlannerPage() {
 
   // ── API ──────────────────────────────────────────────────────────────────
   async function fetchProjectPlans() {
-    const response = await apiFetch("/new-projects-plan/get/all")
-    if (!response.ok) {
+    setLoading(true)
+
+    try {
+      const response = await apiFetch("/new-projects-plan/get/all")
+      if (!response.ok) {
+        toast.error("Oops", {
+          description: "Error fetching the project plans",
+          closeButton: true,
+        })
+        throw new Error("Error fetching the project plans")
+      }
+      const data: ProjectPlan[] = await response.json()
+      setProjectPlans(data)
+    } catch {
       toast.error("Oops", {
-        description: "Error fetching the project plans",
-        closeButton: true,
+        description: "Failed to fetch the plans due to some unforeseen errors",
+        closeButton: true
       })
-      throw new Error("Error fetching the project plans")
+    } finally {
+      setLoading(false)
     }
-    const data: ProjectPlan[] = await response.json()
-    setProjectPlans(data)
   }
 
   async function fetchOverallStats() {
@@ -488,121 +501,121 @@ export default function ProjectPlannerPage() {
   }, [])
 
   return (
-    <main
-      className={cn(
-        "relative min-h-screen overflow-hidden",
-        // Light: a barely-there tint so cards lift off the page
-        "bg-white dark:bg-transparent"
-      )}
-    >
-      {/* Ambient glows — stronger in light mode so they're actually visible */}
-      <div
-        aria-hidden
-        className="pointer-events-none fixed -top-16 left-1/4 h-56 w-80 rounded-full bg-emerald-400/20 blur-3xl dark:bg-emerald-500/9"
-      />
-      <div
-        aria-hidden
-        className="pointer-events-none fixed right-1/4 -bottom-16 h-52 w-72 rounded-full bg-emerald-400/15 blur-3xl dark:bg-emerald-500/6"
-      />
+    loading ? <LoaderPage /> : (
+      <main
+        className={cn(
+          "relative min-h-screen overflow-hidden",
+          "bg-white dark:bg-transparent"
+        )}
+      >
+        {/* Ambient glows — stronger in light mode so they're actually visible */}
+        <div
+          aria-hidden
+          className="pointer-events-none fixed -top-16 left-1/4 h-56 w-80 rounded-full bg-emerald-400/20 blur-3xl dark:bg-emerald-500/9"
+        />
+        <div
+          aria-hidden
+          className="pointer-events-none fixed right-1/4 -bottom-16 h-52 w-72 rounded-full bg-emerald-400/15 blur-3xl dark:bg-emerald-500/6"
+        />
 
-      <div className="relative mx-auto w-full max-w-5xl px-4 py-8 sm:px-6 lg:px-8">
-        {/* ── Header ── */}
-        <header className="mb-8 flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
-          <div>
-            <div className="mb-3 flex items-center gap-2">
-              <span
-                className={cn(
-                  "size-2 rounded-full",
-                  "bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)]",
-                  "dark:bg-emerald-400 dark:shadow-[0_0_12px_rgba(52,211,153,0.8)]"
-                )}
-              />
-              <span className="text-[10px] font-semibold tracking-[0.18em] text-neutral-400 uppercase dark:text-white/35">
-                Project Planner
-              </span>
+        <div className="relative mx-auto w-full max-w-5xl px-4 py-8 sm:px-6 lg:px-8">
+          {/* ── Header ── */}
+          <header className="mb-8 flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <div className="mb-3 flex items-center gap-2">
+                <span
+                  className={cn(
+                    "size-2 rounded-full",
+                    "bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)]",
+                    "dark:bg-emerald-400 dark:shadow-[0_0_12px_rgba(52,211,153,0.8)]"
+                  )}
+                />
+                <span className="text-[10px] font-semibold tracking-[0.18em] text-neutral-400 uppercase dark:text-white/35">
+                  Project Planner
+                </span>
+              </div>
+
+              <h1 className="text-3xl font-semibold tracking-tight text-neutral-900 sm:text-4xl dark:text-white/90">
+                Your projects.
+                <span className="ml-2 text-neutral-300 dark:text-white/25">
+                  Your vision.
+                </span>
+              </h1>
+
+              <p className="mt-2 max-w-md text-sm leading-6 text-neutral-500 dark:text-white/35">
+                Plan, organise and track every project from idea to execution.
+              </p>
             </div>
 
-            <h1 className="text-3xl font-semibold tracking-tight text-neutral-900 sm:text-4xl dark:text-white/90">
-              Your projects.
-              <span className="ml-2 text-neutral-300 dark:text-white/25">
-                Your vision.
-              </span>
-            </h1>
-
-            <p className="mt-2 max-w-md text-sm leading-6 text-neutral-500 dark:text-white/35">
-              Plan, organise and track every project from idea to execution.
-            </p>
-          </div>
-
-          <button
-            onClick={() =>
-              router.push("/developer-dashboard/project-planner/new-plan")
-            }
-            className={cn(
-              "group flex h-10 items-center gap-2 rounded-xl px-4",
-              "text-[12.5px] font-semibold transition-all duration-150 active:scale-[0.98]",
-              "border border-emerald-200 bg-emerald-50 text-emerald-700",
-              "hover:border-emerald-300 hover:bg-emerald-100",
-              "dark:border-emerald-500/20 dark:bg-emerald-500/8 dark:text-emerald-400/80",
-              "dark:hover:border-emerald-500/35 dark:hover:bg-emerald-500/13 dark:hover:text-emerald-400"
-            )}
-          >
-            <Plus className="size-4 transition-transform duration-200 group-hover:rotate-90" />
-            New plan
-          </button>
-        </header>
-
-        {/* ── Stats ── */}
-        <section className="mb-5 grid grid-cols-2 gap-3 sm:grid-cols-4">
-          {stats.map(({ label, value, accent }) => (
-            <div
-              key={label}
+            <button
+              onClick={() =>
+                router.push("/developer-dashboard/project-planner/new-plan")
+              }
               className={cn(
-                "rounded-[18px] border p-4 backdrop-blur-xl",
-                "border-neutral-200 bg-white shadow-sm shadow-neutral-900/4",
-                "dark:border-white/[0.07] dark:bg-white/3 dark:shadow-none"
+                "group flex h-10 items-center gap-2 rounded-xl px-4",
+                "text-[12.5px] font-semibold transition-all duration-150 active:scale-[0.98]",
+                "border border-emerald-200 bg-emerald-50 text-emerald-700",
+                "hover:border-emerald-300 hover:bg-emerald-100",
+                "dark:border-emerald-500/20 dark:bg-emerald-500/8 dark:text-emerald-400/80",
+                "dark:hover:border-emerald-500/35 dark:hover:bg-emerald-500/13 dark:hover:text-emerald-400"
               )}
             >
-              <p className="text-[11px] font-medium text-neutral-400 dark:text-white/30">
-                {label}
-              </p>
-              <p
+              <Plus className="size-4 transition-transform duration-200 group-hover:rotate-90" />
+              New plan
+            </button>
+          </header>
+
+          {/* ── Stats ── */}
+          <section className="mb-5 grid grid-cols-2 gap-3 sm:grid-cols-4">
+            {stats.map(({ label, value, accent }) => (
+              <div
+                key={label}
                 className={cn(
-                  "mt-1 text-[26px] font-semibold tracking-[-0.03em]",
-                  accent
-                    ? "text-emerald-600 dark:text-emerald-400"
-                    : "text-neutral-800 dark:text-white/88"
+                  "rounded-[18px] border p-4 backdrop-blur-xl",
+                  "border-neutral-200 bg-white shadow-sm shadow-neutral-900/4",
+                  "dark:border-white/[0.07] dark:bg-white/3 dark:shadow-none"
                 )}
               >
-                {value}
-              </p>
+                <p className="text-[11px] font-medium text-neutral-400 dark:text-white/30">
+                  {label}
+                </p>
+                <p
+                  className={cn(
+                    "mt-1 text-[26px] font-semibold tracking-[-0.03em]",
+                    accent
+                      ? "text-emerald-600 dark:text-emerald-400"
+                      : "text-neutral-800 dark:text-white/88"
+                  )}
+                >
+                  {value}
+                </p>
+              </div>
+            ))}
+          </section>
+
+          {/* ── Toolbar ── */}
+          <div className="mb-5 flex flex-wrap items-center gap-2.5">
+            {/* Search */}
+            <div className="relative min-w-45 flex-1">
+              <Search className="absolute top-1/2 left-3 size-3.5 -translate-y-1/2 text-neutral-400 dark:text-white/20" />
+              <input
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Search project plans…"
+                className={cn(
+                  "h-9 w-full rounded-xl pr-4 pl-9 transition-all duration-150 outline-none",
+                  "border border-neutral-200 bg-white shadow-sm shadow-neutral-900/4",
+                  "text-[12.5px] text-neutral-700 placeholder:text-neutral-400",
+                  "focus:border-emerald-300 focus:bg-emerald-50/40 focus:ring-2 focus:ring-emerald-500/10",
+                  "dark:border-white/[0.07] dark:bg-white/4 dark:shadow-none",
+                  "dark:text-white/70 dark:placeholder:text-white/20",
+                  "dark:focus:border-emerald-500/30 dark:focus:bg-emerald-500/4 dark:focus:ring-0"
+                )}
+              />
             </div>
-          ))}
-        </section>
 
-        {/* ── Toolbar ── */}
-        <div className="mb-5 flex flex-wrap items-center gap-2.5">
-          {/* Search */}
-          <div className="relative min-w-45 flex-1">
-            <Search className="absolute top-1/2 left-3 size-3.5 -translate-y-1/2 text-neutral-400 dark:text-white/20" />
-            <input
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search project plans…"
-              className={cn(
-                "h-9 w-full rounded-xl pr-4 pl-9 transition-all duration-150 outline-none",
-                "border border-neutral-200 bg-white shadow-sm shadow-neutral-900/4",
-                "text-[12.5px] text-neutral-700 placeholder:text-neutral-400",
-                "focus:border-emerald-300 focus:bg-emerald-50/40 focus:ring-2 focus:ring-emerald-500/10",
-                "dark:border-white/[0.07] dark:bg-white/4 dark:shadow-none",
-                "dark:text-white/70 dark:placeholder:text-white/20",
-                "dark:focus:border-emerald-500/30 dark:focus:bg-emerald-500/4 dark:focus:ring-0"
-              )}
-            />
-          </div>
-
-          {/* Filter */}
-          {/* <button
+            {/* Filter */}
+            {/* <button
             className={cn(
               "flex h-9 items-center gap-2 rounded-xl px-3.5 transition-all duration-150",
               "text-[12px] font-medium",
@@ -618,8 +631,8 @@ export default function ProjectPlannerPage() {
             Filter
           </button> */}
 
-          {/* Sort */}
-          {/* <button
+            {/* Sort */}
+            {/* <button
             className={cn(
               "flex h-9 items-center gap-2 rounded-xl px-3.5 transition-all duration-150",
               "text-[12px] font-medium",
@@ -635,77 +648,78 @@ export default function ProjectPlannerPage() {
             Sort
           </button> */}
 
-          {/* View toggle */}
-          <div
-            className={cn(
-              "flex gap-1 rounded-xl border p-1",
-              "border-neutral-200 bg-white shadow-sm shadow-neutral-900/4",
-              "dark:border-white/[0.07] dark:bg-white/3 dark:shadow-none"
-            )}
-          >
-            {(["grid", "list"] as const).map((v) => (
-              <button
-                key={v}
-                onClick={() => setView(v)}
-                className={cn(
-                  "flex size-7 items-center justify-center rounded-lg transition-all duration-150",
-                  view === v
-                    ? "bg-emerald-50 text-emerald-600 dark:bg-white/8 dark:text-white/70"
-                    : "text-neutral-400 hover:bg-neutral-100 hover:text-neutral-600 dark:text-white/25 dark:hover:text-white/45"
-                )}
-              >
-                {v === "grid" ? (
-                  <LayoutGrid className="size-3.5" />
-                ) : (
-                  <List className="size-3.5" />
-                )}
-              </button>
-            ))}
+            {/* View toggle */}
+            <div
+              className={cn(
+                "flex gap-1 rounded-xl border p-1",
+                "border-neutral-200 bg-white shadow-sm shadow-neutral-900/4",
+                "dark:border-white/[0.07] dark:bg-white/3 dark:shadow-none"
+              )}
+            >
+              {(["grid", "list"] as const).map((v) => (
+                <button
+                  key={v}
+                  onClick={() => setView(v)}
+                  className={cn(
+                    "flex size-7 items-center justify-center rounded-lg transition-all duration-150",
+                    view === v
+                      ? "bg-emerald-50 text-emerald-600 dark:bg-white/8 dark:text-white/70"
+                      : "text-neutral-400 hover:bg-neutral-100 hover:text-neutral-600 dark:text-white/25 dark:hover:text-white/45"
+                  )}
+                >
+                  {v === "grid" ? (
+                    <LayoutGrid className="size-3.5" />
+                  ) : (
+                    <List className="size-3.5" />
+                  )}
+                </button>
+              ))}
+            </div>
           </div>
-        </div>
 
-        {/* ── Grid / List ── */}
-        {filtered.length === 0 ? (
-          <div className="flex flex-col items-center justify-center gap-2 py-24">
-            <p className="text-sm font-medium text-neutral-400 dark:text-white/20">
-              No plans match your search
-            </p>
-            <p className="text-xs text-neutral-300 dark:text-white/12">
-              Try a different keyword
-            </p>
-          </div>
-        ) : (
-          <div
-            className={cn(
-              view === "grid"
-                ? "grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
-                : "flex flex-col gap-3"
-            )}
-          >
-            {filtered.map((project) => (
-              <ProjectCard
-                key={project._id}
-                project={project}
-                onOpen={() =>
-                  router.push(
-                    `/developer-dashboard/project-planner/plan/${project._id}`
-                  )
+          {/* ── Grid / List ── */}
+          {filtered.length === 0 ? (
+            <div className="flex flex-col items-center justify-center gap-2 py-24">
+              <p className="text-sm font-medium text-neutral-400 dark:text-white/20">
+                No plans match your search
+              </p>
+              <p className="text-xs text-neutral-300 dark:text-white/12">
+                Try a different keyword
+              </p>
+            </div>
+          ) : (
+            <div
+              className={cn(
+                view === "grid"
+                  ? "grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
+                  : "flex flex-col gap-3"
+              )}
+            >
+              {filtered.map((project) => (
+                <ProjectCard
+                  key={project._id}
+                  project={project}
+                  onOpen={() =>
+                    router.push(
+                      `/developer-dashboard/project-planner/plan/${project._id}`
+                    )
+                  }
+                  onToggleComplete={() =>
+                    toggleComplete(project._id, project.isActive)
+                  }
+                  onUpdate={() => { }}
+                  onDelete={() => deleteProjectPlan(project._id)}
+                />
+              ))}
+              <NewPlanCard
+                onClick={() =>
+                  router.push("/developer-dashboard/project-planner/new-plan")
                 }
-                onToggleComplete={() =>
-                  toggleComplete(project._id, project.isActive)
-                }
-                onUpdate={() => { }}
-                onDelete={() => deleteProjectPlan(project._id)}
               />
-            ))}
-            <NewPlanCard
-              onClick={() =>
-                router.push("/developer-dashboard/project-planner/new-plan")
-              }
-            />
-          </div>
-        )}
-      </div>
-    </main>
+            </div>
+          )}
+        </div>
+      </main>
+    )
   )
 }
