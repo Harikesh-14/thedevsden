@@ -46,6 +46,7 @@ export default function TaskPlannerPage() {
   const [tasks, setTasks] = useState<ITask[]>([])
   const [completed, setCompleted] = useState<Set<string>>(new Set())
   const [loading, setLoading] = useState<boolean>(false)
+  const [togglingTaskId, setTogglingTaskId] = useState<string | null>()
 
   const menuRef = useRef<HTMLDivElement>(null)
 
@@ -106,31 +107,42 @@ export default function TaskPlannerPage() {
   }, [])
 
   const toggleTask = async (_id: string) => {
-    const isCompleted = completed.has(_id)
+    setTogglingTaskId(_id)
 
-    const response = await apiFetch(`/task-manager/${_id}/status`, {
-      method: "PATCH",
-      body: JSON.stringify({
-        isCompleted: !isCompleted,
-      }),
-    })
+    try {
+      const isCompleted = completed.has(_id)
 
-    if (!response.ok) {
-      toast.error("Oops", {
-        description: "Failed to update task status",
-        closeButton: true,
+      const response = await apiFetch(`/task-manager/${_id}/status`, {
+        method: "PATCH",
+        body: JSON.stringify({
+          isCompleted: !isCompleted,
+        }),
       })
 
-      return
+      if (!response.ok) {
+        toast.error("Oops", {
+          description: "Failed to update task status",
+          closeButton: true,
+        })
+
+        return
+      }
+
+      setCompleted((prev) => {
+        const next = new Set(prev)
+
+        next.has(_id) ? next.delete(_id) : next.add(_id)
+
+        return next
+      })
+    } catch (error) {
+      toast.error("Oops", {
+        description: "An unforeseen error occurred while toggling the task status",
+        closeButton: true,
+      })
+    } finally {
+      setTogglingTaskId(null)
     }
-
-    setCompleted((prev) => {
-      const next = new Set(prev)
-
-      next.has(_id) ? next.delete(_id) : next.add(_id)
-
-      return next
-    })
   }
 
   const filtered = tasks.filter((task) => {
@@ -365,20 +377,24 @@ export default function TaskPlannerPage() {
                         </div>
 
                         {/* Checkbox */}
-                        <button
-                          onClick={() => toggleTask(task._id)}
-                          aria-label={isDone ? "Mark incomplete" : "Mark complete"}
-                          className={cn(
-                            "mt-px flex size-5 shrink-0",
-                            "items-center justify-center rounded-md border",
-                            "transition-all duration-150",
-                            isDone
-                              ? "border-emerald-500/50 bg-emerald-500/15 text-emerald-700 dark:border-emerald-400/50 dark:bg-emerald-400/15 dark:text-emerald-300"
-                              : "border-black/20 bg-black/5 hover:border-black/30 dark:border-white/[0.14] dark:bg-white/3 dark:hover:border-white/25"
-                          )}
-                        >
-                          {isDone && <CheckIcon className="size-3 stroke-[2.5]" />}
-                        </button>
+                        {togglingTaskId === task._id ? (
+                          <Loader2 className="mt-px size-5 shrink-0 animate-spin text-emerald-500" />
+                        ) : (
+                          <button
+                            onClick={() => toggleTask(task._id)}
+                            aria-label={isDone ? "Mark incomplete" : "Mark complete"}
+                            className={cn(
+                              "mt-px flex size-5 shrink-0",
+                              "items-center justify-center rounded-md border",
+                              "transition-all duration-150",
+                              isDone
+                                ? "border-emerald-500/50 bg-emerald-500/15 text-emerald-700 dark:border-emerald-400/50 dark:bg-emerald-400/15 dark:text-emerald-300"
+                                : "border-black/20 bg-black/5 hover:border-black/30 dark:border-white/[0.14] dark:bg-white/3 dark:hover:border-white/25"
+                            )}
+                          >
+                            {isDone && <CheckIcon className="size-3 stroke-[2.5]" />}
+                          </button>
+                        )}
 
                         {/* Content */}
                         <div className="min-w-0 flex-1">
