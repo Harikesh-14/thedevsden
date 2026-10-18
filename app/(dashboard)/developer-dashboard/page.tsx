@@ -1,6 +1,6 @@
 "use client"
 
-import { CalendarDays, LayoutDashboard, ListTodo, Map } from "lucide-react"
+import { CalendarDays, LayoutDashboard, ListTodo, Loader2, Map } from "lucide-react"
 import Link from "next/link"
 import { cn } from "@/lib/utils"
 import { useRouter } from "next/navigation"
@@ -35,6 +35,8 @@ export default function DeveloperDashboardPage() {
   const [roadmaps, setRoadmaps] = useState<number>(0)
   const [projectPlans, setProjectPlans] = useState<number>(0)
 
+  const [loadingThoughts, setLoadingThoughts] = useState<boolean>(false)
+
   const router = useRouter()
 
   const { user, loading, isAuthenticated } = useAuth()
@@ -61,20 +63,32 @@ export default function DeveloperDashboardPage() {
   ]
 
   async function fetchThought() {
-    const response = await apiFetch("/thoughts/today")
+    setLoadingThoughts(true)
 
-    if (!response.ok) {
-      toast.error("Oops", {
-        description: "Failed to fetch the 'thought of the day'.",
-        closeButton: true,
+    try {
+      const response = await apiFetch("/thoughts/today")
+
+      if (!response.ok) {
+        toast.error("Oops", {
+          description: "Failed to fetch the 'thought of the day'.",
+          closeButton: true,
+        })
+
+        throw new Error("Failed to fetch the 'thought of the day'.")
+      }
+
+      const data: IThought = await response.json()
+
+      setThought(data)
+    } catch (error) {
+      toast.error("Oops!", {
+        description: "An unforeseen error occurred while fetching the TOTD",
+        closeButton: true
       })
-
-      throw new Error("Failed to fetch the 'thought of the day'.")
+      console.log(error)
+    } finally {
+      setLoadingThoughts(false)
     }
-
-    const data: IThought = await response.json()
-
-    setThought(data)
   }
 
   async function fetchTasksCount() {
@@ -206,19 +220,25 @@ export default function DeveloperDashboardPage() {
           Thought of the day
         </p>
 
-        <div className="mb-2 border-l-2 border-emerald-500/40 pl-5 dark:border-emerald-500/30">
-          <p
-            className={cn(
-              "text-[19px] leading-relaxed font-normal italic",
-              "text-neutral-700 dark:text-neutral-300"
-            )}
-          >
-            &ldquo;{thought?.thought}&rdquo;
-          </p>
-        </div>
-        <p className="pl-5 text-xs font-semibold tracking-widest text-emerald-600/60 uppercase dark:text-emerald-500/50">
-          — Bhagwan
-        </p>
+        {loadingThoughts ? (
+          <Loader2 size={24} className="animate-spin mx-auto"/>
+        ) : (
+          <>
+            <div className="mb-2 border-l-2 border-emerald-500/40 pl-5 dark:border-emerald-500/30">
+              <p
+                className={cn(
+                  "text-[19px] leading-relaxed font-normal italic",
+                  "text-neutral-700 dark:text-neutral-300"
+                )}
+              >
+                &ldquo;{thought?.thought}&rdquo;
+              </p>
+            </div>
+            <p className="pl-5 text-xs font-semibold tracking-widest text-emerald-600/60 uppercase dark:text-emerald-500/50">
+              — Bhagwan
+            </p>
+          </>
+        )}
 
         {/* Quick-access cards */}
         <div className="mt-12 grid grid-cols-1 gap-3 sm:grid-cols-3">
