@@ -100,7 +100,10 @@ export default function Sidebar() {
 
     try {
       await logout()
-      router.replace("/login")
+
+      window.localStorage.setItem("devMode", "false")
+      
+      router.replace("/")
     } catch (error) {
       toast.error("Oops!", {
         description: "An unforeseen error occurred while logging out",

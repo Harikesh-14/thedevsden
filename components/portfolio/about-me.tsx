@@ -175,16 +175,17 @@ export default function AboutSection() {
                 </a>
               </Button>
 
+
               <Button
                 variant="outline"
-                className="rounded-full border-neutral-200 text-neutral-700 hover:border-neutral-300 hover:bg-neutral-50 dark:border-neutral-700 dark:text-neutral-300 dark:hover:border-neutral-600 dark:hover:bg-neutral-800"
-                asChild
+                className="cursor-not-allowed rounded-full border-neutral-200 bg-neutral-50 text-neutral-400 opacity-90 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-500"
+                disabled
+                title="My resume is still being prepared. Check back soon!"
               >
-                <a href="/cv.pdf" download>
-                  Download CV
-                  <Download className="ml-1.5 size-4" />
-                </a>
+                CV Coming Soon
+                <Calendar1 className="ml-1.5 size-4" />
               </Button>
+
             </div>
           </div>
         </div>

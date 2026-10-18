@@ -12,7 +12,7 @@ export default function ModeToggle() {
   }
 
   return (
-    <Button variant={"outline"} size={"icon"} onClick={toggleTheme}>
+    <Button type="button" variant={"outline"} size={"icon"} onClick={toggleTheme}>
       {theme === "light" ? <Sun /> : <Moon />}
     </Button>
   )

@@ -8,11 +8,14 @@ import { Home, ArrowRight } from "lucide-react"
 import Link from "next/link"
 import { useState } from "react"
 import { cn } from "@/lib/utils"
-import { useRouter } from "next/navigation"
+import { redirect, useRouter } from "next/navigation"
 import { login } from "@/lib/auth"
+import { useAuth } from "@/hooks/use-auth"
 
 export default function LoginPage() {
   const router = useRouter()
+
+  const { isAuthenticated } = useAuth()
 
   const [password, setPassword] = useState("")
   const [loading, setLoading] = useState(false)
@@ -33,6 +36,10 @@ export default function LoginPage() {
     } finally {
       setLoading(false)
     }
+  }
+
+  if (isAuthenticated) {
+    redirect("/developer-dashboard")
   }
 
   return (
