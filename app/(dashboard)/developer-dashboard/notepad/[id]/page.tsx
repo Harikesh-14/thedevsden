@@ -1,26 +1,28 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
-  ArrowUpRight,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+import { useParams, useRouter } from "next/navigation";
+import {
+  ArrowLeft,
   Check,
   Clock3,
+  Eye,
   FileText,
-  FolderOpen,
-  LayoutGrid,
-  List,
-  MoreHorizontal,
-  Pin,
-  Plus,
-  Search,
+  LoaderCircle,
   Pencil,
-  Trash2,
-  Type,
+  Pin,
+  Save,
+  Tag,
+  X,
 } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { apiFetch } from "@/lib/api";
+import { cn } from "@/lib/utils";
 import { formatRelativeTime } from "@/lib/helper-functions";
 import LoaderPage from "@/components/developer-dashboard/loader";
 
@@ -34,7 +36,19 @@ type Note = {
   updatedAt?: string;
 };
 
-type ViewMode = "grid" | "list";
+type NoteDraft = {
+  title: string;
+  content: string;
+  category: string;
+};
+
+type SaveStatus =
+  | "idle"
+  | "unsaved"
+  | "saving"
+  | "saved"
+  | "error"
+  | "needs-title";
 
 const CATEGORIES = [
   "Personal",
@@ -43,434 +57,289 @@ const CATEGORIES = [
   "Learning",
 ];
 
-function getWordCount(content: string) {
-  const trimmed = content.trim();
-  return trimmed ? trimmed.split(/\s+/).length : 0;
+function getSnapshot(draft: NoteDraft) {
+  return JSON.stringify(draft);
 }
-
-// ── Note action menu ────────────────────────────────────────────────────────
-
-function NoteActionMenu({
-  note,
-  onEdit,
-  onTogglePin,
-  onDelete,
-}: {
-  note: Note;
-  onEdit: () => void;
-  onTogglePin: () => void;
-  onDelete: () => void;
-}) {
-  const [open, setOpen] = useState(false);
-  const menuRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!open) return;
-
-    function handleClickOutside(event: MouseEvent) {
-      if (
-        menuRef.current &&
-        !menuRef.current.contains(event.target as Node)
-      ) {
-        setOpen(false);
-      }
-    }
-
-    document.addEventListener("mousedown", handleClickOutside);
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [open]);
-
-  const actions = [
-    {
-      label: note.pinned ? "Unpin note" : "Pin note",
-      icon: Pin,
-      onClick: onTogglePin,
-      danger: false,
-    },
-    {
-      label: "Edit note",
-      icon: Pencil,
-      onClick: onEdit,
-      danger: false,
-    },
-    {
-      label: "Delete note",
-      icon: Trash2,
-      onClick: onDelete,
-      danger: true,
-    },
-  ];
-
-  return (
-    <div ref={menuRef} className="relative">
-      <button
-        type="button"
-        aria-label="Note actions"
-        aria-expanded={open}
-        onClick={(event) => {
-          event.stopPropagation();
-          setOpen((value) => !value);
-        }}
-        className={cn(
-          "flex size-8 items-center justify-center rounded-lg transition-all duration-150",
-          "border border-neutral-200 bg-neutral-50 text-neutral-400",
-          "hover:border-emerald-200 hover:bg-emerald-50 hover:text-emerald-700",
-          "dark:border-white/[0.07] dark:bg-white/4 dark:text-white/40",
-          "dark:hover:border-white/[0.14] dark:hover:bg-white/8 dark:hover:text-white/80",
-          "opacity-100 sm:opacity-0 sm:group-hover:opacity-100",
-        )}
-      >
-        <MoreHorizontal className="size-4" />
-      </button>
-
-      {open && (
-        <div
-          role="menu"
-          onClick={(event) => event.stopPropagation()}
-          className={cn(
-            "absolute top-full right-0 z-50 mt-2 w-44 rounded-xl p-1.5",
-            "border border-neutral-200 bg-white shadow-xl shadow-neutral-900/10",
-            "dark:border-white/8 dark:bg-[#151719] dark:shadow-2xl dark:shadow-black/50",
-          )}
-        >
-          {actions.map(({ label, icon: Icon, onClick, danger }) => (
-            <button
-              key={label}
-              type="button"
-              role="menuitem"
-              onClick={() => {
-                setOpen(false);
-                onClick();
-              }}
-              className={cn(
-                "flex w-full items-center gap-2.5 rounded-lg px-3 py-2.5",
-                "text-left text-xs transition-colors",
-                danger
-                  ? "text-red-500 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-500/10"
-                  : "text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900 dark:text-white/65 dark:hover:bg-white/6 dark:hover:text-white",
-              )}
-            >
-              <Icon className="size-4 shrink-0" />
-              {label}
-            </button>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-}
-
-// ── Note card ───────────────────────────────────────────────────────────────
-
-function NoteCard({
-  note,
-  view,
-  onOpen,
-  onEdit,
-  onTogglePin,
-  onDelete,
-}: {
-  note: Note;
-  view: ViewMode;
-  onOpen: () => void;
-  onEdit: () => void;
-  onTogglePin: () => void;
-  onDelete: () => void;
-}) {
-  const words = getWordCount(note.content ?? "");
-
-  return (
-    <article
-      onClick={onOpen}
-      className={cn(
-        "group relative flex cursor-pointer flex-col overflow-visible rounded-[20px]",
-        "transition-all duration-200",
-        "border border-neutral-200 bg-white",
-        "shadow-[0_1px_3px_rgba(0,0,0,0.06),0_4px_16px_rgba(0,0,0,0.04)]",
-        "hover:-translate-y-1 hover:border-emerald-300 hover:bg-emerald-50/20",
-        "hover:shadow-[0_8px_28px_rgba(0,0,0,0.10)]",
-        "dark:border-white/[0.07] dark:bg-white/3 dark:shadow-none",
-        "dark:hover:border-white/[0.14] dark:hover:bg-white/5",
-        "dark:hover:shadow-[0_12px_40px_rgba(0,0,0,0.35)]",
-        view === "list" && "flex-row items-stretch",
-      )}
-    >
-      <div
-        className={cn(
-          "h-0.75 rounded-t-[20px] bg-linear-to-r from-emerald-400/80 via-emerald-300/40 to-transparent",
-          view === "list" && "hidden",
-        )}
-      />
-
-      <div
-        className={cn(
-          "flex min-w-0 flex-1 flex-col p-5",
-          view === "list" && "sm:flex-row sm:items-center sm:gap-5",
-        )}
-      >
-        <div className="flex min-w-0 flex-1 flex-col">
-          <div className="mb-3 flex items-start justify-between gap-3">
-            <div className="flex min-w-0 items-start gap-2.5">
-              <div
-                className={cn(
-                  "mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-lg",
-                  "border border-emerald-200 bg-emerald-50 text-emerald-600",
-                  "dark:border-emerald-500/20 dark:bg-emerald-500/[0.07] dark:text-emerald-400",
-                )}
-              >
-                <FileText className="size-4" />
-              </div>
-
-              <div className="min-w-0">
-                <h3 className="line-clamp-2 text-[14px] leading-snug font-semibold tracking-[-0.01em] text-neutral-900 dark:text-white/88">
-                  {note.title}
-                </h3>
-
-                <div className="mt-1.5 flex flex-wrap items-center gap-2">
-                  <span className="rounded-md border border-neutral-200 bg-neutral-50 px-2 py-0.5 text-[9px] font-medium text-neutral-500 dark:border-white/8 dark:bg-white/4 dark:text-white/40">
-                    {note.category || "Personal"}
-                  </span>
-
-                  {note.pinned && (
-                    <span className="flex items-center gap-1 text-[9px] font-medium text-emerald-600 dark:text-emerald-400">
-                      <Pin className="size-3 fill-current" />
-                      Pinned
-                    </span>
-                  )}
-                </div>
-              </div>
-            </div>
-
-            <div className="shrink-0">
-              <NoteActionMenu
-                note={note}
-                onEdit={onEdit}
-                onTogglePin={onTogglePin}
-                onDelete={onDelete}
-              />
-            </div>
-          </div>
-
-          <p
-            className={cn(
-              "mb-4 whitespace-pre-wrap wrap-break-word text-[12px] leading-[1.7]",
-              "text-neutral-500 dark:text-white/35",
-              view === "grid" ? "line-clamp-4 min-h-0" : "line-clamp-2",
-            )}
-          >
-            {note.content?.trim() || "An empty note. Add your thoughts here."}
-          </p>
-        </div>
-
-        <div
-          className={cn(
-            "mt-auto flex items-center justify-between gap-3 border-t pt-3",
-            "border-neutral-100 dark:border-white/5",
-            view === "list" && "sm:mt-0 sm:w-48 sm:shrink-0 sm:gap-2",
-          )}
-        >
-          <div className="flex min-w-0 flex-wrap items-center gap-x-3 gap-y-1.5 text-[10px] text-neutral-400 dark:text-white/25">
-            <span className="flex items-center gap-1">
-              <Type className="size-3" />
-              {words} words
-            </span>
-
-            <span className="flex items-center gap-1">
-              <Clock3 className="size-3" />
-              {formatRelativeTime(note.updatedAt ?? note.createdAt ?? new Date().toISOString())}
-            </span>
-          </div>
-
-          <div
-            className={cn(
-              "flex size-6.5 shrink-0 items-center justify-center rounded-[8px]",
-              "border border-emerald-200 bg-emerald-50 text-emerald-600",
-              "transition-all duration-150 group-hover:border-emerald-300 group-hover:bg-emerald-100",
-              "dark:border-emerald-500/15 dark:bg-emerald-500/6 dark:text-emerald-400/50",
-              "dark:group-hover:border-emerald-500/30 dark:group-hover:bg-emerald-500/10 dark:group-hover:text-emerald-400/80",
-            )}
-          >
-            <ArrowUpRight className="size-3" strokeWidth={2.5} />
-          </div>
-        </div>
-      </div>
-    </article>
-  );
-}
-
-// ── New note card ───────────────────────────────────────────────────────────
-
-function NewNoteCard({ onClick }: { onClick: () => void }) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      className={cn(
-        "group flex min-h-50 flex-col items-center justify-center gap-3 rounded-[20px]",
-        "text-center transition-all duration-200",
-        "border-2 border-dashed border-neutral-200 bg-neutral-50/80",
-        "hover:border-emerald-300 hover:bg-emerald-50/60",
-        "dark:border-white/9 dark:bg-white/1.5",
-        "dark:hover:border-emerald-500/25 dark:hover:bg-emerald-500/3",
-      )}
-    >
-      <div
-        className={cn(
-          "flex size-10 items-center justify-center rounded-xl transition-all duration-200",
-          "border border-emerald-200 bg-emerald-50 text-emerald-600",
-          "group-hover:border-emerald-300 group-hover:bg-emerald-100 group-hover:text-emerald-700",
-          "dark:border-emerald-500/20 dark:bg-emerald-500/[0.07] dark:text-emerald-400/60",
-          "dark:group-hover:border-emerald-500/35 dark:group-hover:bg-emerald-500/12 dark:group-hover:text-emerald-400/90",
-        )}
-      >
-        <Plus className="size-4 transition-transform duration-200 group-hover:rotate-90" />
-      </div>
-
-      <div>
-        <p className="text-[13px] font-semibold text-neutral-500 transition-colors group-hover:text-emerald-700 dark:text-white/30 dark:group-hover:text-white/50">
-          New note
-        </p>
-        <p className="mt-0.5 text-[11px] text-neutral-400 transition-colors group-hover:text-emerald-600 dark:text-white/15 dark:group-hover:text-white/25">
-          Capture your next thought
-        </p>
-      </div>
-    </button>
-  );
-}
-
-// ── Page ────────────────────────────────────────────────────────────────────
 
 export default function NotepadIDPage() {
+  const params = useParams<{ id: string }>();
   const router = useRouter();
+  const id = params.id;
 
-  const [notes, setNotes] = useState<Note[]>([]);
-  const [search, setSearch] = useState("");
-  const [category, setCategory] = useState("All");
-  const [view, setView] = useState<ViewMode>("grid");
+  const [note, setNote] = useState<Note | null>(null);
+  const [draft, setDraft] = useState<NoteDraft>({
+    title: "",
+    content: "",
+    category: "Personal",
+  });
+
   const [loading, setLoading] = useState(true);
-  const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [loadError, setLoadError] = useState<string | null>(null);
+  const [notFound, setNotFound] = useState(false);
+  const [editing, setEditing] = useState(false);
+  const [saveStatus, setSaveStatus] = useState<SaveStatus>("idle");
 
-  const fetchNotes = useCallback(async () => {
-    setLoading(true);
+  const draftRef = useRef<NoteDraft>(draft);
+  const savedSnapshotRef = useRef("");
+  const savingRef = useRef(false);
+  const queuedSaveRef = useRef(false);
 
-    try {
-      const response = await apiFetch("/notepad");
-
-      if (!response.ok) {
-        throw new Error("Unable to fetch your notes.");
-      }
-
-      const data = await response.json();
-
-      setNotes(Array.isArray(data) ? data : data.notes ?? []);
-    } catch (error) {
-      toast.error(
-        error instanceof Error
-          ? error.message
-          : "Something went wrong while fetching your notes.",
-      );
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+  draftRef.current = draft;
 
   useEffect(() => {
-    void fetchNotes();
-  }, [fetchNotes]);
+    let cancelled = false;
 
-  const stats = useMemo(() => {
-    const pinnedCount = notes.filter((note) => note.pinned).length;
-    const totalWords = notes.reduce(
-      (total, note) => total + getWordCount(note.content ?? ""),
-      0,
-    );
-    const categoryCount = new Set(
-      notes.map((note) => note.category || "Personal"),
-    ).size;
+    async function fetchNote() {
+      setLoading(true);
+      setLoadError(null);
+      setNotFound(false);
+      setNote(null);
+      setEditing(false);
+      setSaveStatus("idle");
 
-    return [
-      { label: "Total notes", value: notes.length, accent: false },
-      { label: "Pinned", value: pinnedCount, accent: true },
-      { label: "Words written", value: totalWords, accent: false },
-      { label: "Categories", value: categoryCount, accent: false },
-    ];
-  }, [notes]);
+      try {
+        const response = await apiFetch(`/notepad/${id}`);
 
-  const filtered = useMemo(() => {
-    const query = search.trim().toLowerCase();
-
-    return notes
-      .filter((note) => {
-        const matchesSearch =
-          !query ||
-          note.title.toLowerCase().includes(query) ||
-          (note.content ?? "").toLowerCase().includes(query);
-
-        const matchesCategory =
-          category === "All" ||
-          (note.category || "Personal") === category;
-
-        return matchesSearch && matchesCategory;
-      })
-      .sort((a, b) => {
-        if (a.pinned !== b.pinned) {
-          return a.pinned ? -1 : 1;
+        if (response.status === 404) {
+          if (!cancelled) {
+            setNotFound(true);
+          }
+          return;
         }
 
-        return (
-          new Date(b.updatedAt ?? b.createdAt ?? 0).getTime() -
-          new Date(a.updatedAt ?? a.createdAt ?? 0).getTime()
-        );
-      });
-  }, [notes, search, category]);
+        if (!response.ok) {
+          throw new Error("Unable to load this note.");
+        }
 
-  const openNewNote = () => {
-    router.push("/developer-dashboard/notepad/new-note");
-  };
+        const data = await response.json();
+        const fetchedNote: Note = data.note ?? data;
 
-  const openNote = (id: string) => {
-    router.push(`/developer-dashboard/notepad/${id}`);
-  };
+        if (!fetchedNote?._id) {
+          throw new Error("The server returned an invalid note.");
+        }
 
-  async function deleteNote(id: string) {
-    if (deletingId) return;
+        const initialDraft: NoteDraft = {
+          title: fetchedNote.title ?? "",
+          content: fetchedNote.content ?? "",
+          category: fetchedNote.category || "Personal",
+        };
 
-    setDeletingId(id);
+        if (!cancelled) {
+          setNote(fetchedNote);
+          setDraft(initialDraft);
+          draftRef.current = initialDraft;
+          savedSnapshotRef.current = getSnapshot(initialDraft);
+          setSaveStatus("saved");
+        }
+      } catch (error) {
+        if (!cancelled) {
+          setLoadError(
+            error instanceof Error
+              ? error.message
+              : "Something went wrong while loading this note.",
+          );
+        }
+      } finally {
+        if (!cancelled) {
+          setLoading(false);
+        }
+      }
+    }
+
+    void fetchNote();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [id]);
+  
+  const saveLatest = useCallback(async () => {
+    if (!note) return;
+
+    if (savingRef.current) {
+      queuedSaveRef.current = true;
+      return;
+    }
+
+    savingRef.current = true;
 
     try {
-      const response = await apiFetch(`/notepad/${id}`, {
-        method: "DELETE",
-      });
+      do {
+        queuedSaveRef.current = false;
 
-      if (!response.ok) {
-        throw new Error("Unable to delete this note.");
-      }
+        const currentDraft = { ...draftRef.current };
+        const currentSnapshot = getSnapshot(currentDraft);
 
-      setNotes((previous) => previous.filter((note) => note._id !== id));
-      toast.success("Note deleted successfully.");
+        if (currentSnapshot === savedSnapshotRef.current) {
+          setSaveStatus("saved");
+          break;
+        }
+
+        if (!currentDraft.title.trim()) {
+          setSaveStatus("needs-title");
+          break;
+        }
+
+        setSaveStatus("saving");
+
+        const response = await apiFetch(`/notepad/${id}`, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(currentDraft),
+        });
+
+        if (!response.ok) {
+          const message =
+            response.status === 404
+              ? "This note no longer exists."
+              : "Unable to save your changes.";
+
+          throw new Error(message);
+        }
+
+        savedSnapshotRef.current = currentSnapshot;
+
+        if (getSnapshot(draftRef.current) === currentSnapshot) {
+          setSaveStatus("saved");
+        } else {
+          queuedSaveRef.current = true;
+        }
+      } while (queuedSaveRef.current);
     } catch (error) {
+      setSaveStatus("error");
+
       toast.error(
         error instanceof Error
           ? error.message
-          : "Something went wrong while deleting the note.",
+          : "Something went wrong while saving your note.",
       );
     } finally {
-      setDeletingId(null);
+      savingRef.current = false;
+    }
+  }, [id, note]);
+
+  useEffect(() => {
+    if (!editing || !note) return;
+
+    const currentSnapshot = getSnapshot(draft);
+
+    if (currentSnapshot === savedSnapshotRef.current) {
+      setSaveStatus("saved");
+      return;
+    }
+
+    if (!draft.title.trim()) {
+      setSaveStatus("needs-title");
+      return;
+    }
+
+    setSaveStatus("unsaved");
+
+    const timer = window.setTimeout(() => {
+      void saveLatest();
+    }, 800);
+
+    return () => {
+      window.clearTimeout(timer);
+    };
+  }, [draft, editing, note, saveLatest]);
+
+  function updateDraft<K extends keyof NoteDraft>(
+    key: K,
+    value: NoteDraft[K],
+  ) {
+    setDraft((previous) => ({
+      ...previous,
+      [key]: value,
+    }));
+  }
+
+  async function finishEditing() {
+    await saveLatest();
+
+    if (
+      draftRef.current.title.trim() &&
+      getSnapshot(draftRef.current) === savedSnapshotRef.current
+    ) {
+      setEditing(false);
     }
   }
 
-  async function togglePin(note: Note) {
-    // Connect this to your backend's note-update endpoint when available.
-    // Avoid updating only local state, which would lose the change on reload.
-    toast.info(
-      "Connect your note-update endpoint to enable pinning changes.",
+  if (loading) {
+    return <LoaderPage />;
+  }
+
+  if (notFound) {
+    return (
+      <main className="min-h-screen bg-white px-4 py-12 dark:bg-transparent">
+        <div className="mx-auto max-w-xl rounded-[20px] border border-neutral-200 bg-white p-8 text-center shadow-sm dark:border-white/[0.07] dark:bg-white/3">
+          <div className="mx-auto flex size-12 items-center justify-center rounded-2xl border border-emerald-200 bg-emerald-50 text-emerald-600 dark:border-emerald-500/20 dark:bg-emerald-500/[0.07] dark:text-emerald-400">
+            <FileText className="size-5" />
+          </div>
+
+          <h1 className="mt-4 text-lg font-semibold text-neutral-900 dark:text-white/90">
+            Note not found
+          </h1>
+
+          <p className="mt-2 text-sm leading-6 text-neutral-500 dark:text-white/40">
+            This note may have been deleted or the link may be incorrect.
+          </p>
+
+          <button
+            type="button"
+            onClick={() => router.push("/developer-dashboard/notepad")}
+            className="mt-6 inline-flex h-10 items-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 px-4 text-xs font-semibold text-emerald-700 transition-colors hover:bg-emerald-100 dark:border-emerald-500/20 dark:bg-emerald-500/10 dark:text-emerald-400 dark:hover:bg-emerald-500/15"
+          >
+            <ArrowLeft className="size-4" />
+            Back to notes
+          </button>
+        </div>
+      </main>
     );
   }
 
-  if (loading) return <LoaderPage />;
+  if (loadError || !note) {
+    return (
+      <main className="min-h-screen bg-white px-4 py-12 dark:bg-transparent">
+        <div className="mx-auto max-w-xl rounded-[20px] border border-neutral-200 bg-white p-8 text-center dark:border-white/[0.07] dark:bg-white/3">
+          <h1 className="text-lg font-semibold text-neutral-900 dark:text-white/90">
+            Couldn't load this note
+          </h1>
+
+          <p className="mt-2 text-sm text-neutral-500 dark:text-white/40">
+            {loadError ?? "Something went wrong."}
+          </p>
+
+          <button
+            type="button"
+            onClick={() => window.location.reload()}
+            className="mt-5 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-2.5 text-xs font-semibold text-emerald-700 hover:bg-emerald-100 dark:border-emerald-500/20 dark:bg-emerald-500/10 dark:text-emerald-400"
+          >
+            Try again
+          </button>
+
+          <button
+            type="button"
+            onClick={() => router.push("/developer-dashboard/notepad")}
+            className="ml-2 rounded-xl px-4 py-2.5 text-xs font-medium text-neutral-500 hover:bg-neutral-100 dark:text-white/50 dark:hover:bg-white/5"
+          >
+            Back to notes
+          </button>
+        </div>
+      </main>
+    );
+  }
+
+  const statusLabel: Record<SaveStatus, string> = {
+    idle: "Ready",
+    unsaved: "Unsaved changes",
+    saving: "Saving changes…",
+    saved: "All changes saved",
+    error: "Couldn't save changes",
+    "needs-title": "Add a title to save",
+  };
 
   return (
     <main className="relative min-h-screen overflow-hidden bg-white dark:bg-transparent">
@@ -484,195 +353,244 @@ export default function NotepadIDPage() {
         className="pointer-events-none fixed -bottom-16 right-1/4 h-52 w-72 rounded-full bg-emerald-400/15 blur-3xl dark:bg-emerald-500/6"
       />
 
-      <div className="relative mx-auto w-full max-w-5xl px-4 py-8 sm:px-6 lg:px-8">
-        {/* Header */}
-        <header className="mb-8 flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
-          <div>
-            <div className="mb-3 flex items-center gap-2">
-              <span className="size-2 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)] dark:bg-emerald-400" />
-              <span className="text-[10px] font-semibold tracking-[0.18em] text-neutral-400 uppercase dark:text-white/35">
-                Personal Workspace
-              </span>
-            </div>
-
-            <h1 className="text-3xl font-semibold tracking-tight text-neutral-900 sm:text-4xl dark:text-white/90">
-              Your thoughts.
-              <span className="ml-2 text-neutral-300 dark:text-white/25">
-                Your space.
-              </span>
-            </h1>
-
-            <p className="mt-2 max-w-md text-sm leading-6 text-neutral-500 dark:text-white/35">
-              Keep your ideas, learning notes and little discoveries in one place.
-            </p>
-          </div>
-
+      <div className="relative mx-auto w-full max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
+        {/* Navigation */}
+        <div className="mb-8 flex flex-wrap items-center justify-between gap-3">
           <button
             type="button"
-            onClick={openNewNote}
-            className={cn(
-              "group flex h-10 items-center gap-2 rounded-xl px-4",
-              "text-[12.5px] font-semibold transition-all duration-150 active:scale-[0.98]",
-              "border border-emerald-200 bg-emerald-50 text-emerald-700",
-              "hover:border-emerald-300 hover:bg-emerald-100",
-              "dark:border-emerald-500/20 dark:bg-emerald-500/8 dark:text-emerald-400/80",
-              "dark:hover:border-emerald-500/35 dark:hover:bg-emerald-500/13 dark:hover:text-emerald-400",
-            )}
+            onClick={() => router.push("/developer-dashboard/notepad")}
+            className="group inline-flex h-9 items-center gap-2 rounded-xl border border-neutral-200 bg-white px-3 text-xs font-medium text-neutral-500 transition-colors hover:border-emerald-200 hover:bg-emerald-50 hover:text-emerald-700 dark:border-white/[0.07] dark:bg-white/3 dark:text-white/45 dark:hover:border-white/15 dark:hover:bg-white/5 dark:hover:text-white/80"
           >
-            <Plus className="size-4 transition-transform duration-200 group-hover:rotate-90" />
-            New note
+            <ArrowLeft className="size-3.5 transition-transform group-hover:-translate-x-0.5" />
+            All notes
           </button>
-        </header>
 
-        {/* Stats */}
-        <section className="mb-5 grid grid-cols-2 gap-3 sm:grid-cols-4">
-          {stats.map(({ label, value, accent }) => (
-            <div
-              key={label}
-              className={cn(
-                "rounded-[18px] border p-4 backdrop-blur-xl",
-                "border-neutral-200 bg-white shadow-sm shadow-neutral-900/4",
-                "dark:border-white/[0.07] dark:bg-white/3 dark:shadow-none",
-              )}
-            >
-              <p className="text-[11px] font-medium text-neutral-400 dark:text-white/30">
-                {label}
-              </p>
-              <p
-                className={cn(
-                  "mt-1 text-[26px] font-semibold tracking-[-0.03em]",
-                  accent
-                    ? "text-emerald-600 dark:text-emerald-400"
-                    : "text-neutral-800 dark:text-white/88",
-                )}
-              >
-                {value.toLocaleString()}
-              </p>
-            </div>
-          ))}
-        </section>
-
-        {/* Search and controls */}
-        <div className="mb-4 flex flex-wrap items-center gap-2.5">
-          <div className="relative min-w-45 flex-1">
-            <Search className="absolute top-1/2 left-3 size-3.5 -translate-y-1/2 text-neutral-400 dark:text-white/20" />
-            <input
-              value={search}
-              onChange={(event) => setSearch(event.target.value)}
-              placeholder="Search your notes…"
-              aria-label="Search notes"
-              className={cn(
-                "h-9 w-full rounded-xl pr-4 pl-9 text-[12.5px] outline-none transition-all",
-                "border border-neutral-200 bg-white text-neutral-700 placeholder:text-neutral-400 shadow-sm shadow-neutral-900/4",
-                "focus:border-emerald-300 focus:bg-emerald-50/40 focus:ring-2 focus:ring-emerald-500/10",
-                "dark:border-white/[0.07] dark:bg-white/4 dark:text-white/70 dark:shadow-none",
-                "dark:placeholder:text-white/20 dark:focus:border-emerald-500/30 dark:focus:bg-emerald-500/4 dark:focus:ring-0",
-              )}
-            />
-          </div>
-
-          <div className="flex max-w-full items-center gap-1.5 overflow-x-auto">
-            {["All", ...CATEGORIES].map((item) => (
-              <button
-                key={item}
-                type="button"
-                onClick={() => setCategory(item)}
-                className={cn(
-                  "shrink-0 rounded-lg border px-3 py-2 text-[10px] font-medium transition-all",
-                  category === item
-                    ? "border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-500/20 dark:bg-emerald-500/10 dark:text-emerald-400"
-                    : "border-transparent bg-neutral-100/80 text-neutral-500 hover:border-neutral-200 dark:bg-white/[0.035] dark:text-white/35 dark:hover:border-white/10",
-                )}
-              >
-                {item}
-              </button>
-            ))}
-          </div>
-
-          <div
-            className={cn(
-              "flex shrink-0 gap-1 rounded-xl border p-1",
-              "border-neutral-200 bg-white shadow-sm shadow-neutral-900/4",
-              "dark:border-white/[0.07] dark:bg-white/3 dark:shadow-none",
+          <div className="flex items-center gap-2">
+            {note.pinned && (
+              <span className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-200 bg-emerald-50 px-2.5 py-2 text-[10px] font-medium text-emerald-700 dark:border-emerald-500/20 dark:bg-emerald-500/[0.07] dark:text-emerald-400">
+                <Pin className="size-3 fill-current" />
+                Pinned
+              </span>
             )}
-          >
-            {(["grid", "list"] as const).map((item) => (
+
+            {editing ? (
+              <>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setDraft({
+                      title: note.title ?? "",
+                      content: note.content ?? "",
+                      category: note.category || "Personal",
+                    });
+
+                    draftRef.current = {
+                      title: note.title ?? "",
+                      content: note.content ?? "",
+                      category: note.category || "Personal",
+                    };
+
+                    savedSnapshotRef.current = getSnapshot({
+                      title: note.title ?? "",
+                      content: note.content ?? "",
+                      category: note.category || "Personal",
+                    });
+
+                    setSaveStatus("saved");
+                    setEditing(false);
+                  }}
+                  className="inline-flex h-9 items-center gap-2 rounded-xl border border-neutral-200 bg-white px-3 text-xs font-medium text-neutral-500 transition-colors hover:bg-neutral-50 dark:border-white/[0.07] dark:bg-white/3 dark:text-white/50 dark:hover:bg-white/5"
+                >
+                  <X className="size-3.5" />
+                  Discard
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => void finishEditing()}
+                  className="inline-flex h-9 items-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 px-3.5 text-xs font-semibold text-emerald-700 transition-colors hover:bg-emerald-100 dark:border-emerald-500/20 dark:bg-emerald-500/10 dark:text-emerald-400 dark:hover:bg-emerald-500/15"
+                >
+                  <Check className="size-3.5" />
+                  Done
+                </button>
+              </>
+            ) : (
               <button
-                key={item}
                 type="button"
-                aria-label={`${item} view`}
-                aria-pressed={view === item}
-                onClick={() => setView(item)}
-                className={cn(
-                  "flex size-7 items-center justify-center rounded-lg transition-all duration-150",
-                  view === item
-                    ? "bg-emerald-50 text-emerald-600 dark:bg-white/8 dark:text-white/70"
-                    : "text-neutral-400 hover:bg-neutral-100 hover:text-neutral-600 dark:text-white/25 dark:hover:text-white/45",
-                )}
+                onClick={() => setEditing(true)}
+                className="inline-flex h-9 items-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 px-3.5 text-xs font-semibold text-emerald-700 transition-colors hover:bg-emerald-100 dark:border-emerald-500/20 dark:bg-emerald-500/10 dark:text-emerald-400 dark:hover:bg-emerald-500/15"
               >
-                {item === "grid" ? (
-                  <LayoutGrid className="size-3.5" />
-                ) : (
-                  <List className="size-3.5" />
-                )}
+                <Pencil className="size-3.5" />
+                Edit note
               </button>
-            ))}
+            )}
           </div>
         </div>
 
-        {/* Notes */}
-        {filtered.length === 0 ? (
-          <div className="flex flex-col items-center justify-center gap-3 py-24 text-center">
-            <div className="flex size-12 items-center justify-center rounded-2xl border border-emerald-200 bg-emerald-50 text-emerald-600 dark:border-emerald-500/20 dark:bg-emerald-500/[0.07] dark:text-emerald-400">
-              <FolderOpen className="size-5" />
+        {/* Note editor */}
+        <article className="overflow-hidden rounded-[22px] border border-neutral-200 bg-white shadow-[0_1px_3px_rgba(0,0,0,0.04),0_12px_40px_rgba(0,0,0,0.035)] dark:border-white/[0.07] dark:bg-white/2.5 dark:shadow-none">
+          <div className="h-1 bg-linear-to-r from-emerald-400 via-emerald-300/60 to-transparent" />
+
+          <div className="p-5 sm:p-8 lg:p-10">
+            {/* Category */}
+            <div className="mb-7 flex flex-wrap items-center justify-between gap-3">
+              {editing ? (
+                <label className="inline-flex items-center gap-2">
+                  <Tag className="size-3.5 text-emerald-600 dark:text-emerald-400" />
+
+                  <select
+                    value={draft.category}
+                    onChange={(event) =>
+                      updateDraft("category", event.target.value)
+                    }
+                    aria-label="Note category"
+                    className="max-w-48 rounded-lg border border-neutral-200 bg-neutral-50 px-3 py-2 text-xs font-medium text-neutral-600 outline-none transition-colors focus:border-emerald-300 dark:border-white/8 dark:bg-white/4 dark:text-white/65 dark:focus:border-emerald-500/30"
+                  >
+                    {CATEGORIES.map((category) => (
+                      <option
+                        key={category}
+                        value={category}
+                        className="bg-white text-neutral-800 dark:bg-neutral-900 dark:text-white"
+                      >
+                        {category}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              ) : (
+                <span className="inline-flex items-center gap-2 rounded-lg border border-neutral-200 bg-neutral-50 px-3 py-2 text-[10px] font-semibold tracking-wide text-neutral-500 dark:border-white/[0.07] dark:bg-white/[0.035] dark:text-white/45">
+                  <Tag className="size-3.5 text-emerald-600 dark:text-emerald-400" />
+                  {draft.category}
+                </span>
+              )}
+
+              <div className="flex items-center gap-1.5 text-[10px] text-neutral-400 dark:text-white/25">
+                <Clock3 className="size-3.5" />
+                Updated{" "}
+                {formatRelativeTime(
+                  note.updatedAt ??
+                  note.createdAt ??
+                  new Date().toISOString(),
+                )}
+              </div>
             </div>
 
-            <p className="text-sm font-medium text-neutral-500 dark:text-white/35">
-              {notes.length === 0
-                ? "Your notebook starts here"
-                : "No notes match your search"}
-            </p>
-
-            <p className="max-w-xs text-xs leading-5 text-neutral-400 dark:text-white/20">
-              {notes.length === 0
-                ? "Capture an idea, save something you learned, or write down a thought worth keeping."
-                : "Try a different keyword or category to find what you're looking for."}
-            </p>
-
-            {notes.length === 0 && (
-              <button
-                type="button"
-                onClick={openNewNote}
-                className="mt-1 flex items-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-2.5 text-xs font-semibold text-emerald-700 transition-colors hover:bg-emerald-100 dark:border-emerald-500/20 dark:bg-emerald-500/10 dark:text-emerald-400 dark:hover:bg-emerald-500/15"
-              >
-                <Plus className="size-3.5" />
-                Create your first note
-              </button>
-            )}
-          </div>
-        ) : (
-          <div
-            className={cn(
-              view === "grid"
-                ? "grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
-                : "flex flex-col gap-3",
-            )}
-          >
-            {filtered.map((note) => (
-              <NoteCard
-                key={note._id}
-                note={note}
-                view={view}
-                onOpen={() => openNote(note._id)}
-                onEdit={() => openNote(note._id)}
-                onTogglePin={() => void togglePin(note)}
-                onDelete={() => void deleteNote(note._id)}
+            {/* Title */}
+            {editing ? (
+              <input
+                value={draft.title}
+                onChange={(event) =>
+                  updateDraft("title", event.target.value)
+                }
+                maxLength={200}
+                placeholder="Give your note a title..."
+                aria-label="Note title"
+                className={cn(
+                  "w-full border-0 bg-transparent p-0",
+                  "text-3xl leading-tight font-semibold tracking-[-0.035em] text-neutral-900 outline-none",
+                  "placeholder:text-neutral-300 focus:ring-0 sm:text-4xl",
+                  "dark:text-white/90 dark:placeholder:text-white/20",
+                )}
               />
-            ))}
+            ) : (
+              <h1 className="wrap-break-word text-3xl leading-tight font-semibold tracking-[-0.035em] text-neutral-900 sm:text-4xl dark:text-white/90">
+                {draft.title || "Untitled note"}
+              </h1>
+            )}
 
-            <NewNoteCard onClick={openNewNote} />
+            <div className="my-7 h-px bg-neutral-100 dark:bg-white/6" />
+
+            {/* Content */}
+            {editing ? (
+              <textarea
+                value={draft.content}
+                onChange={(event) =>
+                  updateDraft("content", event.target.value)
+                }
+                placeholder="Start writing your thoughts..."
+                aria-label="Note content"
+                rows={16}
+                className={cn(
+                  "min-h-90 w-full resize-y border-0 bg-transparent p-0",
+                  "text-[13px] leading-8 text-neutral-600 outline-none",
+                  "placeholder:text-neutral-300 focus:ring-0 sm:text-sm",
+                  "dark:text-white/65 dark:placeholder:text-white/20",
+                )}
+              />
+            ) : (
+              <div className="min-h-48">
+                {draft.content.trim() ? (
+                  <p className="whitespace-pre-wrap wrap-break-word text-[13px] leading-8 text-neutral-600 sm:text-sm dark:text-white/60">
+                    {draft.content}
+                  </p>
+                ) : (
+                  <p className="text-sm italic text-neutral-400 dark:text-white/25">
+                    This note is empty. Select Edit note to add your thoughts.
+                  </p>
+                )}
+              </div>
+            )}
+
+            {/* Footer */}
+            <div className="mt-8 flex flex-wrap items-center justify-between gap-3 border-t border-neutral-100 pt-5 dark:border-white/6">
+              <div className="flex items-center gap-2 text-[10px] text-neutral-400 dark:text-white/30">
+                {editing ? (
+                  <>
+                    {saveStatus === "saving" ? (
+                      <LoaderCircle className="size-3.5 animate-spin text-emerald-600 dark:text-emerald-400" />
+                    ) : saveStatus === "saved" ? (
+                      <Check className="size-3.5 text-emerald-600 dark:text-emerald-400" />
+                    ) : saveStatus === "error" ? (
+                      <Save className="size-3.5 text-red-500" />
+                    ) : (
+                      <Pencil className="size-3.5" />
+                    )}
+
+                    <span
+                      className={cn(
+                        saveStatus === "saved" &&
+                        "text-emerald-700 dark:text-emerald-400",
+                        saveStatus === "error" &&
+                        "text-red-500 dark:text-red-400",
+                        saveStatus === "needs-title" &&
+                        "text-amber-600 dark:text-amber-400",
+                      )}
+                    >
+                      {statusLabel[saveStatus]}
+                    </span>
+                  </>
+                ) : (
+                  <>
+                    <Eye className="size-3.5" />
+                    Read-only mode
+                  </>
+                )}
+              </div>
+
+              {editing && saveStatus === "error" && (
+                <button
+                  type="button"
+                  onClick={() => void saveLatest()}
+                  className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-[10px] font-semibold text-red-600 transition-colors hover:bg-red-100 dark:border-red-500/20 dark:bg-red-500/10 dark:text-red-400 dark:hover:bg-red-500/15"
+                >
+                  Retry save
+                </button>
+              )}
+
+              {editing && (
+                <p className="text-[10px] text-neutral-400 dark:text-white/25">
+                  Changes save automatically
+                </p>
+              )}
+            </div>
           </div>
-        )}
+        </article>
+
+        <p className="mt-4 text-center text-[10px] text-neutral-400 dark:text-white/20">
+          {note.createdAt
+            ? `Created ${formatRelativeTime(note.createdAt)}`
+            : "Your personal workspace"}
+        </p>
       </div>
     </main>
   );

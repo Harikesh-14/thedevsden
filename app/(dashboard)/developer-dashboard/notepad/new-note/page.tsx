@@ -46,7 +46,7 @@ export default function NewNotePage() {
         1,
         Math.ceil(
           (trimmedContent ? trimmedContent.split(/\s+/).length : 0) /
-            200,
+          200,
         ),
       ),
     };
@@ -69,7 +69,7 @@ export default function NewNotePage() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          title: trimmedTitle,
+          title: title.trim(),
           content,
           category,
           pinned,
@@ -77,15 +77,10 @@ export default function NewNotePage() {
       });
 
       if (!response.ok) {
-        const data = await response.json().catch(() => null);
-
-        throw new Error(
-          data?.message || "Unable to save your note. Please try again.",
-        );
+        throw new Error("Failed to create note.");
       }
 
-      toast.success("Note saved successfully!");
-
+      toast.success("Note created successfully.");
       router.push("/developer-dashboard/notepad");
       router.refresh();
     } catch (error) {

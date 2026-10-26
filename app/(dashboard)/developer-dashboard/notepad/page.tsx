@@ -1,6 +1,8 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { toast } from "sonner";
+import { apiFetch } from "@/lib/api";
 import {
   ArrowUpRight,
   BookOpen,
@@ -75,14 +77,58 @@ const INITIAL_NOTES: Note[] = [
 const categories = ["All notes", "Ideas", "Development", "Learning", "Personal"];
 
 export default function NotepadPage() {
+
   const router = useRouter();
 
-  // Demo data: replace with your backend response.
-  const [notes, setNotes] = useState<Note[]>(INITIAL_NOTES);
+  const [notes, setNotes] = useState<Note[]>([]);
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState("All notes");
   const [showPinnedOnly, setShowPinnedOnly] = useState(false);
-  const [loading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function fetchNotes() {
+      try {
+        setLoading(true);
+        setError(null);
+
+        const response = await apiFetch("/notepad");
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch notes.");
+        }
+
+        const data: Note[] = await response.json();
+
+        if (!cancelled) {
+          setNotes(data);
+        }
+      } catch (err) {
+        if (!cancelled) {
+          const message =
+            err instanceof Error
+              ? err.message
+              : "Something went wrong while loading your notes.";
+
+          setError(message);
+          toast.error(message);
+        }
+      } finally {
+        if (!cancelled) {
+          setLoading(false);
+        }
+      }
+    }
+
+    fetchNotes();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const filteredNotes = useMemo(() => {
     return notes
@@ -133,16 +179,71 @@ export default function NotepadPage() {
     router.push(`/developer-dashboard/notepad/${id}`);
   }
 
-  function handleDeleteNote(id: string) {
-    setNotes((previous) => previous.filter((note) => note._id !== id));
+
+  async function handleDeleteNote(id: string) {
+    try {
+      const response = await apiFetch(`/notepad/${id}`, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to delete note.");
+      }
+
+      setNotes((previous) =>
+        previous.filter((note) => note._id !== id),
+      );
+
+      toast.success("Note deleted successfully.");
+    } catch (err) {
+      toast.error(
+        err instanceof Error
+          ? err.message
+          : "Something went wrong while deleting the note.",
+      );
+    }
   }
 
-  function handleTogglePin(id: string) {
-    setNotes((previous) =>
-      previous.map((note) =>
-        note._id === id ? { ...note, pinned: !note.pinned } : note,
-      ),
-    );
+  async function handleTogglePin(id: string) {
+    const note = notes.find((item) => item._id === id);
+
+    if (!note) return;
+
+    const nextPinned = !note.pinned;
+
+    try {
+      const response = await apiFetch(`/notepad/${id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          pinned: nextPinned,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to update pin status.");
+      }
+
+      const updatedNote: Note = await response.json();
+
+      setNotes((previous) =>
+        previous.map((item) =>
+          item._id === id ? updatedNote : item,
+        ),
+      );
+
+      toast.success(
+        nextPinned ? "Note pinned." : "Note unpinned.",
+      );
+    } catch (err) {
+      toast.error(
+        err instanceof Error
+          ? err.message
+          : "Something went wrong while updating the note.",
+      );
+    }
   }
 
   function formatDate(date?: string) {
@@ -324,6 +425,23 @@ export default function NotepadPage() {
           {loading ? (
             <div className="flex justify-center py-20">
               <LoaderCircle className="size-6 animate-spin text-emerald-500" />
+            </div>
+          ) : error ? (
+            <div className="rounded-[18px] border border-dashed border-neutral-200 px-5 py-16 text-center dark:border-white/10">
+              <p className="text-sm font-medium text-neutral-700 dark:text-white/70">
+                Couldn't load your notes
+              </p>
+
+              <p className="mt-2 text-xs text-neutral-400 dark:text-white/35">
+                Check your connection and try again.
+              </p>
+
+              <button
+                onClick={() => window.location.reload()}
+                className="mt-5 text-xs font-semibold text-emerald-700 hover:text-emerald-800 dark:text-emerald-400"
+              >
+                Try again
+              </button>
             </div>
           ) : filteredNotes.length === 0 ? (
             <div className="rounded-[18px] border border-dashed border-neutral-200 px-5 py-16 text-center dark:border-white/10">
