@@ -10,6 +10,7 @@ import {
   Map,
   Menu,
   Moon,
+  NotepadTextIcon,
   Sun,
   User2,
   X,
@@ -47,6 +48,11 @@ const navigation = [
     href: "/developer-dashboard/roadmap",
     icon: Map,
   },
+  {
+    label: "Notepad",
+    href: "/developer-dashboard/notepad",
+    icon: NotepadTextIcon
+  }
 ]
 
 export default function Sidebar() {
