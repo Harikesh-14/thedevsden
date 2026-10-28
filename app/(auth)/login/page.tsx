@@ -75,6 +75,9 @@ export default function LoginPage() {
             size="icon"
             variant="outline"
             className="size-8.5 rounded-xl border-neutral-200/80 dark:border-white/8"
+            onClick={() => (
+              window.localStorage.setItem("devMode", "false")
+            )}
             asChild
           >
             <Link href="/">
