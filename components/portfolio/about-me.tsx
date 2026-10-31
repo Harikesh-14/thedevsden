@@ -51,7 +51,7 @@ export default async function AboutSection() {
     <section id="about-me" className="border-b bg-background">
       <div className="mx-auto mb-20">
         {/* Section heading */}
-        <div className="mb-12 max-w-2xl lg:mb-16">
+        <div className="mb-12 max-w-3xl lg:mb-16">
           <div className="mb-5 h-0.75 w-8 rounded-full bg-emerald-500" />
 
           <Badge

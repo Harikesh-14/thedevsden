@@ -33,7 +33,10 @@
   "AboutMe": {
     "title": "About me",
     "subheading": "Building software with curiosity and purpose.",
-    "imageMetadata": ["Software Engineer", "Building & Exploring"],
+    "imageMetadata": [
+      "Software Engineer",
+      "Building & Exploring"
+    ],
     "description": [
       "I'm a software engineer who enjoys turning ideas into well-designed, reliable software. I work across the stack, with a particular interest in backend systems, developer tools, and artificial intelligence.",
       "I like understanding how things work beneath the surface — from designing APIs and databases to experimenting with programming languages, machine learning systems, and developer-focused products.",
@@ -47,12 +50,21 @@
       "rowTwo": {
         "heading": "What I do",
         "description": "Full-stack web development, backend engineering, APIs and software architecture.",
-        "tags": ["Frontend", "Backend", "APIs", "Architecture"]
+        "tags": [
+          "Frontend",
+          "Backend",
+          "APIs",
+          "Architecture"
+        ]
       },
       "rowThree": {
         "heading": "Currently focused on",
         "description": "Artificial intelligence, machine learning, developer tools and distributed systems.",
-        "tags": ["AI/ML", "Dev tools", "Distributed Systems"]
+        "tags": [
+          "AI/ML",
+          "Dev tools",
+          "Distributed Systems"
+        ]
       },
       "rowFour": {
         "heading": "Based in",
@@ -63,7 +75,104 @@
     "buttonTwo": "CV Coming Soon"
   },
   "Skills": {
-    "title": "My skills"
+    "title": "Skills & expertise",
+    "subheading": "Tools I use to turn",
+    "subheadingHighlight": "ideas into systems.",
+    "description": "A collection of technologies, engineering practices and areas I'm actively working with — from backend systems to artificial intelligence.",
+    "coreTitle": "Core engineering",
+    "coreDescription": "Beyond frameworks, these are the areas I focus on when designing and building software.",
+    "coreSkills": [
+      "Software Architecture",
+      "API Design",
+      "System Design",
+      "Database Design",
+      "Authentication",
+      "Real-time Systems",
+      "Developer Tools",
+      "Problem Solving"
+    ],
+    "skillGroups": [
+      {
+        "title": "Backend Engineering",
+        "description": "Building APIs, services and scalable server-side systems.",
+        "skills": [
+          "Node.js",
+          "Express.js",
+          "NestJS",
+          "REST APIs",
+          "Authentication",
+          "WebSockets",
+          "Socket.IO"
+        ]
+      },
+      {
+        "title": "Frontend & Web",
+        "description": "Creating modern interfaces and full-stack web applications.",
+        "skills": [
+          "Next.js",
+          "React",
+          "TypeScript",
+          "JavaScript",
+          "Tailwind CSS",
+          "shadcn/ui"
+        ]
+      },
+      {
+        "title": "Databases",
+        "description": "Designing and working with application data and persistence.",
+        "skills": [
+          "MongoDB",
+          "Mongoose",
+          "SwiftData"
+        ]
+      },
+      {
+        "title": "Programming Languages",
+        "description": "Languages I use to build systems and explore computer science.",
+        "skills": [
+          "TypeScript",
+          "JavaScript",
+          "Swift",
+          "Java",
+          "C++",
+          "C",
+          "Python"
+        ]
+      },
+      {
+        "title": "AI & Machine Learning",
+        "description": "Exploring intelligent systems, ML engineering and model development.",
+        "skills": [
+          "Machine Learning",
+          "Deep Learning",
+          "Image Classification",
+          "AI Engineering",
+          "Model Training"
+        ]
+      },
+      {
+        "title": "Systems & Developer Tools",
+        "description": "Working closer to the system and building tools for developers.",
+        "skills": [
+          "Linux",
+          "Unix",
+          "Git",
+          "GitHub",
+          "CLI Development",
+          "Make",
+          "Docker"
+        ]
+      },
+      {
+        "title": "Automation Testing",
+        "description": "Automating the testing process for websites.",
+        "skills": [
+          "Selenium",
+          "Playwright"
+        ]
+      }
+    ],
+    "footer": "Always learning. Always building. Always experimenting."
   },
   "Projects": {
     "title": "Featured projects",
