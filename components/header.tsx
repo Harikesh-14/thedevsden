@@ -8,6 +8,7 @@ import { Switch } from "@/components/ui/switch"
 import { cn } from "@/lib/utils"
 import ModeTransition from "./mode-transition"
 import { useTranslations } from "next-intl"
+import LanguageToggler from "./langauge-toggler"
 
 export default function Header() {
   const pathname = usePathname()
@@ -88,7 +89,7 @@ export default function Header() {
         <div
           className={cn(
             "pointer-events-auto",
-            "w-full max-w-4xl",
+            "w-full max-w-5xl",
             "flex items-center justify-between gap-3 sm:gap-5",
             "h-13 rounded-full px-5",
             "bg-white/75 dark:bg-neutral-950/80",
@@ -207,6 +208,8 @@ export default function Header() {
                 </svg>
               )}
             </button>
+
+            <LanguageToggler />
 
             <ModeToggle />
           </div>
