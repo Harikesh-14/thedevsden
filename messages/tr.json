@@ -1,0 +1,77 @@
+{
+  "Metadata": {
+    "title": "Harikesh Ranjan Sinha | Software Engineer",
+    "description": ""
+  },
+  "Header": {
+    "about": {
+      "title": "Hakkımda",
+      "href": "#about-me"
+    },
+    "skills": {
+      "title": "Yetenekler",
+      "href": "#skills"
+    },
+    "projects": {
+      "title": "Projeler",
+      "href": "#projects"
+    },
+    "experiences": {
+      "title": "Deneyimler",
+      "href": "#experiences"
+    },
+    "education": {
+      "title": "Eğitim",
+      "href": "#education"
+    },
+    "contact": {
+      "title": "İletişim",
+      "href": "#contact-me"
+    },
+    "devMode": "Geliştirici modu"
+  },
+  "AboutMe": {
+    "title": "Hakkımda",
+    "subheading": "Merak ve amaçla yazılım geliştiriyorum.",
+    "imageMetadata": [
+      "Yazılım Mühendisi",
+      "Geliştirmek ve Keşfetmek"
+    ],
+    "description": [
+      "Fikirleri iyi tasarlanmış, güvenilir yazılım çözümlerine dönüştürmekten keyif alan bir yazılım mühendisiyim. Full-stack geliştirme alanında çalışıyor; özellikle backend sistemleri, geliştirici araçları ve yapay zekâ ile ilgileniyorum.",
+      "Teknolojinin perde arkasında nasıl çalıştığını anlamayı seviyorum. API ve veritabanı tasarımından programlama dilleri, makine öğrenimi sistemleri ve geliştirici odaklı ürünler üzerinde deneyler yapmaya kadar birçok farklı alanda kendimi geliştirmeye çalışıyorum.",
+      "Sürekli yeni fikirler geliştiriyor ve farklı teknolojilerle deneyler yapıyorum. Benim için her proje, yeni teknolojileri keşfetmek ve bilgisayar bilimi alanındaki bilgimi derinleştirmek için bir fırsat."
+    ],
+    "tableData": {
+      "rowOne": {
+        "heading": "Profesyonel Deneyim",
+        "description": "Sektörde 1 yıllık deneyim"
+      },
+      "rowTwo": {
+        "heading": "Neler Yapıyorum?",
+        "description": "Full-stack web geliştirme, backend mühendisliği, API'ler ve yazılım mimarisi.",
+        "tags": [
+          "Frontend",
+          "Backend",
+          "API'ler",
+          "Mimari"
+        ]
+      },
+      "rowThree": {
+        "heading": "Şu Anda Odaklandığım Alanlar",
+        "description": "Yapay zekâ, makine öğrenimi, geliştirici araçları ve dağıtık sistemler.",
+        "tags": [
+          "AI/ML",
+          "Geliştirici Araçları",
+          "Dağıtık Sistemler"
+        ]
+      },
+      "rowFour": {
+        "heading": "Yaşadığım Yer",
+        "description": "Greater Noida, Uttar Pradesh, Hindistan"
+      }
+    },
+    "buttonOne": "Projelerimi Keşfet",
+    "buttonTwo": "Özgeçmiş Çok Yakında"
+  }
+}

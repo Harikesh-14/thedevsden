@@ -30,9 +30,14 @@ export default function LanguageToggler() {
 
       <SelectContent position="popper" sideOffset={5}>
         <SelectGroup>
-          <SelectLabel>Language</SelectLabel>
+          <SelectLabel>Indian Languages</SelectLabel>
           <SelectItem value="en">English</SelectItem>
           <SelectItem value="hi">हिन्दी</SelectItem>
+        </SelectGroup>
+
+        <SelectGroup>
+          <SelectLabel>Foreign Languages</SelectLabel>
+          <SelectItem value="tr">Türkçe</SelectItem>
         </SelectGroup>
       </SelectContent>
     </Select>
