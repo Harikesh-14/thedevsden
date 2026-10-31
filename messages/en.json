@@ -1,0 +1,50 @@
+{
+  "Metadata": {
+    "title": "Harikesh Ranjan Sinha | Software Engineer",
+    "description": "Explore my projects, skills, experience and education."
+  },
+  "Header": {
+    "about": "About me",
+    "skills": "Skills",
+    "projects": "Projects",
+    "experiences": "Experiences",
+    "education": "Education",
+    "contact": "Contact",
+    "devMode": "Dev mode"
+  },
+  "About": {
+    "title": "About me",
+    "description": "Your introduction goes here."
+  },
+  "Skills": {
+    "title": "My skills"
+  },
+  "Projects": {
+    "title": "Featured projects",
+    "loading": "Loading projects...",
+    "error": "Unable to load projects.",
+    "empty": "No projects available."
+  },
+  "Experiences": {
+    "title": "Professional experience"
+  },
+  "Education": {
+    "title": "Where I learned.",
+    "description": "My academic journey from school to software engineering.",
+    "qualification": "Qualification",
+    "highlights": "Academic highlights",
+    "graduated": "Graduated",
+    "undergraduate": "Undergraduate",
+    "school": "School"
+  },
+  "Contact": {
+    "title": "Get in touch",
+    "name": "Your name",
+    "email": "Your email",
+    "message": "Your message",
+    "submit": "Send message",
+    "sending": "Sending...",
+    "success": "Message sent successfully!",
+    "error": "Something went wrong. Please try again."
+  }
+}
