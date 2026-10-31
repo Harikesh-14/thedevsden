@@ -5,48 +5,53 @@ import {
   Code2,
   MapPin,
   Sparkles,
-  Download,
   Calendar1,
 } from "lucide-react"
+
+import { getTranslations } from "next-intl/server"
 
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 
-const facts = [
-  {
-    icon: Calendar1,
-    label: "Professional Experience",
-    body: "1 year experience in the industry",
-    tags: [],
-  },
-  {
-    icon: Code2,
-    label: "What I do",
-    body: "Full-stack web development, backend engineering, APIs and software architecture.",
-    tags: ["Frontend", "Backend", "APIs", "Architecture"],
-  },
-  {
-    icon: BriefcaseBusiness,
-    label: "Currently focused on",
-    body: "Artificial intelligence, machine learning, developer tools and distributed systems.",
-    tags: ["AI / ML", "Dev tools", "Distributed systems"],
-  },
-  {
-    icon: MapPin,
-    label: "Based in",
-    body: "Greater Noida, India",
-    tags: [],
-  },
-]
+export default async function AboutSection() {
+  const t = await getTranslations("AboutMe")
 
-export default function AboutSection() {
+  const descriptions = t.raw("description") as string[]
+  const imageMetadata = t.raw("imageMetadata") as string[]
+
+  const facts = [
+    {
+      icon: Calendar1,
+      label: t("tableData.rowOne.heading"),
+      body: t("tableData.rowOne.description"),
+      tags: [] as string[],
+    },
+    {
+      icon: Code2,
+      label: t("tableData.rowTwo.heading"),
+      body: t("tableData.rowTwo.description"),
+      tags: t.raw("tableData.rowTwo.tags") as string[],
+    },
+    {
+      icon: BriefcaseBusiness,
+      label: t("tableData.rowThree.heading"),
+      body: t("tableData.rowThree.description"),
+      tags: t.raw("tableData.rowThree.tags") as string[],
+    },
+    {
+      icon: MapPin,
+      label: t("tableData.rowFour.heading"),
+      body: t("tableData.rowFour.description"),
+      tags: [] as string[],
+    },
+  ]
+
   return (
     <section id="about-me" className="border-b bg-background">
       <div className="mx-auto mb-20">
         {/* Section heading */}
         <div className="mb-12 max-w-2xl lg:mb-16">
-          {/* Emerald rule line */}
           <div className="mb-5 h-0.75 w-8 rounded-full bg-emerald-500" />
 
           <Badge
@@ -54,31 +59,29 @@ export default function AboutSection() {
             className="mb-5 gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-900 dark:bg-emerald-950/50 dark:text-emerald-400"
           >
             <Sparkles className="size-3" />
-            About me
+            {t("title")}
           </Badge>
 
           <h2 className="text-3xl font-semibold tracking-tight text-neutral-900 sm:text-4xl lg:text-5xl dark:text-neutral-50">
-            Building software with{" "}
-            <span className="text-neutral-400 dark:text-neutral-500">
-              curiosity and purpose.
-            </span>
+            {t("subheading")}
           </h2>
         </div>
 
         {/* Content grid */}
         <div className="grid items-start gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:gap-16 xl:gap-24">
-          {/* ── Left: Image ── */}
+
+          {/* Left: Image */}
           <div className="relative mx-auto w-full max-w-sm lg:mx-0">
             <div className="relative aspect-4/5 overflow-hidden rounded-2xl border border-neutral-200 bg-neutral-100 dark:border-neutral-800 dark:bg-neutral-900">
               <Image
                 src="/profile_photo.jpeg"
-                alt="Profile photo"
+                alt={imageMetadata[0]}
                 fill
                 priority
                 sizes="(max-width: 1024px) 100vw, 380px"
                 className="object-cover"
               />
-              {/* Emerald corner accent */}
+
               <div className="absolute inset-0 rounded-2xl ring-1 ring-black/5 ring-inset dark:ring-white/5" />
             </div>
 
@@ -92,41 +95,37 @@ export default function AboutSection() {
               )}
             >
               <div className="flex items-center gap-2.5">
-                {/* Animated pulse dot */}
                 <span className="relative flex size-2.5">
                   <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-60" />
                   <span className="relative inline-flex size-2.5 rounded-full bg-emerald-500" />
                 </span>
+
                 <p className="text-sm font-semibold text-neutral-900 dark:text-neutral-100">
-                  Software Engineer
+                  {imageMetadata[0]}
                 </p>
               </div>
+
               <p className="mt-0.5 pl-5 text-xs text-neutral-400 dark:text-neutral-500">
-                Building &amp; exploring
+                {imageMetadata[1]}
               </p>
             </div>
           </div>
 
-          {/* ── Right: Content ── */}
+          {/* Right: Content */}
           <div className="flex flex-col gap-8">
+
             {/* Bio */}
             <div className="space-y-3">
               <p className="text-lg leading-8 text-neutral-800 sm:text-xl dark:text-neutral-200">
-                I'm a software engineer who enjoys turning ideas into
-                well-designed, reliable software. I work across the stack, with
-                a particular interest in backend systems, developer tools, and
-                artificial intelligence.
+                {descriptions[0]}
               </p>
+
               <p className="leading-7 text-neutral-500 dark:text-neutral-400">
-                I like understanding how things work beneath the surface — from
-                designing APIs and databases to experimenting with programming
-                languages, machine learning systems, and developer-focused
-                products.
+                {descriptions[1]}
               </p>
+
               <p className="leading-7 text-neutral-500 dark:text-neutral-400">
-                I'm constantly building and experimenting with new ideas, using
-                projects as a way to explore technologies and deepen my
-                understanding of computer science.
+                {descriptions[2]}
               </p>
             </div>
 
@@ -134,7 +133,6 @@ export default function AboutSection() {
             <div className="divide-y divide-neutral-100 overflow-hidden rounded-2xl border border-neutral-200 bg-white dark:divide-neutral-800 dark:border-neutral-800 dark:bg-neutral-900/50">
               {facts.map(({ icon: Icon, label, body, tags }) => (
                 <div key={label} className="flex items-start gap-4 p-5">
-                  {/* Emerald icon box */}
                   <div className="flex size-9 shrink-0 items-center justify-center rounded-xl border border-emerald-200 bg-emerald-50 dark:border-emerald-900 dark:bg-emerald-950/60">
                     <Icon className="size-4 text-emerald-600 dark:text-emerald-400" />
                   </div>
@@ -143,9 +141,11 @@ export default function AboutSection() {
                     <p className="text-sm font-semibold text-neutral-900 dark:text-neutral-100">
                       {label}
                     </p>
+
                     <p className="mt-1 text-sm leading-6 text-neutral-500 dark:text-neutral-400">
                       {body}
                     </p>
+
                     {tags.length > 0 && (
                       <div className="mt-2.5 flex flex-wrap gap-1.5">
                         {tags.map((tag) => (
@@ -170,11 +170,10 @@ export default function AboutSection() {
                 asChild
               >
                 <a href="#projects">
-                  Explore my work
+                  {t("buttonOne")}
                   <ArrowUpRight className="ml-1.5 size-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                 </a>
               </Button>
-
 
               <Button
                 variant="outline"
@@ -182,10 +181,9 @@ export default function AboutSection() {
                 disabled
                 title="My resume is still being prepared. Check back soon!"
               >
-                CV Coming Soon
+                {t("buttonTwo")}
                 <Calendar1 className="ml-1.5 size-4" />
               </Button>
-
             </div>
           </div>
         </div>

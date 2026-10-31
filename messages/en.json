@@ -12,9 +12,37 @@
     "contact": "Contact",
     "devMode": "Dev mode"
   },
-  "About": {
+  "AboutMe": {
     "title": "About me",
-    "description": "Your introduction goes here."
+    "subheading": "Building software with curiosity and purpose.",
+    "imageMetadata": ["Software Engineer", "Building & Exploring"],
+    "description": [
+      "I'm a software engineer who enjoys turning ideas into well-designed, reliable software. I work across the stack, with a particular interest in backend systems, developer tools, and artificial intelligence.",
+      "I like understanding how things work beneath the surface — from designing APIs and databases to experimenting with programming languages, machine learning systems, and developer-focused products.",
+      "I'm constantly building and experimenting with new ideas, using projects as a way to explore technologies and deepen my understanding of computer science."
+    ],
+    "tableData": {
+      "rowOne": {
+        "heading": "Professional Experience",
+        "description": "1 year experience in the industry"
+      },
+      "rowTwo": {
+        "heading": "What I do",
+        "description": "Full-stack web development, backend engineering, APIs and software architecture.",
+        "tags": ["Frontend", "Backend", "APIs", "Architecture"]
+      },
+      "rowThree": {
+        "heading": "Currently focused on",
+        "description": "Artificial intelligence, machine learning, developer tools and distributed systems.",
+        "tags": ["AI/ML", "Dev tools", "Distributed Systems"]
+      },
+      "rowFour": {
+        "heading": "Based in",
+        "description": "Greater Noida, Uttar Pradesh, India"
+      }
+    },
+    "buttonOne": "Explore my work",
+    "buttonTwo": "CV Coming Soon"
   },
   "Skills": {
     "title": "My skills"
