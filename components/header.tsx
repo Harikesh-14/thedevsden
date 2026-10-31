@@ -1,25 +1,29 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import Link from "next/link"
+import { Link } from "@/i18n/navigation"
 import { usePathname, useRouter } from "next/navigation"
 import ModeToggle from "./mode-toggle"
 import { Switch } from "@/components/ui/switch"
 import { cn } from "@/lib/utils"
 import ModeTransition from "./mode-transition"
-
-const navLinks = [
-  { label: "About me", href: "#about-me" },
-  { label: "Skills", href: "#skills" },
-  { label: "Projects", href: "#projects" },
-  { label: "Experiences", href: "#experiences" },
-  { label: "Education", href: "#education" },
-  { label: "Contact", href: "#contact-me" },
-]
+import { useTranslations } from "next-intl"
 
 export default function Header() {
   const pathname = usePathname()
   const router = useRouter()
+  const t = useTranslations("Header")
+
+  const navLinks = [
+    t.raw("about"),
+    t.raw("skills"),
+    t.raw("projects"),
+    t.raw("experiences"),
+    t.raw("education"),
+    t.raw("contact"),
+  ] as { title: string, href: string} []
+
+  const devMode = t.raw("devMode")
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [developerMode, setDeveloperMode] = useState<boolean | null>(null)
@@ -115,7 +119,7 @@ export default function Header() {
 
           {/* Desktop Nav */}
           <nav className="hidden items-center gap-0.5 md:flex">
-            {navLinks.map(({ label, href }) => (
+            {navLinks.map(({ title, href }) => (
               <Link
                 key={href}
                 href={href}
@@ -130,7 +134,7 @@ export default function Header() {
                   ]
                 )}
               >
-                {label}
+                {title}
               </Link>
             ))}
           </nav>
@@ -164,7 +168,7 @@ export default function Header() {
               )}
 
               <span className="pr-0.5 text-[12px] font-medium whitespace-nowrap text-zinc-400 dark:text-neutral-500">
-                Dev mode
+                {devMode}
               </span>
             </label>
 
@@ -230,7 +234,7 @@ export default function Header() {
             )}
           >
             <nav className="flex flex-col gap-1">
-              {navLinks.map(({ label, href }) => (
+              {navLinks.map(({ title, href }) => (
                 <Link
                   key={href}
                   href={href}
@@ -243,7 +247,7 @@ export default function Header() {
                     pathname === href && "font-semibold text-emerald-500"
                   )}
                 >
-                  {label}
+                  {title}
                 </Link>
               ))}
             </nav>
@@ -253,7 +257,7 @@ export default function Header() {
             {/* Mobile Dev Mode */}
             <div className="flex items-center justify-between px-2 py-1">
               <span className="text-sm font-medium text-zinc-600 dark:text-neutral-300">
-                Dev mode
+                {devMode}
               </span>
 
               {isDeveloperModeLoaded && (

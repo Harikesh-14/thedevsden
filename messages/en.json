@@ -4,12 +4,30 @@
     "description": "Explore my projects, skills, experience and education."
   },
   "Header": {
-    "about": "About me",
-    "skills": "Skills",
-    "projects": "Projects",
-    "experiences": "Experiences",
-    "education": "Education",
-    "contact": "Contact",
+    "about": {
+      "title": "About me",
+      "href": "#about-me"
+    },
+    "skills": {
+      "title": "Skills",
+      "href": "#skills"
+    },
+    "projects": {
+      "title": "Projects",
+      "href": "#projects"
+    },
+    "experiences": {
+      "title": "Experiences",
+      "href": "#experiences"
+    },
+    "education": {
+      "title": "Education",
+      "href": "#education"
+    },
+    "contact": {
+      "title": "Contact",
+      "href": "#contact-me"
+    },
     "devMode": "Dev mode"
   },
   "AboutMe": {

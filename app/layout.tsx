@@ -4,6 +4,8 @@ import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 import { cn } from "@/lib/utils"
 import { Metadata } from "next"
+import { NextIntlClientProvider } from "next-intl"
+import { getMessages } from "next-intl/server"
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" })
 
@@ -17,11 +19,13 @@ export const metadata: Metadata = {
   description: "The porfolio cum developer dashboard of Harikesh Ranjan Sinha",
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const messages = getMessages()
+
   return (
     <html
       lang="en"
@@ -34,7 +38,11 @@ export default function RootLayout({
       )}
     >
       <body>
-        <ThemeProvider>{children}</ThemeProvider>
+        <ThemeProvider>
+          <NextIntlClientProvider messages={messages}>
+            {children}
+          </NextIntlClientProvider>
+        </ThemeProvider>
       </body>
     </html>
   )

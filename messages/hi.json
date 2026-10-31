@@ -4,12 +4,30 @@
     "description": "मेरी परियोजनाओं, कौशल, अनुभव और शिक्षा के बारे में जानें।"
   },
   "Header": {
-    "about": "मेरे बारे में",
-    "skills": "कौशल",
-    "projects": "परियोजनाएँ",
-    "experiences": "अनुभव",
-    "education": "शिक्षा",
-    "contact": "संपर्क करें",
+    "about": {
+      "title": "मेरे बारे में",
+      "href": "#about-me"
+    },
+    "skills": {
+      "title": "कौशल",
+      "href": "#skills"
+    },
+    "projects": {
+      "title": "प्रोजेक्ट्स",
+      "href": "#projects"
+    },
+    "experiences": {
+      "title": "अनुभव",
+      "href": "#experiences"
+    },
+    "education": {
+      "title": "शिक्षा",
+      "href": "#education"
+    },
+    "contact": {
+      "title": "संपर्क करें",
+      "href": "#contact-me"
+    },
     "devMode": "डेवलपर मोड"
   },
   "AboutMe": {
