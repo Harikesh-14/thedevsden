@@ -152,7 +152,7 @@ export default function NotepadIDPage() {
       cancelled = true;
     };
   }, [id]);
-  
+
   const saveLatest = useCallback(async () => {
     if (!note) return;
 
@@ -353,7 +353,7 @@ export default function NotepadIDPage() {
         className="pointer-events-none fixed -bottom-16 right-1/4 h-52 w-72 rounded-full bg-emerald-400/15 blur-3xl dark:bg-emerald-500/6"
       />
 
-      <div className="relative mx-auto w-full max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
+      <div className="relative mx-auto w-full max-w-5xl px-4 py-8 sm:px-6 lg:px-8">
         {/* Navigation */}
         <div className="mb-8 flex flex-wrap items-center justify-between gap-3">
           <button

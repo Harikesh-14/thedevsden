@@ -1,20 +1,26 @@
 import Sidebar from "@/components/developer-dashboard/sidebar"
 import { Toaster } from "@/components/ui/sonner"
+import { NextIntlClientProvider } from "next-intl"
+import { getMessages } from "next-intl/server"
 import React from "react"
 
-export default function DashboardLayout({
+export default async function DashboardLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  return (
-    <main className="min-h-screen">
-      <Sidebar />
+  const messages = await getMessages();
 
-      <div className="min-h-screen md:pl-68">
-        {children}
-        <Toaster position="top-right" />
-      </div>
-    </main>
+  return (
+    <NextIntlClientProvider messages={messages}>
+      <main className="min-h-screen">
+        <Sidebar />
+
+        <div className="min-h-screen md:pl-68">
+          {children}
+          <Toaster position="top-right" />
+        </div>
+      </main>
+    </NextIntlClientProvider>
   )
 }

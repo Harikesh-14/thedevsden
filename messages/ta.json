@@ -1,0 +1,368 @@
+{
+  "Metadata": {
+    "title": "ஹரிகேஷ் ரஞ்சன் சின்ஹா | மென்பொருள் பொறியாளர்",
+    "description": "என் திட்டங்கள், திறன்கள், அனுபவம் மற்றும் கல்வியை அறியுங்கள்."
+  },
+  "Header": {
+    "about": {
+      "title": "என்னைப் பற்றி",
+      "href": "#about-me"
+    },
+    "skills": {
+      "title": "திறன்கள்",
+      "href": "#skills"
+    },
+    "projects": {
+      "title": "திட்டங்கள்",
+      "href": "#projects"
+    },
+    "experiences": {
+      "title": "அனுபவம்",
+      "href": "#experiences"
+    },
+    "education": {
+      "title": "கல்வி",
+      "href": "#education"
+    },
+    "contact": {
+      "title": "தொடர்பு",
+      "href": "#contact-me"
+    },
+    "devMode": "Dev முறை"
+  },
+  "AboutMe": {
+    "title": "என்னைப் பற்றி",
+    "subheading": "ஆர்வத்துடனும் தெளிவான இலக்குடனும் மென்பொருள்களை உருவாக்குபவன்.",
+    "imageMetadata": [
+      "மென்பொருள் பொறியாளர்",
+      "உருவாக்கம் & ஆராய்ச்சி"
+    ],
+    "description": [
+      "நான் ஒரு மென்பொருள் பொறியாளர். புதிய யோசனைகளைச் சிறந்த, நம்பகமான மென்பொருள்களாக மாற்றுவதில் எனக்கு மிகுந்த ஆர்வம் உண்டு. Backend அமைப்புகள், Developer கருவிகள் மற்றும் செயற்கை நுண்ணறிவு (AI) ஆகியவற்றில் அதிக கவனம் செலுத்தி Full-stack தளங்களில் பணியாற்றுகிறேன்.",
+      "API மற்றும் தரவுத்தள வடிவமைப்பு (Databases) முதல் நிரலாக்க மொழிகள், இயந்திரக் கற்றல் (Machine Learning) அமைப்புகள் மற்றும் Developer கருவிகள் வரை தொழல்நுட்பங்கள் எவ்வாறு இயங்குகின்றன என்பதை ஆழமாகப் புரிந்து கொள்ள விரும்புபவன்.",
+      "கணினி அறிவியலின் நுட்பங்களை மேலும் ஆழமாகப் புரிந்துகொள்ளவும், புதிய தொழில்நுட்பங்களைக் கற்றுக்கொள்ளவும் தொடர்ச்சியாகப் பல்வேறு திட்டங்களை உருவாக்கி வருகிறேன்."
+    ],
+    "tableData": {
+      "rowOne": {
+        "heading": "தொழில்முறை அனுபவம்",
+        "description": "தொழில்துறையில் 1 வருட அனுபவம்"
+      },
+      "rowTwo": {
+        "heading": "என் பணிகள்",
+        "description": "Full-stack வலைப்பக்க உருவாக்கம், Backend பொறியியல், APIகள் மற்றும் மென்பொருள் கட்டமைப்பு.",
+        "tags": [
+          "Frontend",
+          "Backend",
+          "APIs",
+          "Architecture"
+        ]
+      },
+      "rowThree": {
+        "heading": "தற்போதைய கவனம்",
+        "description": "செயற்கை நுண்ணறிவு (AI), இயந்திரக் கற்றல் (ML), Developer கருவிகள் மற்றும் விநியோகிக்கப்பட்ட அமைப்புகள் (Distributed Systems).",
+        "tags": [
+          "AI/ML",
+          "Dev tools",
+          "Distributed Systems"
+        ]
+      },
+      "rowFour": {
+        "heading": "வாழும் இடம்",
+        "description": "கிரேட்டர் நொய்டா, உத்திரப் பிரதேசம், இந்தியா"
+      }
+    },
+    "buttonOne": "என் பணிகளைப் பார்க்க",
+    "buttonTwo": "சுயவிவரக் குறிப்பு விரைவில்"
+  },
+  "Skills": {
+    "title": "திறன்களும் நிபுணத்துவமும்",
+    "subheading": "யோசனைகளை அமைப்புகளாக மாற்ற",
+    "subheadingHighlight": "நான் பயன்படுத்தும் கருவிகள்.",
+    "description": "Backend அமைப்புகள் முதல் செயற்கை நுண்ணறிவு வரை நான் தீவிரமாகப் பணியாற்றும் தொழில்நுட்பங்கள் மற்றும் பொறியியல் முறைகளின் தொகுப்பு.",
+    "coreTitle": "முக்கிய பொறியியல் திறன்கள்",
+    "coreDescription": "Frameworks கடந்து, மென்பொருளை வடிவமைக்கும்போது நான் முதன்மையாகக் கவனத்தில் கொள்ளும் பகுதிகள்.",
+    "coreSkills": [
+      "மென்பொருள் கட்டமைப்பு",
+      "API வடிவமைப்பு",
+      "கணினி அமைப்பு வடிவமைப்பு",
+      "தரவுத்தள வடிவமைப்பு",
+      "உறுதிப்படுத்தல் (Authentication)",
+      "Real-time அமைப்புகள்",
+      "Developer கருவிகள்",
+      "சிக்கல் தீர்த்தல் (Problem Solving)"
+    ],
+    "skillGroups": [
+      {
+        "title": "Backend பொறியியல்",
+        "description": "APIகள், சேவைகள் மற்றும் அளவிடக்கூடிய (Scalable) சர்வர் அமைப்புகளை உருவாக்குதல்.",
+        "skills": [
+          "Node.js",
+          "Express.js",
+          "NestJS",
+          "REST APIs",
+          "Authentication",
+          "WebSockets",
+          "Socket.IO"
+        ]
+      },
+      {
+        "title": "Frontend & Web",
+        "description": "நவீன பயனர் இடைமுகங்கள் மற்றும் Full-stack வலைச் செயலிகளை உருவாக்குதல்.",
+        "skills": [
+          "Next.js",
+          "React",
+          "TypeScript",
+          "JavaScript",
+          "Tailwind CSS",
+          "shadcn/ui"
+        ]
+      },
+      {
+        "title": "தரவுத்தளங்கள் (Databases)",
+        "description": "செயலித் தரவுகள் மற்றும் தரவு சேமிப்பகங்களை வடிவமைத்தல்.",
+        "skills": [
+          "MongoDB",
+          "Mongoose",
+          "SwiftData"
+        ]
+      },
+      {
+        "title": "நிரலாக்க மொழிகள்",
+        "description": "அமைப்புகளை உருவாக்கவும் கணினி அறிவியலைக் கற்றுக்கொள்ளவும் நான் பயன்படுத்தும் மொழிகள்.",
+        "skills": [
+          "TypeScript",
+          "JavaScript",
+          "Swift",
+          "Java",
+          "C++",
+          "C",
+          "Python"
+        ]
+      },
+      {
+        "title": "AI & Machine Learning",
+        "description": "நுண்ணறிவு அமைப்புகள், ML பொறியியல் மற்றும் மாதிரி உருவாக்கத்தை ஆராய்தல்.",
+        "skills": [
+          "Machine Learning",
+          "Deep Learning",
+          "Image Classification",
+          "AI Engineering",
+          "Model Training"
+        ]
+      },
+      {
+        "title": "அமைப்புகள் & Developer கருவிகள்",
+        "description": "கணினி அமைப்புகளுக்கு மிக நெருக்கமான பணிகள் மற்றும் Developer கருவிகளை உருவாக்குதல்.",
+        "skills": [
+          "Linux",
+          "Unix",
+          "Git",
+          "GitHub",
+          "CLI Development",
+          "Make",
+          "Docker"
+        ]
+      },
+      {
+        "title": "தானியங்கி சோதனை (Automation Testing)",
+        "description": "வலைத்தளங்களுக்கான சோதனைச் செயல்பாடுகளைத் தானியங்குபடுத்துதல்.",
+        "skills": [
+          "Selenium",
+          "Playwright"
+        ]
+      }
+    ],
+    "footer": "எப்போதும் கற்றல். எப்போதும் உருவாக்கம். எப்போதும் பரிசோதனை."
+  },
+  "Projects": {
+    "title": "தேர்ந்தெடுக்கப்பட்ட பணிகள்",
+    "headingOne": "நான் உருவாக்கிய",
+    "headingTwo": "திட்டங்கள்.",
+    "description": "மென்பொருள் பொறியியல், AI, Developer கருவிகள் மற்றும் கணினி அறிவியலைக் கற்றுக்கொள்ளும் பாதையில் நான் உருவாக்கிய திட்டங்களின் தொகுப்பு.",
+    "viewAllProjects": "அனைத்துத் திட்டங்களையும் பார்க்க",
+    "viewProject": "திட்டத்தைப் பார்க்க",
+    "dialogBoxHeading": "GitHub-இல் என்னைக் காண",
+    "dialogBoxDescription": "நான் உருவாக்கிய திட்டங்களை இரண்டு GitHub கணக்குகளில் பகிர்ந்துள்ளேன். எனது பணிகளைப் பார்க்க ஒரு கணக்கைத் தேர்ந்தெடுக்கவும்.",
+    "footerNoteOne": "எப்போதும் உருவாக்கத்தில்... பெரும்பாலும் பரிசோதனையில்...",
+    "footerNoteTwo": "கூடுதல் திட்டங்கள் GitHub-இல் உள்ளன.",
+    "noProjectsYet": "சிறப்புத் திட்டங்கள் எதுவும் இல்லை",
+    "checkBackLater": "சிறப்புத் திட்டங்களைப் பார்க்க பின்னர் வரவும்.",
+    "tryAgain": "மீண்டும் முயற்சிக்கவும்",
+    "cannotLoadProject": "திட்டங்களை ஏற்ற முடியவில்லை",
+    "somethingWentWrong": "திட்டங்களைப் பெறும்போது பிழை ஏற்பட்டது. மீண்டும் முயற்சிக்கவும்.",
+    "githubs": [
+      {
+        "label": "முக்கிய GitHub",
+        "desc": "எனது முதன்மை சுயவிவரம், திட்டங்கள் மற்றும் Open-source பணிகள்.",
+        "username": "@Harikesh-14",
+        "href": "https://github.com/Harikesh-14"
+      },
+      {
+        "label": "இரண்டாம் நிலை GitHub",
+        "desc": "பரிசோதனைகள், கற்றல் திட்டங்கள் மற்றும் துணைப் பணிகள்.",
+        "username": "harikeshranjan",
+        "href": "https://github.com/harikeshranjan"
+      }
+    ]
+  },
+  "Experiences": {
+    "badge": "அனுபவம்",
+    "heading": "நான் பணியாற்றிய",
+    "headingHighlight": "இடங்கள்.",
+    "description": "எனது தொழில்முறைப் பயணம் Frontend உருவாக்கத்தில் தொடங்கி Backend பொறியியல் மற்றும் தானியங்கி சோதனை வரை நீண்டுள்ளது. இது மென்பொருள் உருவாக்கத்தின் பல்வேறு நிலைகளில் எனக்கு அனுபவத்தை அளித்துள்ளது.",
+    "current": "தற்போது",
+    "role": "பதவி",
+    "focusAreas": "கவனப் பகுதிகள்",
+    "employmentTypes": {
+      "fullTime": "முழு நேரப் பணி",
+      "internship": "பயிற்சிப் பணி (Internship)"
+    },
+    "positions": [
+      {
+        "company": "Tata Consultancy Services",
+        "shortName": "TCS",
+        "role": "System Engineer",
+        "period": "27 நவம்பர் 2025 – தற்போது வரை",
+        "type": "fullTime",
+        "location": "புது தில்லி, இந்தியா",
+        "description": "Backend உருவாக்கம் மற்றும் தானியங்கி சோதனைகளில் பணியாற்றுகிறேன்; Spring Boot மூலம் Backend சேவைகளை உருவாக்குவதோடு Selenium Java மூலம் தானியங்கு சோதனைச் செயல்பாடுகளை அமைத்து வருகிறேன்.",
+        "technologies": [
+          "Java",
+          "Spring Boot",
+          "Selenium",
+          "Backend Development",
+          "Test Automation"
+        ],
+        "highlightedTechs": [
+          "Java",
+          "Spring Boot",
+          "Selenium"
+        ],
+        "featured": true,
+        "meta": "Backend & Automation"
+      },
+      {
+        "company": "Centre for Railway Information Systems",
+        "shortName": "CRIS",
+        "role": "Frontend Web Developer Intern",
+        "period": "5 ஜூன் 2023 – 5 ஜூலை 2023",
+        "type": "internship",
+        "location": "புது தில்லி, இந்தியா",
+        "description": "Frontend разработчик-ஆகப் பணியாற்றி, பயனர் இடைமுகங்களை உருவாக்குவதிலும் தொழில்முறைப் பொறியியல் சூழலில் மென்பொருள் உருவாக்க நடைமுறைகளைப் புரிந்துகொள்வதிலும் நடைமுறை அனுபவம் பெற்றேன்.",
+        "technologies": [
+          "Frontend Development",
+          "Web Development",
+          "JavaScript",
+          "UI Development"
+        ],
+        "highlightedTechs": [],
+        "featured": false,
+        "meta": null
+      }
+    ]
+  },
+  "Education": {
+    "badge": "கல்வி",
+    "heading": "நான் பயின்ற",
+    "headingHighlight": "இடங்கள்.",
+    "description": "பள்ளிப் படிப்பிலிருந்து மென்பொருள் பொறியியல் வரையிலான எனது கல்விப் பயணம், கணினி அறிவியலின் வலுவான அடித்தளத்தாலும் தொழில்நுட்பக் கட்டமைப்பின் மீதான ஆர்வத்தாலும் வடிவமைக்கப்பட்டது.",
+    "qualification": "தகுதி",
+    "highlights": "கல்விச் சிறப்பம்சங்கள்",
+    "graduated": "பட்டப்படிப்பு முடித்தது",
+    "undergraduate": "இளங்கலை",
+    "school": "பள்ளி",
+    "institutions": [
+      {
+        "institution": "SRM பல்கலைக்கழகம்",
+        "shortName": "SRMIST",
+        "degree": "B.Tech — கணினி அறிவியல் மற்றும் பொறியியல்",
+        "specialization": "மென்பொருள் பொறியியல் சிறப்புப் பிரிவு",
+        "period": "ஆகஸ்ட் 2021 – ஜூன் 2025",
+        "type": "undergraduate",
+        "location": "காட்டாங்குளத்தூர், தமிழ்நாடு, இந்தியா",
+        "result": "8.89 CGPA",
+        "description": "கணினி அறிவியல் மற்றும் பொறியியல் துறையில் மென்பொருள் பொறியியல் சிறப்புப் பிரிவில் இளங்கலைப் பட்டப்படிப்பை முடித்தேன். மென்பொருள் உருவாக்கம் மற்றும் கணினி அறிவியல் கோட்பாடுகளில் வலுவான அடித்தளத்தைப் பெற்றேன்.",
+        "highlights": [
+          "B.Tech — கணினி அறிவியல் & பொறியியல்",
+          "மென்பொருள் பொறியியல் சிறப்புப் பிரிவு",
+          "மொத்த CGPA: 8.89"
+        ],
+        "featured": true
+      },
+      {
+        "institution": "R.D. ராஜ்பால் பள்ளி",
+        "shortName": "CBSE",
+        "degree": "மேல்நிலைக் கல்வி",
+        "specialization": "எல்.கே.ஜி முதல் 12-ஆம் வகுப்பு வரை",
+        "period": "2008 – 2021",
+        "type": "school",
+        "location": "துவாரகா செக்டார்-9, புது தில்லி, இந்தியா",
+        "result": "12-ஆம் வகுப்பில் 91.8%",
+        "description": "CBSE பாடத்திட்டத்தின் கீழ் மழலையர் பள்ளி முதல் 12-ஆம் வகுப்பு வரை எனது பள்ளிப் படிப்பை முடித்தேன்.",
+        "highlights": [
+          "12-ஆம் வகுப்பு: 91.8% — CBSE",
+          "10-ஆம் வகுப்பு: 84.6% — CBSE"
+        ],
+        "featured": false
+      }
+    ]
+  },
+  "Contact": {
+    "title": "தொடர்பு கொள்ள",
+    "heading": "சுவாரஸ்யமான ஒன்றை",
+    "headingHighlight": "உருவாக்குவோம்.",
+    "description": "உங்களிடம் ஒரு யோசனையோ, திட்டமோ இருக்கிறதா? அல்லது மென்பொருள், AI அல்லது தொழில்நுட்பங்கள் குறித்துப் பேச வேண்டுமா? எனது மின்னஞ்சல் கதவுகள் எப்போதும் திறந்திருக்கின்றன.",
+    "introTitle": "நாம் எதைப் பற்றிப் பேசலாம்?",
+    "introDescription": "சுவாரஸ்யமான யோசனைகள் மற்றும் சவாலான தொழில்நுட்பச் சிக்கல்களில் பணியாற்ற எப்போதும் தயாராக உள்ளேன். திட்டங்கள், கூட்டணி அல்லது மென்பொருள் பொறியியல் குறித்து தயங்காமல் தொடர்பு கொள்ளுங்கள்.",
+    "topics": [
+      "மென்பொருள் பொறியியல்",
+      "AI / ML",
+      "Backend அமைப்புகள்",
+      "Developer கருவிகள்",
+      "Open Source"
+    ],
+    "locationTitle": "வாழும் இடம்",
+    "location": "கிரேட்டர் நொய்டா, இந்தியா",
+    "contactMethods": {
+      "email": "மின்னஞ்சல்",
+      "githubMain": "GitHub (முதன்மை)",
+      "githubSecondary": "GitHub (இரண்டாம் நிலை)",
+      "linkedin": "LinkedIn"
+    },
+    "formTitle": "செய்தி அனுப்பவும்",
+    "formDescription": "உங்களைப் பற்றியும் நீங்கள் செய்யும் பணிகள் பற்றியும் சிறுகக் கூறுங்கள்.",
+    "name": "பெயர்",
+    "namePlaceholder": "உங்கள் பெயர்",
+    "email": "மின்னஞ்சல்",
+    "emailPlaceholder": "you@example.com",
+    "subject": "தலைப்பு",
+    "subjectPlaceholder": "நீங்கள் என்ன பேச விரும்புகிறீர்கள்?",
+    "message": "செய்தி",
+    "messagePlaceholder": "உங்கள் யோசனை, திட்டம் அல்லது கேள்வியைப் பற்றி எழுதுங்கள்...",
+    "submit": "செய்தி அனுப்பு",
+    "sending": "அனுப்பப்படுகிறது...",
+    "success": "செய்தி வெற்றிகரமாக அனுப்பப்பட்டது!",
+    "error": "ஏதோ தவறு நடந்துவிட்டது. மீண்டும் முயற்சிக்கவும்.",
+    "footer": "விரைவில் உங்களுக்குப் பதிலளிப்பேன்."
+  },
+  "Login": {
+    "heading": "நீங்கள்",
+    "name": "ஹரிகேஷா?",
+    "desc": "இது தனிப்பட்ட கட்டுப்பாட்டுப் பகுதி. தொடர உங்கள் அடையாளத்தை உறுதிப்படுத்தவும்.",
+    "password": "கடவுச்சொல்",
+    "passwordPlaceholder": "உங்கள் கடவுச்சொல்லை உள்ளிடவும்",
+    "button": "ஆம், நான்தான்",
+    "verifying": "சரிபார்க்கப்படுகிறது...",
+    "footerNote": "அனுமதிக்கப்பட்ட பயனர்களுக்கு மட்டும்",
+    "invalidCreds": "தவறான மின்னஞ்சல் அல்லது கடவுச்சொல்."
+  },
+  "DevModeLoader": {
+    "devMode": "Dev முறைக்கு மாறுகிறது",
+    "portfolioMode": "போர்ட்ஃபோலியோ முறைக்கு மாறுகிறது",
+    "extra": "பணிப்பகுதி தொடங்கப்படுகிறது..."
+  },
+  "LanguageToggler": {
+    "indian": "இந்திய மொழிகள்",
+    "other": "பிற மொழிகள்"
+  }
+}

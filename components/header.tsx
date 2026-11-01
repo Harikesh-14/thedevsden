@@ -89,7 +89,7 @@ export default function Header() {
         <div
           className={cn(
             "pointer-events-auto",
-            "w-full max-w-5xl",
+            "w-full max-w-6xl",
             "flex items-center justify-between gap-3 sm:gap-5",
             "h-13 rounded-full px-5",
             "bg-white/75 dark:bg-neutral-950/80",
