@@ -33,6 +33,7 @@ export default function LanguageToggler() {
         <SelectGroup>
           <SelectLabel>{t.raw("indian")}</SelectLabel>
           <SelectItem value="hi">हिन्दी</SelectItem>
+          <SelectItem value="ta">தமிழ்</SelectItem>
         </SelectGroup>
 
         <SelectGroup>
