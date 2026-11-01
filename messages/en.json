@@ -175,10 +175,12 @@
     "footer": "Always learning. Always building. Always experimenting."
   },
   "Projects": {
-    "title": "Featured projects",
-    "loading": "Loading projects...",
-    "error": "Unable to load projects.",
-    "empty": "No projects available."
+    "title": "Selected work",
+    "heading": "Things I've built.",
+    "description": "A collection of projects I've built while exploring software engineering, artificial intelligence, developer tools and computer science.",
+    "viewAllProjects": "View all projects",
+    "footerNoteOne": "Always building. Usually experimenting.",
+    "footerNoteTwo": "More projects live on GitHub."
   },
   "Experiences": {
     "badge": "Experience",

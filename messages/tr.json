@@ -73,5 +73,13 @@
     },
     "buttonOne": "Projelerimi Keşfet",
     "buttonTwo": "Özgeçmiş Çok Yakında"
+  },
+  "Projects": {
+    "title": "Öne Çıkan Çalışmalar",
+    "heading": "Geliştirdiğim Projeler.",
+    "description": "Yazılım mühendisliği, yapay zekâ, geliştirici araçları ve bilgisayar bilimlerini keşfederken geliştirdiğim projelerden bir koleksiyon.",
+    "viewAllProjects": "Tüm Projeleri Gör",
+    "footerNoteOne": "Her zaman geliştiriyorum. Genellikle yeni şeyler deniyorum.",
+    "footerNoteTwo": "Daha fazla proje GitHub'da."
   }
 }

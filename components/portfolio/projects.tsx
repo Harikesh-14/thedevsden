@@ -1,6 +1,7 @@
 "use client"
 
 import { useCallback, useEffect, useState } from "react"
+import { useLocale } from "next-intl"
 import {
   ArrowUpRight,
   Brain,
@@ -68,20 +69,22 @@ export default function ProjectsSection() {
   const [projects, setProjects] = useState<Project[]>([])
   const [loading, setLoading] = useState<boolean>(true)
   const [failedToLoadProjects, setFailedToLoadProjects] = useState(false)
+  const locale = useLocale()
 
   const fetchProjects = useCallback(async () => {
     setLoading(true)
     setFailedToLoadProjects(false)
 
     try {
-      const response = await apiFetch("/projects/featured")
+      const response = await apiFetch(
+        `/projects/featured?locale=${locale}`
+      )
 
       if (!response.ok) {
         throw new Error("Failed to fetch projects")
       }
 
       const data: Project[] = await response.json()
-      console.log(data)
 
       setProjects(data)
     } catch {
@@ -94,7 +97,7 @@ export default function ProjectsSection() {
     } finally {
       setLoading(false)
     }
-  }, [])
+  }, [locale])
 
   useEffect(() => {
     void fetchProjects()
