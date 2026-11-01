@@ -39,6 +39,7 @@ export default function LanguageToggler() {
           <SelectLabel>{t.raw("other")}</SelectLabel>
           <SelectItem value="en">English</SelectItem>
           <SelectItem value="tr">Türkçe</SelectItem>
+          <SelectItem value="ru">Русский</SelectItem>
         </SelectGroup>
       </SelectContent>
     </Select>
