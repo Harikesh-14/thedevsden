@@ -1,7 +1,7 @@
 "use client";
 
 import { Languages } from "lucide-react";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { usePathname, useRouter } from "@/i18n/navigation";
 
 import {
@@ -17,6 +17,7 @@ export default function LanguageToggler() {
   const locale = useLocale();
   const pathname = usePathname();
   const router = useRouter();
+  const t = useTranslations("LanguageToggler")
 
   function handleLanguageChange(nextLocale: string) {
     router.replace(pathname, { locale: nextLocale });
@@ -30,13 +31,13 @@ export default function LanguageToggler() {
 
       <SelectContent position="popper" sideOffset={5}>
         <SelectGroup>
-          <SelectLabel>Indian Languages</SelectLabel>
-          <SelectItem value="en">English</SelectItem>
+          <SelectLabel>{t.raw("indian")}</SelectLabel>
           <SelectItem value="hi">हिन्दी</SelectItem>
         </SelectGroup>
 
         <SelectGroup>
-          <SelectLabel>Foreign Languages</SelectLabel>
+          <SelectLabel>{t.raw("other")}</SelectLabel>
+          <SelectItem value="en">English</SelectItem>
           <SelectItem value="tr">Türkçe</SelectItem>
         </SelectGroup>
       </SelectContent>

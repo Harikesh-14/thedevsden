@@ -360,5 +360,9 @@
     "devMode": "Geliştirici Moduna Geçiliyor",
     "portfolioMode": "Portföy Moduna Geçiliyor",
     "extra": "Çalışma alanı başlatılıyor..."
+  },
+  "LanguageToggler": {
+    "indian": "Hint Dilleri",
+    "other": "Diğer Diller"
   }
 }
