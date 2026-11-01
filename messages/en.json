@@ -176,11 +176,34 @@
   },
   "Projects": {
     "title": "Selected work",
-    "heading": "Things I've built.",
+    "headingOne": "Things I've",
+    "headingTwo": "built.",
     "description": "A collection of projects I've built while exploring software engineering, artificial intelligence, developer tools and computer science.",
     "viewAllProjects": "View all projects",
+    "viewProject": "View project",
+    "dialogBoxHeading": "Find me on Github",
+    "dialogBoxDescription": "I keep different kinds of projects across two GitHub accounts. Pick a profile to explore everything I've built.",
     "footerNoteOne": "Always building. Usually experimenting.",
-    "footerNoteTwo": "More projects live on GitHub."
+    "footerNoteTwo": "More projects live on GitHub.",
+    "noProjectsYet": "No featured projects yet",
+    "checkBackLater": "Check back later for featured projects.",
+    "tryAgain": "Try again",
+    "cannotLoadProject": "Couldn't load projects",
+    "somethingWentWrong": "Something went wrong while fetching the projects. Give it another try.",
+    "githubs": [
+      {
+        "label": "Primary Github",
+        "desc": "My main profile, projects and open-source work.",
+        "username": "@Harikesh-14",
+        "href": "https://github.com/Harikesh-14"
+      },
+      {
+        "label": "Secondary Github",
+        "desc": "Experiments, learning projects and side quests",
+        "username": "harikeshranjan",
+        "href": "https://github.com/harikeshranjan"
+      }
+    ]
   },
   "Experiences": {
     "badge": "Experience",

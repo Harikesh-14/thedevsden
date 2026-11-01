@@ -40,7 +40,7 @@ const contactMethods = [
   {
     key: "linkedin",
     icon: Inbox,
-    value: "linkedin.com/in/harikeshsinhahar",
+    value: "linkedin.com/in/harikeshranjansinha",
     href: "https://linkedin.com/in/harikeshranjansinha",
   },
 ] as const
