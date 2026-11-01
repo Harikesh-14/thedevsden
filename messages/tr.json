@@ -344,5 +344,21 @@
     "success": "Mesajınız başarıyla gönderildi!",
     "error": "Bir sorun oluştu. Lütfen tekrar deneyin.",
     "footer": "En kısa sürede size geri dönüş yapacağım."
+  },
+  "Login": {
+    "heading": "Siz",
+    "name": "Harikesh misiniz?",
+    "desc": "Bu kontrol paneli özeldir. Devam etmek için kimliğinizi doğrulayın.",
+    "password": "Şifre",
+    "passwordPlaceholder": "Şifrenizi girin",
+    "button": "Evet, benim",
+    "verifying": "Doğrulanıyor...",
+    "footerNote": "Yalnızca yetkili erişim",
+    "invalidCreds": "Geçersiz e-posta adresi veya şifre."
+  },
+  "DevModeLoader": {
+    "devMode": "Geliştirici Moduna Geçiliyor",
+    "portfolioMode": "Portföy Moduna Geçiliyor",
+    "extra": "Çalışma alanı başlatılıyor..."
   }
 }

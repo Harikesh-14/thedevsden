@@ -344,5 +344,21 @@
     "success": "Message sent successfully!",
     "error": "Something went wrong. Please try again.",
     "footer": "I'll get back to you as soon as I can."
+  },
+  "Login": {
+    "heading": "Are you",
+    "name": "Harikesh?",
+    "desc": "This dashboard is private. Prove it's you to continue.",
+    "password": "Password",
+    "passwordPlaceholder": "Enter your password",
+    "button": "That's me",
+    "verifying": "Verifying...",
+    "footerNote": "Private access only",
+    "invalidCreds": "Invalid email or password."
+  },
+  "DevModeLoader": {
+    "devMode": "Entering Developer Mode",
+    "portfolioMode": "Entering Portfolio Mode",
+    "extra": "Initializing workspace..."
   }
 }
