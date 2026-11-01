@@ -184,13 +184,50 @@
     "title": "Professional experience"
   },
   "Education": {
-    "title": "Where I learned.",
-    "description": "My academic journey from school to software engineering.",
+    "badge": "Education",
+    "heading": "Where I",
+    "headingHighlight": "learned.",
+    "description": "My academic journey from school to software engineering, shaped by a strong foundation in computer science and a continued interest in building things with technology.",
     "qualification": "Qualification",
-    "highlights": "Academic highlights",
+    "highlights": "Academic Highlights",
     "graduated": "Graduated",
     "undergraduate": "Undergraduate",
-    "school": "School"
+    "school": "School",
+    "institutions": [
+      {
+        "institution": "SRM University",
+        "shortName": "SRMIST",
+        "degree": "B.Tech in Computer Science & Engineering",
+        "specialization": "Specialization in Software Engineering",
+        "period": "August 2021 – June 2025",
+        "type": "undergraduate",
+        "location": "Kattankulathur, Tamil Nadu, India",
+        "result": "8.89 CGPA",
+        "description": "Completed my undergraduate degree in Computer Science & Engineering with a specialization in Software Engineering, developing a strong foundation in software development, computer science, and engineering principles.",
+        "highlights": [
+          "B.Tech — Computer Science & Engineering",
+          "Specialization in Software Engineering",
+          "Cumulative CGPA: 8.89"
+        ],
+        "featured": true
+      },
+      {
+        "institution": "R.D. Rajpal School",
+        "shortName": "CBSE",
+        "degree": "Senior Secondary Education",
+        "specialization": "Kindergarten to Class 12",
+        "period": "2008 – 2021",
+        "type": "school",
+        "location": "Dwarka Sector-9, New Delhi, India",
+        "result": "91.8% in Class 12",
+        "description": "Completed my schooling from Kindergarten through Class 12 under the CBSE curriculum, maintaining a consistent academic record throughout my school years.",
+        "highlights": [
+          "Class 12: 91.8% — CBSE",
+          "Class 10: 84.6% — CBSE"
+        ],
+        "featured": false
+      }
+    ]
   },
   "Contact": {
     "title": "Get in touch",

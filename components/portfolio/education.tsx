@@ -1,3 +1,7 @@
+"use client"
+
+import { useTranslations } from "next-intl"
+
 import {
   Award,
   CalendarDays,
@@ -11,44 +15,25 @@ import { Badge } from "@/components/ui/badge"
 import { Card, CardContent } from "@/components/ui/card"
 import { cn } from "@/lib/utils"
 
-const education = [
-  {
-    institution: "SRM University",
-    shortName: "SRMIST",
-    degree: "B.Tech in Computer Science & Engineering",
-    specialization: "Specialization in Software Engineering",
-    period: "August 2021 - June 2025",
-    type: "Undergraduate",
-    location: "Kattankulathur, Tamil Nadu, India",
-    result: "8.89 CGPA",
-    description:
-      "Completed my undergraduate degree in Computer Science & Engineering with a specialization in Software Engineering, building a strong foundation across software development, computer science, and engineering principles.",
-    highlights: [
-      "B.Tech — Computer Science & Engineering",
-      "Software Engineering Specialization",
-      "Cumulative CGPA: 8.89",
-    ],
-    icon: GraduationCap,
-    featured: true,
-  },
-  {
-    institution: "R.D. Rajpal School",
-    shortName: "CBSE",
-    degree: "Senior Secondary Education",
-    specialization: "KG - Class 12",
-    period: "2008 - 2021",
-    type: "School",
-    location: "Dwarka Sector-9, New Delhi",
-    result: "91.8% in Class 12",
-    description:
-      "Completed schooling from Kindergarten through Class 12 under the CBSE curriculum, with a consistent academic record and no backlogs.",
-    highlights: ["Class 12: 91.8% — CBSE", "Class 10: 84.6% — CBSE"],
-    icon: School,
-    featured: false,
-  },
-]
-
 export default function EducationSection() {
+  const t = useTranslations("Education")
+
+  const educationIcons = [GraduationCap, School]
+
+  const education = t.raw("institutions") as {
+    institution: string
+    shortName: string
+    degree: string
+    specialization: string
+    period: string
+    type: "undergraduate" | "school"
+    location: string
+    result: string
+    description: string
+    highlights: string[]
+    featured: boolean
+  }[]
+
   return (
     <section
       id="education"
@@ -70,20 +55,18 @@ export default function EducationSection() {
             className="mb-5 gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-900 dark:bg-emerald-950/50 dark:text-emerald-400"
           >
             <GraduationCap className="size-3" />
-            Education
+            {t("badge")}
           </Badge>
 
           <h2 className="text-3xl font-semibold tracking-tight text-neutral-900 sm:text-4xl lg:text-5xl dark:text-neutral-50">
-            Where I{" "}
+            {t("heading")}{" "}
             <span className="text-neutral-400 dark:text-neutral-500">
-              learned.
+              {t("headingHighlight")}
             </span>
           </h2>
 
           <p className="mt-5 max-w-2xl text-base leading-7 text-neutral-500 sm:text-lg dark:text-neutral-400">
-            My academic journey from school to software engineering, shaped by a
-            strong foundation in computer science and a continued interest in
-            building things with technology.
+            {t("description")}
           </p>
         </div>
 
@@ -93,8 +76,8 @@ export default function EducationSection() {
           <div className="absolute top-0 bottom-0 left-4.75 hidden w-px bg-linear-to-b from-emerald-400 via-emerald-200 to-neutral-200 md:block dark:from-emerald-600 dark:via-emerald-900 dark:to-neutral-800" />
 
           <div className="space-y-8">
-            {education.map((item) => {
-              const Icon = item.icon
+            {education.map((item, index) => {
+              const Icon = educationIcons[index]
 
               return (
                 <div key={item.institution} className="relative md:pl-15">
@@ -164,13 +147,13 @@ export default function EducationSection() {
                               {item.featured && (
                                 <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-0.5 text-[11px] font-medium text-emerald-700 dark:border-emerald-800 dark:bg-emerald-950 dark:text-emerald-400">
                                   <span className="size-1.5 rounded-full bg-emerald-500" />
-                                  Graduated
+                                  {t("graduated")}
                                 </span>
                               )}
                             </div>
 
                             <p className="mt-0.5 text-sm text-neutral-400 dark:text-neutral-500">
-                              {item.shortName} · {item.type}
+                              {item.shortName} · {t(item.type)}
                             </p>
                           </div>
                         </div>
@@ -189,7 +172,7 @@ export default function EducationSection() {
                       <div className="grid gap-6 lg:grid-cols-[1fr_0.8fr]">
                         <div>
                           <p className="text-[10px] font-semibold tracking-widest text-neutral-400 uppercase dark:text-neutral-500">
-                            Qualification
+                            {t("qualification")}
                           </p>
 
                           <h4 className="mt-2 text-xl font-semibold tracking-tight text-neutral-900 sm:text-2xl dark:text-neutral-100">
@@ -211,7 +194,7 @@ export default function EducationSection() {
                             <Trophy className="size-3.5 text-emerald-600 dark:text-emerald-400" />
 
                             <p className="text-[10px] font-semibold tracking-widest text-neutral-400 uppercase dark:text-neutral-500">
-                              Academic highlights
+                              {t("highlights")}
                             </p>
                           </div>
 
