@@ -181,7 +181,60 @@
     "empty": "No projects available."
   },
   "Experiences": {
-    "title": "Professional experience"
+    "badge": "Experience",
+    "heading": "Where I've been",
+    "headingHighlight": "building things.",
+    "description": "My professional journey has taken me from frontend development into backend engineering and test automation, giving me experience across different parts of the software development lifecycle.",
+    "current": "Current",
+    "role": "Role",
+    "focusAreas": "Focus areas",
+    "employmentTypes": {
+      "fullTime": "Full-time",
+      "internship": "Internship"
+    },
+    "positions": [
+      {
+        "company": "Tata Consultancy Services",
+        "shortName": "TCS",
+        "role": "System Engineer",
+        "period": "27 November 2025 – Present",
+        "type": "fullTime",
+        "location": "New Delhi, India",
+        "description": "Working across backend development and test automation, building backend services with Spring Boot and developing automated test workflows using Selenium with Java.",
+        "technologies": [
+          "Java",
+          "Spring Boot",
+          "Selenium",
+          "Backend Development",
+          "Test Automation"
+        ],
+        "highlightedTechs": [
+          "Java",
+          "Spring Boot",
+          "Selenium"
+        ],
+        "featured": true,
+        "meta": "Backend & Automation"
+      },
+      {
+        "company": "Centre for Railway Information Systems",
+        "shortName": "CRIS",
+        "role": "Frontend Web Developer Intern",
+        "period": "5 June 2023 – 5 July 2023",
+        "type": "internship",
+        "location": "New Delhi, India",
+        "description": "Worked as a frontend developer, gaining practical experience in building user interfaces and understanding software development practices within a professional engineering environment.",
+        "technologies": [
+          "Frontend Development",
+          "Web Development",
+          "JavaScript",
+          "UI Development"
+        ],
+        "highlightedTechs": [],
+        "featured": false,
+        "meta": null
+      }
+    ]
   },
   "Education": {
     "badge": "Education",
