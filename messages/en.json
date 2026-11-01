@@ -360,5 +360,9 @@
     "devMode": "Entering Developer Mode",
     "portfolioMode": "Entering Portfolio Mode",
     "extra": "Initializing workspace..."
+  },
+  "LanguageToggler": {
+    "indian": "Indian Languages",
+    "other": "Other Languages"
   }
 }
