@@ -1,0 +1,364 @@
+{
+  "Metadata": {
+    "title": "Harikesh Ranjan Sinha | Yazılım Mühendisi",
+    "description": "Projelerimi, becerilerimi, deneyimlerimi ve eğitim geçmişimi keşfedin."
+  },
+  "Header": {
+    "about": {
+      "title": "Hakkımda",
+      "href": "#about-me"
+    },
+    "skills": {
+      "title": "Beceriler",
+      "href": "#skills"
+    },
+    "projects": {
+      "title": "Projeler",
+      "href": "#projects"
+    },
+    "experiences": {
+      "title": "Deneyim",
+      "href": "#experiences"
+    },
+    "education": {
+      "title": "Eğitim",
+      "href": "#education"
+    },
+    "contact": {
+      "title": "İletişim",
+      "href": "#contact-me"
+    },
+    "devMode": "Geliştirici Modu"
+  },
+  "AboutMe": {
+    "title": "Hakkımda",
+    "subheading": "Merak ve tutkuyla yazılım geliştiriyorum.",
+    "imageMetadata": [
+      "Yazılım Mühendisi",
+      "Geliştiriyor ve Keşfediyor"
+    ],
+    "description": [
+      "Fikirleri iyi tasarlanmış ve güvenilir yazılımlara dönüştürmekten keyif alan bir yazılım mühendisiyim. Farklı katmanlarda çalışıyorum; özellikle backend sistemleri, geliştirici araçları ve yapay zekâ ile ilgileniyorum.",
+      "API ve veritabanı tasarımından programlama dillerini, makine öğrenimi sistemlerini ve geliştiricilere yönelik ürünleri denemeye kadar, teknolojilerin temelinde nasıl çalıştığını anlamayı seviyorum.",
+      "Bilgisayar bilimi bilgimi derinleştirmek ve yeni teknolojileri keşfetmek için sürekli yeni fikirler geliştiriyor, projeler üretiyor ve deneyler yapıyorum."
+    ],
+    "tableData": {
+      "rowOne": {
+        "heading": "Profesyonel Deneyim",
+        "description": "Sektörde 1 yıllık deneyim"
+      },
+      "rowTwo": {
+        "heading": "Neler Yapıyorum",
+        "description": "Full-stack web geliştirme, backend mühendisliği, API'ler ve yazılım mimarisi.",
+        "tags": [
+          "Frontend",
+          "Backend",
+          "API'ler",
+          "Mimari"
+        ]
+      },
+      "rowThree": {
+        "heading": "Şu Anda Odaklandığım Alanlar",
+        "description": "Yapay zekâ, makine öğrenimi, geliştirici araçları ve dağıtık sistemler.",
+        "tags": [
+          "Yapay Zekâ / Makine Öğrenimi",
+          "Geliştirici Araçları",
+          "Dağıtık Sistemler"
+        ]
+      },
+      "rowFour": {
+        "heading": "Konum",
+        "description": "Greater Noida, Uttar Pradesh, Hindistan"
+      }
+    },
+    "buttonOne": "Çalışmalarımı Keşfet",
+    "buttonTwo": "Özgeçmiş Yakında"
+  },
+  "Skills": {
+    "title": "Beceriler ve Uzmanlık",
+    "subheading": "Fikirleri",
+    "subheadingHighlight": "sistemlere dönüştürmek için kullandığım araçlar.",
+    "description": "Backend sistemlerinden yapay zekâya kadar üzerinde aktif olarak çalıştığım teknolojiler, mühendislik pratikleri ve uzmanlık alanları.",
+    "coreTitle": "Temel Mühendislik Yetkinlikleri",
+    "coreDescription": "Framework'lerin ötesinde, yazılım tasarlarken ve geliştirirken odaklandığım temel alanlar.",
+    "coreSkills": [
+      "Yazılım Mimarisi",
+      "API Tasarımı",
+      "Sistem Tasarımı",
+      "Veritabanı Tasarımı",
+      "Kimlik Doğrulama",
+      "Gerçek Zamanlı Sistemler",
+      "Geliştirici Araçları",
+      "Problem Çözme"
+    ],
+    "skillGroups": [
+      {
+        "title": "Backend Mühendisliği",
+        "description": "API'ler, servisler ve ölçeklenebilir sunucu tarafı sistemler geliştiriyorum.",
+        "skills": [
+          "Node.js",
+          "Express.js",
+          "NestJS",
+          "REST API'ler",
+          "Kimlik Doğrulama",
+          "WebSockets",
+          "Socket.IO"
+        ]
+      },
+      {
+        "title": "Frontend ve Web",
+        "description": "Modern arayüzler ve full-stack web uygulamaları geliştiriyorum.",
+        "skills": [
+          "Next.js",
+          "React",
+          "TypeScript",
+          "JavaScript",
+          "Tailwind CSS",
+          "shadcn/ui"
+        ]
+      },
+      {
+        "title": "Veritabanları",
+        "description": "Uygulama verilerini ve kalıcı veri depolama çözümlerini tasarlıyor ve yönetiyorum.",
+        "skills": [
+          "MongoDB",
+          "Mongoose",
+          "SwiftData"
+        ]
+      },
+      {
+        "title": "Programlama Dilleri",
+        "description": "Sistemler geliştirmek ve bilgisayar bilimlerini keşfetmek için kullandığım diller.",
+        "skills": [
+          "TypeScript",
+          "JavaScript",
+          "Swift",
+          "Java",
+          "C++",
+          "C",
+          "Python"
+        ]
+      },
+      {
+        "title": "Yapay Zekâ ve Makine Öğrenimi",
+        "description": "Akıllı sistemleri, makine öğrenimi mühendisliğini ve model geliştirmeyi keşfediyorum.",
+        "skills": [
+          "Makine Öğrenimi",
+          "Derin Öğrenme",
+          "Görüntü Sınıflandırma",
+          "Yapay Zekâ Mühendisliği",
+          "Model Eğitimi"
+        ]
+      },
+      {
+        "title": "Sistemler ve Geliştirici Araçları",
+        "description": "Sistem seviyesinde çalışıyor ve geliştiricilere yönelik araçlar üretiyorum.",
+        "skills": [
+          "Linux",
+          "Unix",
+          "Git",
+          "GitHub",
+          "CLI Geliştirme",
+          "Make",
+          "Docker"
+        ]
+      },
+      {
+        "title": "Otomasyon Testleri",
+        "description": "Web sitelerinin test süreçlerini otomatikleştiriyorum.",
+        "skills": [
+          "Selenium",
+          "Playwright"
+        ]
+      }
+    ],
+    "footer": "Her zaman öğreniyor, geliştiriyor ve yeni şeyler deniyorum."
+  },
+  "Projects": {
+    "title": "Öne Çıkan Çalışmalar",
+    "headingOne": "Geliştirdiğim",
+    "headingTwo": "projeler.",
+    "description": "Yazılım mühendisliği, yapay zekâ, geliştirici araçları ve bilgisayar bilimlerini keşfederken geliştirdiğim projelerden bir seçki.",
+    "viewAllProjects": "Tüm Projeleri Gör",
+    "viewProject": "Projeyi Görüntüle",
+    "dialogBoxHeading": "GitHub'da Beni Bulun",
+    "dialogBoxDescription": "Farklı türdeki projelerimi iki ayrı GitHub hesabında tutuyorum. Geliştirdiğim çalışmaları keşfetmek için profillerimden birini seçin.",
+    "footerNoteOne": "Sürekli geliştiriyorum, çoğu zaman da yeni şeyler deniyorum.",
+    "footerNoteTwo": "Diğer projelerime GitHub üzerinden ulaşabilirsiniz.",
+    "noProjectsYet": "Henüz öne çıkan bir proje yok",
+    "checkBackLater": "Öne çıkan projeler için daha sonra tekrar göz atın.",
+    "tryAgain": "Tekrar Dene",
+    "cannotLoadProject": "Projeler Yüklenemedi",
+    "somethingWentWrong": "Projeler yüklenirken bir sorun oluştu. Lütfen yeniden deneyin.",
+    "githubs": [
+      {
+        "label": "Ana GitHub Hesabı",
+        "desc": "Ana profilim, projelerim ve açık kaynak çalışmalarım.",
+        "username": "@Harikesh-14",
+        "href": "https://github.com/Harikesh-14"
+      },
+      {
+        "label": "İkincil GitHub Hesabı",
+        "desc": "Deneylerim, öğrenme amaçlı projelerim ve kişisel çalışmalarım.",
+        "username": "harikeshranjan",
+        "href": "https://github.com/harikeshranjan"
+      }
+    ]
+  },
+  "Experiences": {
+    "badge": "Deneyim",
+    "heading": "Ürettiklerimi",
+    "headingHighlight": "geliştirdiğim yerler.",
+    "description": "Profesyonel yolculuğum beni frontend geliştirmeden backend mühendisliğine ve test otomasyonuna taşıdı. Bu süreçte yazılım geliştirme yaşam döngüsünün farklı aşamalarında deneyim kazandım.",
+    "current": "Devam Ediyor",
+    "role": "Pozisyon",
+    "focusAreas": "Odak Alanları",
+    "employmentTypes": {
+      "fullTime": "Tam Zamanlı",
+      "internship": "Staj"
+    },
+    "positions": [
+      {
+        "company": "Tata Consultancy Services",
+        "shortName": "TCS",
+        "role": "Sistem Mühendisi",
+        "period": "27 Kasım 2025 – Günümüz",
+        "type": "fullTime",
+        "location": "Yeni Delhi, Hindistan",
+        "description": "Backend geliştirme ve test otomasyonu alanlarında çalışıyorum. Spring Boot ile backend servisleri geliştiriyor, Java ve Selenium kullanarak otomatik test iş akışları oluşturuyorum.",
+        "technologies": [
+          "Java",
+          "Spring Boot",
+          "Selenium",
+          "Backend Geliştirme",
+          "Test Otomasyonu"
+        ],
+        "highlightedTechs": [
+          "Java",
+          "Spring Boot",
+          "Selenium"
+        ],
+        "featured": true,
+        "meta": "Backend ve Otomasyon"
+      },
+      {
+        "company": "Centre for Railway Information Systems",
+        "shortName": "CRIS",
+        "role": "Frontend Web Geliştirici Stajyeri",
+        "period": "5 Haziran 2023 – 5 Temmuz 2023",
+        "type": "internship",
+        "location": "Yeni Delhi, Hindistan",
+        "description": "Frontend geliştirici olarak çalıştım; kullanıcı arayüzleri oluşturma ve profesyonel bir mühendislik ortamında yazılım geliştirme süreçlerini tanıma konusunda uygulamalı deneyim kazandım.",
+        "technologies": [
+          "Frontend Geliştirme",
+          "Web Geliştirme",
+          "JavaScript",
+          "Arayüz Geliştirme"
+        ],
+        "highlightedTechs": [],
+        "featured": false,
+        "meta": null
+      }
+    ]
+  },
+  "Education": {
+    "badge": "Eğitim",
+    "heading": "Eğitim",
+    "headingHighlight": "geçmişim.",
+    "description": "Okul yıllarımdan yazılım mühendisliğine uzanan akademik yolculuğum; bilgisayar bilimlerinde sağlam bir temel ve teknolojiyle üretmeye yönelik sürekli merakla şekillendi.",
+    "qualification": "Derece",
+    "highlights": "Akademik Başarılar",
+    "graduated": "Mezun",
+    "undergraduate": "Lisans",
+    "school": "Okul",
+    "institutions": [
+      {
+        "institution": "SRM University",
+        "shortName": "SRMIST",
+        "degree": "Bilgisayar Bilimleri ve Mühendisliği Lisans (B.Tech)",
+        "specialization": "Yazılım Mühendisliği Uzmanlığı",
+        "period": "Ağustos 2021 – Haziran 2025",
+        "type": "undergraduate",
+        "location": "Kattankulathur, Tamil Nadu, Hindistan",
+        "result": "8,89 CGPA",
+        "description": "Yazılım Mühendisliği uzmanlığıyla Bilgisayar Bilimleri ve Mühendisliği lisans eğitimimi tamamladım. Bu süreçte yazılım geliştirme, bilgisayar bilimleri ve mühendislik ilkeleri konusunda sağlam bir temel edindim.",
+        "highlights": [
+          "B.Tech — Bilgisayar Bilimleri ve Mühendisliği",
+          "Yazılım Mühendisliği Uzmanlığı",
+          "Genel Not Ortalaması: 8,89"
+        ],
+        "featured": true
+      },
+      {
+        "institution": "R.D. Rajpal School",
+        "shortName": "CBSE",
+        "degree": "Lise Eğitimi",
+        "specialization": "Anaokulundan 12. Sınıfa",
+        "period": "2008 – 2021",
+        "type": "school",
+        "location": "Dwarka Sector-9, Yeni Delhi, Hindistan",
+        "result": "12. Sınıf: %91,8",
+        "description": "CBSE müfredatı kapsamında anaokulundan 12. sınıfa kadar eğitim aldım ve okul yıllarım boyunca istikrarlı bir akademik başarı gösterdim.",
+        "highlights": [
+          "12. Sınıf: %91,8 — CBSE",
+          "10. Sınıf: %84,6 — CBSE"
+        ],
+        "featured": false
+      }
+    ]
+  },
+  "Contact": {
+    "title": "İletişime Geçin",
+    "heading": "Birlikte ilgi çekici",
+    "headingHighlight": "bir şeyler geliştirelim.",
+    "description": "Bir fikriniz, projeniz varsa ya da yazılım, yapay zekâ veya merak uyandıran bir teknoloji konusu üzerine sohbet etmek istiyorsanız bana ulaşabilirsiniz. Mesajlarınıza açığım.",
+    "introTitle": "Neler Hakkında Konuşabiliriz?",
+    "introDescription": "İlginç fikirler ve zorlu teknik problemler her zaman ilgimi çeker. Projeler, iş birlikleri, yazılım mühendisliği veya konuşmaya değer başka konular için benimle iletişime geçebilirsiniz.",
+    "topics": [
+      "Yazılım Mühendisliği",
+      "Yapay Zekâ / Makine Öğrenimi",
+      "Backend Sistemleri",
+      "Geliştirici Araçları",
+      "Açık Kaynak"
+    ],
+    "locationTitle": "Konum",
+    "location": "Greater Noida, Hindistan",
+    "contactMethods": {
+      "email": "E-posta",
+      "githubMain": "GitHub (ana hesap)",
+      "githubSecondary": "GitHub (ikincil hesap)",
+      "linkedin": "LinkedIn"
+    },
+    "formTitle": "Bana Mesaj Gönderin",
+    "formDescription": "Kendinizden ve üzerinde çalıştığınız konudan biraz bahsedin.",
+    "name": "Ad",
+    "namePlaceholder": "Adınız",
+    "email": "E-posta",
+    "emailPlaceholder": "siz@ornek.com",
+    "subject": "Konu",
+    "subjectPlaceholder": "Aklınızda ne var?",
+    "message": "Mesaj",
+    "messagePlaceholder": "Fikrinizden, projenizden veya sorunuzdan bahsedin...",
+    "submit": "Mesaj Gönder",
+    "sending": "Gönderiliyor...",
+    "success": "Mesajınız başarıyla gönderildi!",
+    "error": "Bir sorun oluştu. Lütfen tekrar deneyin.",
+    "footer": "En kısa sürede size geri dönüş yapacağım."
+  },
+  "Login": {
+    "heading": "Siz",
+    "name": "Harikesh misiniz?",
+    "desc": "Bu kontrol paneli özeldir. Devam etmek için kimliğinizi doğrulayın.",
+    "password": "Şifre",
+    "passwordPlaceholder": "Şifrenizi girin",
+    "button": "Evet, benim",
+    "verifying": "Doğrulanıyor...",
+    "footerNote": "Yalnızca yetkili erişim",
+    "invalidCreds": "Geçersiz e-posta adresi veya şifre."
+  },
+  "DevModeLoader": {
+    "devMode": "Geliştirici Moduna Geçiliyor",
+    "portfolioMode": "Portföy Moduna Geçiliyor",
+    "extra": "Çalışma alanı başlatılıyor..."
+  }
+}

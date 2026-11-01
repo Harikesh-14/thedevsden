@@ -1,5 +1,6 @@
 "use client"
 
+import { useState } from "react"
 import {
   ArrowUpRight,
   GitBranch,
@@ -8,54 +9,58 @@ import {
   MapPin,
   MessageCircle,
   Sparkles,
+  LoaderCircle,
 } from "lucide-react"
+import { useTranslations } from "next-intl"
+import { toast } from "sonner"
 
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { useState } from "react";
-import { toast } from "sonner";
-import { LoaderCircle } from "lucide-react";
-import { apiFetch } from "@/lib/api";
+import { apiFetch } from "@/lib/api"
 
 const contactMethods = [
   {
+    key: "email",
     icon: Mail,
-    label: "Email",
     value: "ranjansinhaharikesh@gmail.com",
     href: "mailto:ranjansinhaharikesh@gmail.com",
   },
   {
+    key: "githubMain",
     icon: GitBranch,
-    label: "GitHub (main)",
     value: "github.com/Harikesh-14",
     href: "https://github.com/Harikesh-14",
   },
   {
+    key: "githubSecondary",
     icon: GitBranch,
-    label: "GitHub (secondary)",
     value: "github.com/harikeshranjan",
     href: "https://github.com/harikeshranjan",
   },
   {
+    key: "linkedin",
     icon: Inbox,
-    label: "LinkedIn",
     value: "linkedin.com/in/harikeshranjansinha",
     href: "https://linkedin.com/in/harikeshranjansinha",
   },
-]
+] as const
 
 export default function ContactSection() {
-  const [loading, setLoading] = useState(false);
+  const t = useTranslations("Contact")
+
+  const [loading, setLoading] = useState(false)
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     subject: "",
     message: "",
-  });
+  })
+
+  const topics = t.raw("topics") as string[]
 
   async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    setLoading(true);
+    e.preventDefault()
+    setLoading(true)
 
     try {
       const response = await apiFetch("/contact-me", {
@@ -66,21 +71,26 @@ export default function ContactSection() {
           subject: formData.subject.trim(),
           message: formData.message.trim(),
         }),
-      });
+      })
 
       if (!response.ok) {
-        const errorData = await response.json().catch(() => null);
-        throw new Error(errorData?.message || "Failed to send message.");
+        const errorData = await response.json().catch(() => null)
+        throw new Error(errorData?.message || t("error"))
       }
 
-      toast.success("Message sent successfully! I'll get back to you soon.");
-      setFormData({ name: "", email: "", subject: "", message: "" });
+      toast.success(t("success"))
+      setFormData({
+        name: "",
+        email: "",
+        subject: "",
+        message: "",
+      })
     } catch (error) {
       toast.error(
-        error instanceof Error ? error.message : "Something went wrong."
-      );
+        error instanceof Error ? error.message : t("error")
+      )
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
   }
 
@@ -96,25 +106,23 @@ export default function ContactSection() {
             className="mb-5 gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-900 dark:bg-emerald-950/50 dark:text-emerald-400"
           >
             <Sparkles className="size-3" />
-            Get in touch
+            {t("title")}
           </Badge>
 
           <h1 className="text-4xl font-semibold tracking-tight text-neutral-900 sm:text-5xl lg:text-6xl dark:text-neutral-50">
-            Let's build something{" "}
+            {t("heading")}{" "}
             <span className="text-neutral-400 dark:text-neutral-500">
-              interesting.
+              {t("headingHighlight")}
             </span>
           </h1>
 
           <p className="mt-6 max-w-2xl text-lg leading-8 text-neutral-500 sm:text-xl dark:text-neutral-400">
-            Have an idea, a project, or just want to talk about software,
-            artificial intelligence, or some ridiculously interesting tech
-            rabbit hole? My inbox is open.
+            {t("description")}
           </p>
         </div>
 
         <div className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20">
-          {/* ───────────── Left ───────────── */}
+          {/* Left */}
           <div className="flex flex-col gap-8">
             {/* Intro card */}
             <div className="rounded-2xl border border-neutral-200 bg-white p-6 sm:p-7 dark:border-neutral-800 dark:bg-neutral-900/50">
@@ -123,24 +131,15 @@ export default function ContactSection() {
               </div>
 
               <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
-                What can we talk about?
+                {t("introTitle")}
               </h2>
 
               <p className="mt-2 text-sm leading-6 text-neutral-500 dark:text-neutral-400">
-                I'm always interested in interesting ideas and challenging
-                technical problems. Feel free to reach out about projects,
-                collaboration, software engineering, or anything worth
-                discussing.
+                {t("introDescription")}
               </p>
 
               <div className="mt-5 flex flex-wrap gap-2">
-                {[
-                  "Software Engineering",
-                  "AI / ML",
-                  "Backend Systems",
-                  "Developer Tools",
-                  "Open Source",
-                ].map((topic) => (
+                {topics.map((topic) => (
                   <span
                     key={topic}
                     className="inline-flex items-center rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-[11px] font-medium text-emerald-700 dark:border-emerald-900 dark:bg-emerald-950/50 dark:text-emerald-400"
@@ -159,11 +158,11 @@ export default function ContactSection() {
 
               <div>
                 <p className="text-sm font-semibold text-neutral-900 dark:text-neutral-100">
-                  Based in
+                  {t("locationTitle")}
                 </p>
 
                 <p className="mt-1 text-sm text-neutral-500 dark:text-neutral-400">
-                  Greater Noida, India
+                  {t("location")}
                 </p>
               </div>
             </div>
@@ -171,9 +170,9 @@ export default function ContactSection() {
             {/* Contact methods */}
             <div className="overflow-hidden rounded-2xl border border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900/50">
               {contactMethods.map(
-                ({ icon: Icon, label, value, href }, index) => (
+                ({ key, icon: Icon, value, href }, index) => (
                   <a
-                    key={label}
+                    key={key}
                     href={href}
                     target={href.startsWith("http") ? "_blank" : undefined}
                     rel={
@@ -181,10 +180,11 @@ export default function ContactSection() {
                         ? "noopener noreferrer"
                         : undefined
                     }
-                    className={`group flex items-center gap-4 p-5 transition-colors hover:bg-neutral-50 dark:hover:bg-neutral-800/50 ${index !== contactMethods.length - 1
-                      ? "border-b border-neutral-100 dark:border-neutral-800"
-                      : ""
-                      }`}
+                    className={`group flex items-center gap-4 p-5 transition-colors hover:bg-neutral-50 dark:hover:bg-neutral-800/50 ${
+                      index !== contactMethods.length - 1
+                        ? "border-b border-neutral-100 dark:border-neutral-800"
+                        : ""
+                    }`}
                   >
                     <div className="flex size-9 shrink-0 items-center justify-center rounded-xl border border-emerald-200 bg-emerald-50 dark:border-emerald-900 dark:bg-emerald-950/60">
                       <Icon className="size-4 text-emerald-600 dark:text-emerald-400" />
@@ -192,7 +192,7 @@ export default function ContactSection() {
 
                     <div className="min-w-0 flex-1">
                       <p className="text-xs font-medium text-neutral-400 dark:text-neutral-500">
-                        {label}
+                        {t(`contactMethods.${key}`)}
                       </p>
 
                       <p className="mt-0.5 truncate text-sm font-medium text-neutral-800 dark:text-neutral-200">
@@ -204,18 +204,18 @@ export default function ContactSection() {
                   </a>
                 )
               )}
-            </div> 
+            </div>
           </div>
 
-          {/* ───────────── Right: Contact Form ───────────── */}
+          {/* Right: Contact Form */}
           <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-[0_4px_20px_rgba(0,0,0,0.04)] sm:p-8 lg:p-10 dark:border-neutral-800 dark:bg-neutral-900/50 dark:shadow-[0_4px_24px_rgba(0,0,0,0.2)]">
             <div className="mb-8">
               <h2 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
-                Send me a message
+                {t("formTitle")}
               </h2>
 
               <p className="mt-1.5 text-sm leading-6 text-neutral-500 dark:text-neutral-400">
-                Tell me a little about yourself and what you're working on.
+                {t("formDescription")}
               </p>
             </div>
 
@@ -226,7 +226,7 @@ export default function ContactSection() {
                   htmlFor="name"
                   className="text-sm font-medium text-neutral-800 dark:text-neutral-200"
                 >
-                  Name
+                  {t("name")}
                 </label>
 
                 <input
@@ -238,7 +238,7 @@ export default function ContactSection() {
                   onChange={(e) =>
                     setFormData({ ...formData, name: e.target.value })
                   }
-                  placeholder="Your name"
+                  placeholder={t("namePlaceholder")}
                   className="h-11 w-full rounded-xl border border-neutral-200 bg-neutral-50 px-3.5 text-sm text-neutral-900 transition outline-none placeholder:text-neutral-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/10 dark:border-neutral-800 dark:bg-neutral-950 dark:text-neutral-100 dark:placeholder:text-neutral-600"
                 />
               </div>
@@ -249,7 +249,7 @@ export default function ContactSection() {
                   htmlFor="email"
                   className="text-sm font-medium text-neutral-800 dark:text-neutral-200"
                 >
-                  Email
+                  {t("email")}
                 </label>
 
                 <input
@@ -261,7 +261,7 @@ export default function ContactSection() {
                   onChange={(e) =>
                     setFormData({ ...formData, email: e.target.value })
                   }
-                  placeholder="you@example.com"
+                  placeholder={t("emailPlaceholder")}
                   className="h-11 w-full rounded-xl border border-neutral-200 bg-neutral-50 px-3.5 text-sm text-neutral-900 transition outline-none placeholder:text-neutral-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/10 dark:border-neutral-800 dark:bg-neutral-950 dark:text-neutral-100 dark:placeholder:text-neutral-600"
                 />
               </div>
@@ -272,7 +272,7 @@ export default function ContactSection() {
                   htmlFor="subject"
                   className="text-sm font-medium text-neutral-800 dark:text-neutral-200"
                 >
-                  Subject
+                  {t("subject")}
                 </label>
 
                 <input
@@ -283,7 +283,7 @@ export default function ContactSection() {
                   onChange={(e) =>
                     setFormData({ ...formData, subject: e.target.value })
                   }
-                  placeholder="What's on your mind?"
+                  placeholder={t("subjectPlaceholder")}
                   className="h-11 w-full rounded-xl border border-neutral-200 bg-neutral-50 px-3.5 text-sm text-neutral-900 transition outline-none placeholder:text-neutral-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/10 dark:border-neutral-800 dark:bg-neutral-950 dark:text-neutral-100 dark:placeholder:text-neutral-600"
                 />
               </div>
@@ -294,7 +294,7 @@ export default function ContactSection() {
                   htmlFor="message"
                   className="text-sm font-medium text-neutral-800 dark:text-neutral-200"
                 >
-                  Message
+                  {t("message")}
                 </label>
 
                 <textarea
@@ -306,7 +306,7 @@ export default function ContactSection() {
                   onChange={(e) =>
                     setFormData({ ...formData, message: e.target.value })
                   }
-                  placeholder="Tell me about your idea, project, or question..."
+                  placeholder={t("messagePlaceholder")}
                   className="w-full resize-none rounded-xl border border-neutral-200 bg-neutral-50 px-3.5 py-3 text-sm leading-6 text-neutral-900 transition outline-none placeholder:text-neutral-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/10 dark:border-neutral-800 dark:bg-neutral-950 dark:text-neutral-100 dark:placeholder:text-neutral-600"
                 />
               </div>
@@ -320,18 +320,18 @@ export default function ContactSection() {
                 {loading ? (
                   <>
                     <LoaderCircle className="mr-1.5 size-4 animate-spin" />
-                    Sending...
+                    {t("sending")}
                   </>
                 ) : (
                   <>
-                    Send message
+                    {t("submit")}
                     <ArrowUpRight className="ml-1.5 size-4" />
                   </>
                 )}
               </Button>
 
               <p className="text-center text-xs text-neutral-400 dark:text-neutral-600">
-                I'll get back to you as soon as I can.
+                {t("footer")}
               </p>
             </form>
           </div>

@@ -1,8 +1,12 @@
 "use client"
 
+import { useTranslations } from "next-intl"
+
 type Mode = "developer" | "portfolio"
 
 export default function ModeTransition({ mode }: { mode: Mode }) {
+  const t = useTranslations("DevModeLoader")
+
   return (
     <div className="fixed inset-0 z-9999 flex items-center justify-center bg-neutral-50 transition-colors duration-300 dark:bg-neutral-950">
       <div className="flex flex-col items-center gap-5">
@@ -17,16 +21,16 @@ export default function ModeTransition({ mode }: { mode: Mode }) {
         <div className="text-center">
           {mode === "developer" ? (
             <p className="text-sm font-medium tracking-wide text-neutral-900 dark:text-white">
-              Entering Developer Mode
+              {t.raw("devMode")}
             </p>
           ) : (
             <p className="text-sm font-medium tracking-wide text-neutral-900 dark:text-white">
-              Entering Portfolio Mode
+              {t.raw("portfolioMode")}
             </p>
           )}
 
           <p className="mt-1 text-xs text-neutral-500 dark:text-white/40">
-            Initializing workspace...
+            {t.raw("extra")}
           </p>
         </div>
       </div>

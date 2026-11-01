@@ -1,6 +1,7 @@
 "use client"
 
 import { useCallback, useEffect, useState } from "react"
+import { useLocale, useTranslations } from "next-intl"
 import {
   ArrowUpRight,
   Brain,
@@ -36,21 +37,6 @@ import { Project } from "@/lib/projects"
 import { apiFetch } from "@/lib/api"
 import { toast } from "sonner"
 
-const githubAccounts = [
-  {
-    name: "Primary GitHub",
-    username: "@Harikesh-14",
-    description: "My main profile, projects and open-source work.",
-    href: "https://github.com/Harikesh-14",
-  },
-  {
-    name: "Secondary GitHub",
-    username: "@harikeshranjan",
-    description: "Experiments, learning projects and side quests.",
-    href: "https://github.com/harikeshranjan",
-  },
-]
-
 const iconMap: Record<string, LucideIcon> = {
   Circle,
   Zap,
@@ -68,20 +54,25 @@ export default function ProjectsSection() {
   const [projects, setProjects] = useState<Project[]>([])
   const [loading, setLoading] = useState<boolean>(true)
   const [failedToLoadProjects, setFailedToLoadProjects] = useState(false)
+  const locale = useLocale()
+  const t = useTranslations("Projects")
+
+  const githubAccounts = t.raw("githubs")
 
   const fetchProjects = useCallback(async () => {
     setLoading(true)
     setFailedToLoadProjects(false)
 
     try {
-      const response = await apiFetch("/projects/featured")
+      const response = await apiFetch(
+        `/projects/featured?locale=${locale}`
+      )
 
       if (!response.ok) {
         throw new Error("Failed to fetch projects")
       }
 
       const data: Project[] = await response.json()
-      console.log(data)
 
       setProjects(data)
     } catch {
@@ -94,7 +85,7 @@ export default function ProjectsSection() {
     } finally {
       setLoading(false)
     }
-  }, [])
+  }, [locale])
 
   useEffect(() => {
     void fetchProjects()
@@ -113,20 +104,18 @@ export default function ProjectsSection() {
               className="mb-5 gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-900 dark:bg-emerald-950/50 dark:text-emerald-400"
             >
               <Sparkles className="size-3" />
-              Selected work
+              {t.raw("title")}
             </Badge>
 
             <h2 className="text-3xl font-semibold tracking-tight text-neutral-900 sm:text-4xl lg:text-5xl dark:text-neutral-50">
-              Things I've{" "}
+              {t.raw("headingOne")}{" "}
               <span className="text-neutral-400 dark:text-neutral-500">
-                built.
+                {t.raw("headingTwo")}
               </span>
             </h2>
 
             <p className="mt-5 max-w-2xl text-base leading-7 text-neutral-500 sm:text-lg dark:text-neutral-400">
-              A collection of projects I've built while exploring software
-              engineering, artificial intelligence, developer tools and
-              computer science.
+              {t.raw("description")}
             </p>
           </div>
 
@@ -137,7 +126,7 @@ export default function ProjectsSection() {
                 variant="outline"
                 className="w-fit shrink-0 rounded-full border-neutral-200 text-neutral-700 hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-700 dark:border-neutral-700 dark:text-neutral-300 dark:hover:border-emerald-800 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-400"
               >
-                View all projects
+                {t.raw("viewAllProjects")}
                 <ArrowUpRight className="ml-1.5 size-4" />
               </Button>
             </DialogTrigger>
@@ -145,19 +134,18 @@ export default function ProjectsSection() {
             <DialogContent className="max-w-lg border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-950">
               <DialogHeader>
                 <DialogTitle className="text-xl">
-                  Find me on GitHub
+                  {t.raw("dialogBoxHeading")}
                 </DialogTitle>
 
                 <DialogDescription className="leading-6 text-neutral-500 dark:text-neutral-400">
-                  I keep different kinds of projects across two GitHub
-                  accounts. Pick a profile to explore everything I've built.
+                  {t.raw("dialogBoxDescription")}
                 </DialogDescription>
               </DialogHeader>
 
               <div className="mt-4 space-y-3">
-                {githubAccounts.map((account) => (
+                {githubAccounts.map((account: {label: string, href: string, desc: string, username: string}) => (
                   <a
-                    key={account.name}
+                    key={account.label}
                     href={account.href}
                     target="_blank"
                     rel="noopener noreferrer"
@@ -169,7 +157,7 @@ export default function ProjectsSection() {
 
                     <div className="min-w-0 flex-1">
                       <p className="text-sm font-semibold text-neutral-900 dark:text-neutral-100">
-                        {account.name}
+                        {account.label}
                       </p>
 
                       <p className="mt-0.5 text-xs text-neutral-400 dark:text-neutral-500">
@@ -177,7 +165,7 @@ export default function ProjectsSection() {
                       </p>
 
                       <p className="mt-2 text-xs leading-5 text-neutral-500 dark:text-neutral-400">
-                        {account.description}
+                        {account.desc}
                       </p>
                     </div>
 
@@ -213,17 +201,15 @@ export default function ProjectsSection() {
             ))}
           </div>
         ) : failedToLoadProjects ? (
-          /* Error state */
           <div className="rounded-2xl border border-neutral-200 bg-white px-6 py-14 text-center dark:border-neutral-800 dark:bg-neutral-900/50">
             <Code2 className="mx-auto size-8 text-neutral-400" />
 
             <h3 className="mt-4 text-lg font-semibold text-neutral-900 dark:text-neutral-100">
-              Couldn't load projects
+              {t.raw("cannotLoadProject")}
             </h3>
 
             <p className="mt-2 text-sm text-neutral-500 dark:text-neutral-400">
-              Something went wrong while fetching the projects. Give it
-              another try.
+              {t.raw("somethingWentWrong")}
             </p>
 
             <Button
@@ -231,7 +217,7 @@ export default function ProjectsSection() {
               onClick={() => void fetchProjects()}
               className="mt-5 rounded-full bg-emerald-600 text-white hover:bg-emerald-700"
             >
-              Try again
+              {t.raw("tryAgain")}
             </Button>
           </div>
         ) : projects.length === 0 ? (
@@ -239,11 +225,11 @@ export default function ProjectsSection() {
             <Layers3 className="mx-auto size-8 text-neutral-400" />
 
             <h3 className="mt-4 text-lg font-semibold text-neutral-900 dark:text-neutral-100">
-              No featured projects yet
+              {t.raw("noProjectsYet")}
             </h3>
 
             <p className="mt-2 text-sm text-neutral-500 dark:text-neutral-400">
-              Check back later for featured projects.
+              {t.raw("checkBackLater")}
             </p>
           </div>
         ) : (
@@ -324,7 +310,7 @@ export default function ProjectsSection() {
                       rel="noopener noreferrer"
                       className="group/link mt-6 flex items-center gap-1.5 text-sm font-medium text-neutral-700 dark:text-neutral-300"
                     >
-                      View project
+                      {t.raw("viewProject")}
                       <ArrowUpRight className="size-3.5 transition-transform group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5" />
                     </a>
                   </div>
@@ -337,11 +323,11 @@ export default function ProjectsSection() {
         {/* Footer */}
         <div className="mt-12 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between dark:border-neutral-800">
           <p className="text-sm text-neutral-500 dark:text-neutral-400">
-            Always building. Usually experimenting.
+            {t.raw("footerNoteOne")}
           </p>
 
           <p className="text-xs text-neutral-400 dark:text-neutral-600">
-            More projects live on GitHub.
+            {t.raw("footerNoteTwo")}
           </p>
         </div>
       </div>

@@ -1,0 +1,364 @@
+{
+  "Metadata": {
+    "title": "Harikesh Ranjan Sinha | Software Engineer",
+    "description": "Explore my projects, skills, experience and education."
+  },
+  "Header": {
+    "about": {
+      "title": "About me",
+      "href": "#about-me"
+    },
+    "skills": {
+      "title": "Skills",
+      "href": "#skills"
+    },
+    "projects": {
+      "title": "Projects",
+      "href": "#projects"
+    },
+    "experiences": {
+      "title": "Experiences",
+      "href": "#experiences"
+    },
+    "education": {
+      "title": "Education",
+      "href": "#education"
+    },
+    "contact": {
+      "title": "Contact",
+      "href": "#contact-me"
+    },
+    "devMode": "Dev mode"
+  },
+  "AboutMe": {
+    "title": "About me",
+    "subheading": "Building software with curiosity and purpose.",
+    "imageMetadata": [
+      "Software Engineer",
+      "Building & Exploring"
+    ],
+    "description": [
+      "I'm a software engineer who enjoys turning ideas into well-designed, reliable software. I work across the stack, with a particular interest in backend systems, developer tools, and artificial intelligence.",
+      "I like understanding how things work beneath the surface — from designing APIs and databases to experimenting with programming languages, machine learning systems, and developer-focused products.",
+      "I'm constantly building and experimenting with new ideas, using projects as a way to explore technologies and deepen my understanding of computer science."
+    ],
+    "tableData": {
+      "rowOne": {
+        "heading": "Professional Experience",
+        "description": "1 year experience in the industry"
+      },
+      "rowTwo": {
+        "heading": "What I do",
+        "description": "Full-stack web development, backend engineering, APIs and software architecture.",
+        "tags": [
+          "Frontend",
+          "Backend",
+          "APIs",
+          "Architecture"
+        ]
+      },
+      "rowThree": {
+        "heading": "Currently focused on",
+        "description": "Artificial intelligence, machine learning, developer tools and distributed systems.",
+        "tags": [
+          "AI/ML",
+          "Dev tools",
+          "Distributed Systems"
+        ]
+      },
+      "rowFour": {
+        "heading": "Based in",
+        "description": "Greater Noida, Uttar Pradesh, India"
+      }
+    },
+    "buttonOne": "Explore my work",
+    "buttonTwo": "CV Coming Soon"
+  },
+  "Skills": {
+    "title": "Skills & expertise",
+    "subheading": "Tools I use to turn",
+    "subheadingHighlight": "ideas into systems.",
+    "description": "A collection of technologies, engineering practices and areas I'm actively working with — from backend systems to artificial intelligence.",
+    "coreTitle": "Core engineering",
+    "coreDescription": "Beyond frameworks, these are the areas I focus on when designing and building software.",
+    "coreSkills": [
+      "Software Architecture",
+      "API Design",
+      "System Design",
+      "Database Design",
+      "Authentication",
+      "Real-time Systems",
+      "Developer Tools",
+      "Problem Solving"
+    ],
+    "skillGroups": [
+      {
+        "title": "Backend Engineering",
+        "description": "Building APIs, services and scalable server-side systems.",
+        "skills": [
+          "Node.js",
+          "Express.js",
+          "NestJS",
+          "REST APIs",
+          "Authentication",
+          "WebSockets",
+          "Socket.IO"
+        ]
+      },
+      {
+        "title": "Frontend & Web",
+        "description": "Creating modern interfaces and full-stack web applications.",
+        "skills": [
+          "Next.js",
+          "React",
+          "TypeScript",
+          "JavaScript",
+          "Tailwind CSS",
+          "shadcn/ui"
+        ]
+      },
+      {
+        "title": "Databases",
+        "description": "Designing and working with application data and persistence.",
+        "skills": [
+          "MongoDB",
+          "Mongoose",
+          "SwiftData"
+        ]
+      },
+      {
+        "title": "Programming Languages",
+        "description": "Languages I use to build systems and explore computer science.",
+        "skills": [
+          "TypeScript",
+          "JavaScript",
+          "Swift",
+          "Java",
+          "C++",
+          "C",
+          "Python"
+        ]
+      },
+      {
+        "title": "AI & Machine Learning",
+        "description": "Exploring intelligent systems, ML engineering and model development.",
+        "skills": [
+          "Machine Learning",
+          "Deep Learning",
+          "Image Classification",
+          "AI Engineering",
+          "Model Training"
+        ]
+      },
+      {
+        "title": "Systems & Developer Tools",
+        "description": "Working closer to the system and building tools for developers.",
+        "skills": [
+          "Linux",
+          "Unix",
+          "Git",
+          "GitHub",
+          "CLI Development",
+          "Make",
+          "Docker"
+        ]
+      },
+      {
+        "title": "Automation Testing",
+        "description": "Automating the testing process for websites.",
+        "skills": [
+          "Selenium",
+          "Playwright"
+        ]
+      }
+    ],
+    "footer": "Always learning. Always building. Always experimenting."
+  },
+  "Projects": {
+    "title": "Selected work",
+    "headingOne": "Things I've",
+    "headingTwo": "built.",
+    "description": "A collection of projects I've built while exploring software engineering, artificial intelligence, developer tools and computer science.",
+    "viewAllProjects": "View all projects",
+    "viewProject": "View project",
+    "dialogBoxHeading": "Find me on Github",
+    "dialogBoxDescription": "I keep different kinds of projects across two GitHub accounts. Pick a profile to explore everything I've built.",
+    "footerNoteOne": "Always building. Usually experimenting.",
+    "footerNoteTwo": "More projects live on GitHub.",
+    "noProjectsYet": "No featured projects yet",
+    "checkBackLater": "Check back later for featured projects.",
+    "tryAgain": "Try again",
+    "cannotLoadProject": "Couldn't load projects",
+    "somethingWentWrong": "Something went wrong while fetching the projects. Give it another try.",
+    "githubs": [
+      {
+        "label": "Primary Github",
+        "desc": "My main profile, projects and open-source work.",
+        "username": "@Harikesh-14",
+        "href": "https://github.com/Harikesh-14"
+      },
+      {
+        "label": "Secondary Github",
+        "desc": "Experiments, learning projects and side quests",
+        "username": "harikeshranjan",
+        "href": "https://github.com/harikeshranjan"
+      }
+    ]
+  },
+  "Experiences": {
+    "badge": "Experience",
+    "heading": "Where I've been",
+    "headingHighlight": "building things.",
+    "description": "My professional journey has taken me from frontend development into backend engineering and test automation, giving me experience across different parts of the software development lifecycle.",
+    "current": "Current",
+    "role": "Role",
+    "focusAreas": "Focus areas",
+    "employmentTypes": {
+      "fullTime": "Full-time",
+      "internship": "Internship"
+    },
+    "positions": [
+      {
+        "company": "Tata Consultancy Services",
+        "shortName": "TCS",
+        "role": "System Engineer",
+        "period": "27 November 2025 – Present",
+        "type": "fullTime",
+        "location": "New Delhi, India",
+        "description": "Working across backend development and test automation, building backend services with Spring Boot and developing automated test workflows using Selenium with Java.",
+        "technologies": [
+          "Java",
+          "Spring Boot",
+          "Selenium",
+          "Backend Development",
+          "Test Automation"
+        ],
+        "highlightedTechs": [
+          "Java",
+          "Spring Boot",
+          "Selenium"
+        ],
+        "featured": true,
+        "meta": "Backend & Automation"
+      },
+      {
+        "company": "Centre for Railway Information Systems",
+        "shortName": "CRIS",
+        "role": "Frontend Web Developer Intern",
+        "period": "5 June 2023 – 5 July 2023",
+        "type": "internship",
+        "location": "New Delhi, India",
+        "description": "Worked as a frontend developer, gaining practical experience in building user interfaces and understanding software development practices within a professional engineering environment.",
+        "technologies": [
+          "Frontend Development",
+          "Web Development",
+          "JavaScript",
+          "UI Development"
+        ],
+        "highlightedTechs": [],
+        "featured": false,
+        "meta": null
+      }
+    ]
+  },
+  "Education": {
+    "badge": "Education",
+    "heading": "Where I",
+    "headingHighlight": "learned.",
+    "description": "My academic journey from school to software engineering, shaped by a strong foundation in computer science and a continued interest in building things with technology.",
+    "qualification": "Qualification",
+    "highlights": "Academic Highlights",
+    "graduated": "Graduated",
+    "undergraduate": "Undergraduate",
+    "school": "School",
+    "institutions": [
+      {
+        "institution": "SRM University",
+        "shortName": "SRMIST",
+        "degree": "B.Tech in Computer Science & Engineering",
+        "specialization": "Specialization in Software Engineering",
+        "period": "August 2021 – June 2025",
+        "type": "undergraduate",
+        "location": "Kattankulathur, Tamil Nadu, India",
+        "result": "8.89 CGPA",
+        "description": "Completed my undergraduate degree in Computer Science & Engineering with a specialization in Software Engineering, developing a strong foundation in software development, computer science, and engineering principles.",
+        "highlights": [
+          "B.Tech — Computer Science & Engineering",
+          "Specialization in Software Engineering",
+          "Cumulative CGPA: 8.89"
+        ],
+        "featured": true
+      },
+      {
+        "institution": "R.D. Rajpal School",
+        "shortName": "CBSE",
+        "degree": "Senior Secondary Education",
+        "specialization": "Kindergarten to Class 12",
+        "period": "2008 – 2021",
+        "type": "school",
+        "location": "Dwarka Sector-9, New Delhi, India",
+        "result": "91.8% in Class 12",
+        "description": "Completed my schooling from Kindergarten through Class 12 under the CBSE curriculum, maintaining a consistent academic record throughout my school years.",
+        "highlights": [
+          "Class 12: 91.8% — CBSE",
+          "Class 10: 84.6% — CBSE"
+        ],
+        "featured": false
+      }
+    ]
+  },
+  "Contact": {
+    "title": "Get in touch",
+    "heading": "Let's build something",
+    "headingHighlight": "interesting.",
+    "description": "Have an idea, a project, or just want to talk about software, artificial intelligence, or some ridiculously interesting tech rabbit hole? My inbox is open.",
+    "introTitle": "What can we talk about?",
+    "introDescription": "I'm always interested in interesting ideas and challenging technical problems. Feel free to reach out about projects, collaboration, software engineering, or anything worth discussing.",
+    "topics": [
+      "Software Engineering",
+      "AI / ML",
+      "Backend Systems",
+      "Developer Tools",
+      "Open Source"
+    ],
+    "locationTitle": "Based in",
+    "location": "Greater Noida, India",
+    "contactMethods": {
+      "email": "Email",
+      "githubMain": "GitHub (main)",
+      "githubSecondary": "GitHub (secondary)",
+      "linkedin": "LinkedIn"
+    },
+    "formTitle": "Send me a message",
+    "formDescription": "Tell me a little about yourself and what you're working on.",
+    "name": "Name",
+    "namePlaceholder": "Your name",
+    "email": "Email",
+    "emailPlaceholder": "you@example.com",
+    "subject": "Subject",
+    "subjectPlaceholder": "What's on your mind?",
+    "message": "Message",
+    "messagePlaceholder": "Tell me about your idea, project, or question...",
+    "submit": "Send message",
+    "sending": "Sending...",
+    "success": "Message sent successfully!",
+    "error": "Something went wrong. Please try again.",
+    "footer": "I'll get back to you as soon as I can."
+  },
+  "Login": {
+    "heading": "Are you",
+    "name": "Harikesh?",
+    "desc": "This dashboard is private. Prove it's you to continue.",
+    "password": "Password",
+    "passwordPlaceholder": "Enter your password",
+    "button": "That's me",
+    "verifying": "Verifying...",
+    "footerNote": "Private access only",
+    "invalidCreds": "Invalid email or password."
+  },
+  "DevModeLoader": {
+    "devMode": "Entering Developer Mode",
+    "portfolioMode": "Entering Portfolio Mode",
+    "extra": "Initializing workspace..."
+  }
+}

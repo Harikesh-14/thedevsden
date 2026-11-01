@@ -11,9 +11,11 @@ import { cn } from "@/lib/utils"
 import { redirect, useRouter } from "next/navigation"
 import { login } from "@/lib/auth"
 import { useAuth } from "@/hooks/use-auth"
+import { useTranslations } from "next-intl"
 
 export default function LoginPage() {
   const router = useRouter()
+  const t = useTranslations("Login")
 
   const { isAuthenticated } = useAuth()
 
@@ -32,7 +34,7 @@ export default function LoginPage() {
 
       router.push("/developer-dashboard")
     } catch (error) {
-      setError(error instanceof Error ? error.message : "Something went wong")
+      setError(t.raw("invalidCreds"))
     } finally {
       setLoading(false)
     }
@@ -105,13 +107,13 @@ export default function LoginPage() {
         <div className="mb-7">
           <div className="mb-4 h-0.5 w-6 rounded-full bg-emerald-500" />
           <h1 className="mb-2 text-[22px] leading-tight font-semibold tracking-[-0.02em] text-neutral-900 dark:text-neutral-100">
-            Are you{" "}
+            {t.raw("heading")}{" "}
             <span className="text-emerald-500 dark:text-emerald-400">
-              Harikesh?
+              {t.raw("name")}
             </span>
           </h1>
           <p className="text-[13px] leading-relaxed text-neutral-400 dark:text-neutral-500">
-            This dashboard is private. Prove it's you to continue.
+            {t.raw("desc")}
           </p>
         </div>
 
@@ -121,12 +123,12 @@ export default function LoginPage() {
             htmlFor="password"
             className="text-[10px] font-semibold tracking-[0.08em] text-neutral-400 uppercase dark:text-neutral-600"
           >
-            Password
+            {t.raw("password")}
           </Label>
           <Input
             id="password"
             type="password"
-            placeholder="Enter your password"
+            placeholder={t.raw("passwordPlaceholder")}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
@@ -164,11 +166,11 @@ export default function LoginPage() {
           {loading ? (
             <span className="flex items-center gap-2">
               <span className="size-3.5 animate-spin rounded-full border-2 border-white/30 border-t-white" />
-              Verifying…
+              {t.raw("verifying")}
             </span>
           ) : (
             <span className="flex items-center gap-2">
-              That's me
+              {t.raw("button")}
               <ArrowRight className="size-3.5" />
             </span>
           )}
@@ -176,7 +178,7 @@ export default function LoginPage() {
 
         {/* Footer hint */}
         <p className="mt-5 text-center text-[11px] text-neutral-300 dark:text-neutral-700">
-          Private access only · thedevsden
+          {t.raw("footerNote")} · thedevsden
         </p>
       </form>
     </div>
