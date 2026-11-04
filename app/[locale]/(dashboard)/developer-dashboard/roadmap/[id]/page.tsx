@@ -30,11 +30,11 @@ import { EDGE_TYPES, EdgeType, NODE_TYPES, NodeType, Position, Roadmap, RoadmapE
 
 const NODE_WIDTH = 240;
 const NODE_HEIGHT = 116;
-const WORLD_WIDTH = 3600;
-const WORLD_HEIGHT = 2400;
-const MIN_ZOOM = 0.3;
-const MAX_ZOOM = 1.6;
-const GRID = 24;
+const WORLD_WIDTH = 7200;
+const WORLD_HEIGHT = 4800;
+const MIN_ZOOM = 0.1;
+const MAX_ZOOM = 1.8;
+const GRID = 48;
 
 const fieldClass =
   "w-full rounded-xl border border-zinc-200 bg-white px-3 py-2.5 text-base outline-none transition placeholder:text-zinc-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/15 sm:text-sm dark:border-white/10 dark:bg-[#171a19]";
