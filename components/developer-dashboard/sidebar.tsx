@@ -108,7 +108,7 @@ export default function Sidebar() {
       await logout()
 
       window.localStorage.setItem("devMode", "false")
-      
+
       router.replace("/")
     } catch (error) {
       toast.error("Oops!", {
@@ -289,6 +289,21 @@ export default function Sidebar() {
                       >
                         <span className="size-1.5 rounded-full bg-emerald-500/70 dark:bg-emerald-400/70" />
                         thedevsden
+                      </Link>
+
+                      <Link
+                        href="/developer-dashboard/admin-portal/yappery"
+                        onClick={closeSidebar}
+                        className={cn(
+                          "flex items-center gap-2 rounded-lg px-2.5 py-1.5",
+                          "text-[11.5px] font-medium transition-all duration-150",
+                          pathname === "/developer-dashboard/admin-portal/yappery"
+                            ? "bg-emerald-500/10 text-emerald-600 dark:bg-emerald-400/10 dark:text-emerald-400"
+                            : "text-neutral-500 hover:bg-neutral-100 hover:text-neutral-800 dark:text-neutral-500 dark:hover:bg-white/5 dark:hover:text-neutral-300"
+                        )}
+                      >
+                        <span className="size-1.5 rounded-full bg-emerald-500/70 dark:bg-emerald-400/70" />
+                        Yappery
                       </Link>
                     </div>
                   </AccordionContent>
