@@ -94,12 +94,7 @@ function formatDate(date?: string) {
   });
 }
 
-function getCategoryId(category: Blog["category"]) {
-  return typeof category === "string" ? category : category?._id || "";
-}
-
 // ─── Blog Card ──────────────────────────────────────────────────────────────
-
 function BlogCard({
   blog,
   onEdit,
@@ -111,15 +106,18 @@ function BlogCard({
   onDelete: (blog: Blog) => void;
   onTogglePublish: (blog: Blog) => void;
 }) {
+  const router = useRouter();
+
   return (
     <article
       className={cn(
-        "group relative flex flex-col gap-4 rounded-[16px] border p-4 sm:flex-row sm:items-start sm:p-5",
+        "group relative flex flex-col gap-4 rounded-[16px] border p-4 sm:flex-row sm:items-start sm:p-5 cursor-pointer",
         "border-neutral-200 bg-white shadow-xs shadow-neutral-900/4",
         "transition-all duration-150 hover:border-neutral-300 hover:shadow-sm",
         "dark:border-white/[0.07] dark:bg-white/2 dark:shadow-none",
         "dark:hover:border-white/15 dark:hover:bg-white/4",
       )}
+      onClick={() => router.push(`/developer-dashboard/admin-portal/yappery/yaps/${blog.slug}`)}
     >
       {/* Cover image */}
       <div className="relative h-32 w-full shrink-0 overflow-hidden rounded-xl border border-neutral-200 bg-neutral-100 sm:size-28 dark:border-white/10 dark:bg-white/5">
@@ -269,7 +267,6 @@ export default function AdminPortalYapperyBlogsPage() {
   const [updating, setUpdating] = useState<string | null>(null);
 
   // ─── Fetch Blogs ──────────────────────────────────────────────────────────
-
   const fetchBlogs = useCallback(async () => {
     setLoading(true);
 
@@ -308,7 +305,6 @@ export default function AdminPortalYapperyBlogsPage() {
   }, [fetchBlogs]);
 
   // ─── Client-side Filtering ─────────────────────────────────────────────────
-
   const filteredBlogs = useMemo(() => {
     return blogs.filter((blog) => {
       if (filter === "published") return blog.isPublished;
@@ -318,7 +314,6 @@ export default function AdminPortalYapperyBlogsPage() {
   }, [blogs, filter]);
 
   // ─── Statistics ───────────────────────────────────────────────────────────
-
   const publishedCount = blogs.filter((b) => b.isPublished).length;
   const draftCount = blogs.filter((b) => !b.isPublished).length;
 
@@ -352,7 +347,6 @@ export default function AdminPortalYapperyBlogsPage() {
   ];
 
   // ─── Edit Blog ────────────────────────────────────────────────────────────
-
   function handleEdit(blog: Blog) {
     router.push(
       `/developer-dashboard/admin-portal/yappery/yaps/${blog.slug}/edit`,
@@ -360,7 +354,6 @@ export default function AdminPortalYapperyBlogsPage() {
   }
 
   // ─── Toggle Publish Status ─────────────────────────────────────────────────
-
   async function togglePublish(blog: Blog) {
     const willPublish = !blog.isPublished;
 
@@ -422,7 +415,6 @@ export default function AdminPortalYapperyBlogsPage() {
   }
 
   // ─── Render ───────────────────────────────────────────────────────────────
-
   return (
     <main className="relative min-h-screen overflow-hidden bg-white dark:bg-neutral-950">
       {/* Subtle background glow */}
