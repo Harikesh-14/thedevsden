@@ -117,7 +117,6 @@ function BlogCard({
         "dark:border-white/[0.07] dark:bg-white/2 dark:shadow-none",
         "dark:hover:border-white/15 dark:hover:bg-white/4",
       )}
-      onClick={() => router.push(`/developer-dashboard/admin-portal/yappery/yaps/${blog.slug}`)}
     >
       {/* Cover image */}
       <div className="relative h-32 w-full shrink-0 overflow-hidden rounded-xl border border-neutral-200 bg-neutral-100 sm:size-28 dark:border-white/10 dark:bg-white/5">
@@ -137,7 +136,10 @@ function BlogCard({
       {/* Content */}
       <div className="min-w-0 flex-1">
         <div className="mb-2 flex flex-wrap items-center gap-2">
-          <h3 className="text-[14px] font-semibold tracking-tight text-neutral-900 dark:text-white/90">
+          <h3 
+            className="text-[14px] font-semibold tracking-tight text-neutral-900 dark:text-white/90"
+            onClick={() => router.push(`/developer-dashboard/admin-portal/yappery/yaps/${blog.slug}`)}
+          >
             {blog.title}
           </h3>
 
