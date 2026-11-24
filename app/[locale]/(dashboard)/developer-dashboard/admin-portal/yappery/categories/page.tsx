@@ -168,6 +168,7 @@ function IconPicker({
       <PopoverContent
         align="start"
         className="w-70 border-neutral-200 bg-white p-0 dark:border-white/10 dark:bg-[#151515]"
+        onWheel={(event) => event.stopPropagation()}
       >
         <Command className="bg-transparent">
           <CommandInput
@@ -175,7 +176,7 @@ function IconPicker({
             className="h-9 text-xs"
           />
 
-          <CommandList className="max-h-64">
+          <CommandList className="max-h-64 overflow-y-auto overscroll-contain">
             <CommandEmpty className="py-5 text-xs text-neutral-500">
               No icon found.
             </CommandEmpty>
@@ -243,7 +244,7 @@ export default function CategoriesPage() {
     setLoading(true);
 
     try {
-      const response = await apiFetch("/categories");
+      const response = await apiFetch("/yappery/categories");
 
       if (!response.ok) {
         throw new Error("Failed to fetch categories.");
@@ -368,8 +369,8 @@ export default function CategoriesPage() {
 
     try {
       const endpoint = editingCategory
-        ? `/categories/${editingCategory._id}`
-        : "/categories";
+        ? `/yappery/categories/${editingCategory._id}`
+        : "/yappery/categories";
 
       const response = await apiFetch(endpoint, {
         method: editingCategory ? "PATCH" : "POST",
@@ -427,7 +428,7 @@ export default function CategoriesPage() {
 
     try {
       const response = await apiFetch(
-        `/categories/${deleteCategory._id}`,
+        `yappery/categories/${deleteCategory._id}`,
         {
           method: "DELETE",
         }
@@ -565,11 +566,10 @@ export default function CategoriesPage() {
             <span className="text-xs text-neutral-500">
               {loading
                 ? "Loading..."
-                : `${filteredCategories.length} ${
-                    filteredCategories.length === 1
-                      ? "category"
-                      : "categories"
-                  }`}
+                : `${filteredCategories.length} ${filteredCategories.length === 1
+                  ? "category"
+                  : "categories"
+                }`}
             </span>
           </div>
 
@@ -842,11 +842,10 @@ export default function CategoriesPage() {
                     key={accent.value}
                     type="button"
                     onClick={() => updateField("accent", accent.value)}
-                    className={`flex h-10 items-center justify-center gap-2 rounded-lg border text-xs font-medium transition-colors ${
-                      form.accent === accent.value
+                    className={`flex h-10 items-center justify-center gap-2 rounded-lg border text-xs font-medium transition-colors ${form.accent === accent.value
                         ? "border-emerald-500 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
                         : "border-neutral-200 bg-white text-neutral-600 hover:bg-neutral-50 dark:border-white/10 dark:bg-[#191919] dark:text-neutral-400"
-                    }`}
+                      }`}
                   >
                     <span className={`h-2.5 w-2.5 rounded-full ${accent.color}`} />
                     {accent.label}
